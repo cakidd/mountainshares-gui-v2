@@ -26,7 +26,6 @@ export default async function handler(req, res) {
 
     // Calculate price: $1.37 per token
     const unitAmount = 137; // $1.37 in cents
-    const totalAmount = unitAmount * tokens;
 
     const session = await stripe.checkout.create({
       payment_method_types: ['card'],
