@@ -2,10 +2,8 @@
   "name": "mountainshares-gui-v2",
   "version": "1.0.0",
   "description": "MountainShares API Backend",
-  "main": "api/create-checkout-session.js",
+  "type": "module",
   "scripts": {
-    "test": "echo 'No tests specified'",
-    "start": "echo 'Vercel handles serverless deployment'",
     "dev": "vercel dev",
     "deploy": "vercel --prod"
   },
