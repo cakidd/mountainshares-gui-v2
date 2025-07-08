@@ -1,6 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -24,7 +24,6 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid token amount' });
     }
 
-    // Calculate price: $1.37 per token
     const unitAmount = 137; // $1.37 in cents
 
     const session = await stripe.checkout.create({
@@ -43,8 +42,8 @@ export default async function handler(req, res) {
         },
       ],
       mode: 'payment',
-      success_url: `${req.headers.origin || 'https://buy.mountainshares.us'}/success.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.origin || 'https://buy.mountainshares.us'}/purchase.html`,
+      success_url: 'https://buy.mountainshares.us/success.html?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'https://buy.mountainshares.us/purchase.html',
       metadata: {
         tokens: tokens.toString(),
       },
@@ -53,6 +52,9 @@ export default async function handler(req, res) {
     res.json({ sessionId: session.id });
   } catch (error) {
     console.error('Error creating checkout session:', error);
-    res.status(500).json({ error: 'Failed to create checkout session', details: error.message });
+    res.status(500).json({ 
+      error: 'Failed to create checkout session',
+      details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+    });
   }
-}
+};
