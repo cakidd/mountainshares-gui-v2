@@ -1,0 +1,30 @@
+{
+  "name": "mountainshares-gui-v2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'No tests specified'",
+    "start": "node src/api/checkout-session.js",
+    "dev": "nodemon src/api/checkout-session.js",
+    "build": "echo 'Build completed'",
+    "lint": "echo 'No linting configured'",
+    "vercel-build": "echo 'Vercel build completed'",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.1.0",
+    "express": "^5.1.0",
+    "stripe": "^18.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

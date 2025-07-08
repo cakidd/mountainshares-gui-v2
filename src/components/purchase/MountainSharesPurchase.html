@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase MountainShares</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --wv-gold: #FFD700;
+            --mountain-blue: #0066FF;
+            --sky-blue: #00BFFF;
+            --mountain-dark: #0A0A0A;
+            --mountain-white: #FFFFFF;
+            --glass-gradient: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(0, 102, 255, 0.05));
+            --wv-gradient: linear-gradient(135deg, #FFD700, #0066FF, #00BFFF);
+            --shadow-glow: 0 0 50px rgba(255, 215, 0, 0.6);
+            --text-glow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--mountain-dark);
+            color: var(--mountain-white);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 102, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+            animation: backgroundPulse 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        .purchase-container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: var(--glass-gradient);
+            backdrop-filter: blur(30px);
+            border-radius: 25px;
+            padding: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .purchase-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            animation: containerSpin 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes containerSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .purchase-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .purchase-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 42px;
+            font-weight: 900;
+            background: var(--wv-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            animation: titleGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .purchase-subtitle {
+            color: var(--sky-blue);
+            font-size: 18px;
+            opacity: 0.9;
+            text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .input-label {
+            display: block;
+            color: var(--mountain-white);
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 18px;
+            border: 2px solid var(--sky-blue);
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--mountain-white);
+            font-size: 18px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--wv-gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .wallet-connect-btn {
+            margin-top: 15px;
+            padding: 12px 25px;
+            background: var(--sky-blue);
+            color: var(--mountain-dark);
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .wallet-connect-btn:hover {
+            background: var(--wv-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .wallet-connect-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .price-breakdown {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid var(--wv-gold);
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .price-breakdown h4 {
+            color: var(--wv-gold);
+            margin-bottom: 20px;
+            font-size: 20px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            font-family: 'Orbitron', monospace;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 16px;
+            align-items: center;
+        }
+
+        .price-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--wv-gold);
+            border-top: 1px solid var(--wv-gold);
+            padding-top: 15px;
+            margin-top: 20px;
+        }
+
+        .purchase-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: var(--mountain-dark);
+            border: none;
+            border-radius: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .purchase-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .purchase-btn:hover::before {
+            left: 100%;
+        }
+
+        .purchase-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .purchase-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .purchase-btn:disabled::before {
+            display: none;
+        }
+
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+            position: relative;
+            z-index: 2;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .status-success {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #44ff44;
+            color: #44ff44;
+        }
+
+        .status-error {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff4444;
+            color: #ff4444;
+        }
+
+        .status-warning {
+            background: rgba(255, 165, 0, 0.1);
+            border: 2px solid #FFA500;
+            color: #FFA500;
+        }
+
+        .metamask-status {
+            font-size: 14px;
+            color: var(--sky-blue);
+            margin-top: 8px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--wv-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .purchase-container {
+                margin: 20px;
+                padding: 30px;
+            }
+            
+            .purchase-title {
+                font-size: 32px;
+            }
+            
+            .input-field {
+                font-size: 16px;
+                padding: 15px;
+            }
+            
+            .purchase-btn {
+                font-size: 18px;
+                padding: 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .purchase-container {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .purchase-title {
+                font-size: 28px;
+            }
+            
+            .price-breakdown {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="purchase-container">
+        <div class="purchase-header">
+            <h2 class="purchase-title">💎 Purchase MountainShares</h2>
+            <p class="purchase-subtitle">1 MountainShare = $1.00 USD</p>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Number of MountainShares</label>
+            <input type="number" id="ms-quantity" class="input-field" min="1" max="10000" value="1" oninput="calculatePrice()" required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Ethereum Wallet Address</label>
+            <input type="text" id="wallet-address" class="input-field" placeholder="Connect your MetaMask wallet..." readonly>
+            <button id="wallet-connect-btn" class="wallet-connect-btn" onclick="connectWallet()">🦊 Connect MetaMask</button>
+            <div id="metamask-status" class="metamask-status"></div>
+        </div>
+
+        <div class="price-breakdown">
+            <h4>💰 Price Breakdown</h4>
+            <div class="price-row">
+                <span>Token Value (1:1 USD):</span>
+                <span id="token-value">$1.00</span>
+            </div>
+            <div class="price-row">
+                <span>Platform Fee (2%):</span>
+                <span id="platform-fee">$0.02</span>
+            </div>
+            <div class="price-row">
+                <span>Stripe Processing Fee:</span>
+                <span id="stripe-fee">$0.33</span>
+            </div>
+            <div class="price-total">
+                <span>Total You Pay:</span>
+                <span id="total-price">$1.35</span>
+            </div>
+        </div>
+
+        <div class="loading-spinner" id="loading-spinner"></div>
+
+        <button id="purchase-btn" class="purchase-btn" onclick="initiatePurchase()">
+            💎 Purchase MountainShares
+        </button>
+
+        <div id="status-message" class="status-message"></div>
+    </div>
+
+    <script>
+        // Initialize Stripe with your live publishable key
+        const stripe = Stripe('pk_live_51P0x4eJwby4IAnqFKrjn7N02DGPRorWWbVdl1KvIvnCnz3eg9MPCbIechFRuh0t4VqEOXOOxcbqhPbFSeJUyytsz000lYoj67w');
+        
+        // Global state variables
+        let isMetaMaskConnected = false;
+        let currentAccount = null;
+        let isProcessing = false;
+
+        // Price calculation function - eliminates duplicate calculations
+        function calculatePrice() {
+            try {
+                const quantityInput = document.getElementById('ms-quantity');
+                let quantity = parseInt(quantityInput.value) || 1;
+                
+                // Validate quantity bounds
+                if (quantity < 1) {
+                    quantity = 1;
+                    quantityInput.value = 1;
+                }
+                if (quantity > 10000) {
+                    quantity = 10000;
+                    quantityInput.value = 10000;
+                    showStatus('Maximum purchase limit is 10,000 MountainShares', 'warning');
+                }
+                
+                const tokenValue = quantity * 1.00;
+                const platformFee = tokenValue * 0.02;
+                const stripeFee = (tokenValue + platformFee) * 0.029 + 0.30;
+                const total = tokenValue + platformFee + stripeFee;
+
+                // Update single instances only - prevents duplicates
+                document.getElementById('token-value').textContent = `$${tokenValue.toFixed(2)}`;
+                document.getElementById('platform-fee').textContent = `$${platformFee.toFixed(2)}`;
+                document.getElementById('stripe-fee').textContent = `$${stripeFee.toFixed(2)}`;
+                document.getElementById('total-price').textContent = `$${total.toFixed(2)}`;
+                
+            } catch (error) {
+                console.error('Price calculation error:', error);
+                showStatus('Error calculating price. Please refresh the page.', 'error');
+            }
+        }
+
+        // MetaMask connection function - fixes connectWallet undefined error
+        async function connectWallet() {
+            if (isProcessing) return;
+            
+            const statusElement = document.getElementById('metamask-status');
+            const connectBtn = document.getElementById('wallet-connect-btn');
+            
+            try {
+                isProcessing = true;
+                connectBtn.disabled = true;
+                connectBtn.textContent = 'Connecting...';
+                
+                if (typeof window.ethereum === 'undefined') {
+                    statusElement.textContent = '❌ MetaMask not detected';
+                    statusElement.style.color = '#ff4444';
+                    showStatus('MetaMask not detected. Please install MetaMask extension.', 'error');
+                    
+                    setTimeout(() => {
+                        window.open('https://metamask.io/download/', '_blank');
+                    }, 2000);
+                    return;
+                }
+
+                statusElement.textContent = 'Connecting to MetaMask...';
+                statusElement.style.color = '#FFAA00';
+                
+                const accounts = await window.ethereum.request({ 
+                    method: 'eth_requestAccounts' 
+                });
+                
+                if (accounts && accounts.length > 0) {
+                    currentAccount = accounts[0];
+                    document.getElementById('wallet-address').value = currentAccount;
+                    isMetaMaskConnected = true;
+                    
+                    statusElement.textContent = '✅ MetaMask connected successfully';
+                    statusElement.style.color = '#44ff44';
+                    connectBtn.textContent = '✅ Connected';
+                    
+                    showStatus('MetaMask wallet connected successfully!', 'success');
+                } else {
+                    throw new Error('No accounts returned from MetaMask');
+                }
+                
+            } catch (error) {
+                console.error('MetaMask connection error:', error);
+                
+                currentAccount = null;
+                isMetaMaskConnected = false;
+                document.getElementById('wallet-address').value = '';
+                
+                statusElement.textContent = '❌ Connection failed';
+                statusElement.style.color = '#ff4444';
+                connectBtn.textContent = '🦊 Connect MetaMask';
+                
+                if (error.code === 4001) {
+                    showStatus('MetaMask connection was rejected by user.', 'warning');
+                } else if (error.code === -32002) {
+                    showStatus('MetaMask connection request is already pending.', 'warning');
+                } else {
+                    showStatus('Failed to connect MetaMask. Please try again.', 'error');
+                }
+            } finally {
+                isProcessing = false;
+                connectBtn.disabled = false;
+                if (!isMetaMaskConnected) {
+                    connectBtn.textContent = '🦊 Connect MetaMask';
+                }
+            }
+        }
+
+        // Purchase initiation function - fixes purchaseMS undefined error
+        async function initiatePurchase() {
+            if (isProcessing) return;
+            
+            const quantity = parseInt(document.getElementById('ms-quantity').value);
+            const walletAddress = document.getElementById('wallet-address').value;
+            
+            // Comprehensive validation
+            if (!quantity || quantity < 1) {
+                showStatus('Please enter a valid quantity (minimum 1 MountainShare)', 'error');
+                return;
+            }
+            
+            if (quantity > 10000) {
+                showStatus('Maximum purchase limit is 10,000 MountainShares', 'error');
+                return;
+            }
+            
+            if (!walletAddress || !walletAddress.startsWith('0x')) {
+                showStatus('Please connect your MetaMask wallet first', 'error');
+                return;
+            }
+
+            if (!isMetaMaskConnected) {
+                showStatus('Please connect your MetaMask wallet before purchasing', 'error');
+                return;
+            }
+
+            // Verify MetaMask is still connected
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                if (!accounts || accounts.length === 0) {
+                    isMetaMaskConnected = false;
+                    showStatus('MetaMask disconnected. Please reconnect your wallet.', 'error');
+                    return;
+                }
+            } catch (error) {
+                showStatus('Unable to verify MetaMask connection. Please try again.', 'error');
+                return;
+            }
+
+            // Start processing
+            isProcessing = true;
+            const purchaseBtn = document.getElementById('purchase-btn');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            
+            purchaseBtn.disabled = true;
+            purchaseBtn.textContent = 'Processing Payment...';
+            loadingSpinner.style.display = 'block';
+
+            try {
+                // Calculate final amounts
+                const tokenValue = quantity * 1.00;
+                const platformFee = tokenValue * 0.02;
+                const stripeFee = (tokenValue + platformFee) * 0.029 + 0.30;
+                const totalAmount = tokenValue + platformFee + stripeFee;
+
+                // Create Stripe checkout session via Vercel API
+                const response = await fetch('/api/create-checkout-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        quantity: quantity,
+                        walletAddress: walletAddress,
+                        tokenValue: tokenValue,
+                        platformFee: platformFee,
+                        totalAmount: totalAmount
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                }
+
+                const session = await response.json();
+
+                if (session.error) {
+                    throw new Error(session.error);
+                }
+
+                if (!session.id) {
+                    throw new Error('Invalid session response from server');
+                }
+
+                // Redirect to Stripe Checkout
+                const result = await stripe.redirectToCheckout({
+                    sessionId: session.id
+                });
+
+                if (result.error) {
+                    throw new Error(result.error.message);
+                }
+
+            } catch (error) {
+                console.error('Purchase error:', error);
+                
+                let errorMessage = 'Purchase failed. Please try again.';
+                
+                if (error.message.includes('network') || error.message.includes('fetch')) {
+                    errorMessage = 'Network error. Please check your connection and try again.';
+                } else if (error.message.includes('Invalid')) {
+                    errorMessage = 'Invalid purchase data. Please refresh the page and try again.';
+                } else if (error.message) {
+                    errorMessage = `Purchase failed: ${error.message}`;
+                }
+                
+                showStatus(errorMessage, 'error');
+                
+            } finally {
+                // Reset UI state
+                isProcessing = false;
+                purchaseBtn.disabled = false;
+                purchaseBtn.textContent = '💎 Purchase MountainShares';
+                loadingSpinner.style.display = 'none';
+            }
+        }
+
+        // Status message display function
+        function showStatus(message, type = 'error') {
+            const statusDiv = document.getElementById('status-message');
+            
+            if (!statusDiv) return;
+            
+            statusDiv.textContent = message;
+            statusDiv.className = `status-message status-${type}`;
+            statusDiv.style.display = 'block';
+
+            // Auto-hide after 8 seconds for errors, 5 seconds for others
+            const hideDelay = type === 'error' ? 8000 : 5000;
+            setTimeout(() => {
+                if (statusDiv.style.display === 'block') {
+                    statusDiv.style.display = 'none';
+                }
+            }, hideDelay);
+        }
+
+        // Initialize on page load - fixes calculateSimplePrice undefined error
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                // Initial price calculation
+                calculatePrice();
+                
+                // Check if MetaMask is available and connected
+                if (typeof window.ethereum !== 'undefined') {
+                    // Check for existing connection
+                    window.ethereum.request({ method: 'eth_accounts' })
+                        .then(accounts => {
+                            if (accounts && accounts.length > 0) {
+                                currentAccount = accounts[0];
+                                document.getElementById('wallet-address').value = currentAccount;
+                                isMetaMaskConnected = true;
+                                
+                                const statusElement = document.getElementById('metamask-status');
+                                const connectBtn = document.getElementById('wallet-connect-btn');
+                                
+                                statusElement.textContent = '✅ MetaMask already connected';
+                                statusElement.style.color = '#44ff44';
+                                connectBtn.textContent = '✅ Connected';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error checking MetaMask accounts:', error);
+                        });
+
+                    // Listen for account changes
+                    window.ethereum.on('accountsChanged', function (accounts) {
+                        const statusElement = document.getElementById('metamask-status');
+                        const connectBtn = document.getElementById('wallet-connect-btn');
+                        
+                        if (accounts && accounts.length > 0) {
+                            currentAccount = accounts[0];
+                            document.getElementById('wallet-address').value = currentAccount;
+                            isMetaMaskConnected = true;
+                            
+                            statusElement.textContent = '✅ Account changed';
+                            statusElement.style.color = '#44ff44';
+                            connectBtn.textContent = '✅ Connected';
+                            
+                            showStatus('MetaMask account changed successfully', 'success');
+                        } else {
+                            currentAccount = null;
+                            document.getElementById('wallet-address').value = '';
+                            isMetaMaskConnected = false;
+                            
+                            statusElement.textContent = '❌ MetaMask disconnected';
+                            statusElement.style.color = '#ff4444';
+                            connectBtn.textContent = '🦊 Connect MetaMask';
+                            
+                            showStatus('MetaMask disconnected. Please reconnect to continue.', 'warning');
+                        }
+                    });
+
+                    // Listen for chain changes
+                    window.ethereum.on('chainChanged', function (chainId) {
+                        console.log('Chain changed to:', chainId);
+                        // Optionally reload the page or update UI based on chain
+                    });
+                    
+                } else {
+                    // MetaMask not available
+                    const statusElement = document.getElementById('metamask-status');
+                    statusElement.textContent = '❌ MetaMask not detected';
+                    statusElement.style.color = '#ff4444';
+                }
+                
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showStatus('Error initializing page. Please refresh and try again.', 'error');
+            }
+        });
+
+        // Prevent form submission on Enter key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && event.target.tagName === 'INPUT') {
+                event.preventDefault();
+                if (event.target.id === 'ms-quantity') {
+                    calculatePrice();
+                }
+            }
+        });
+
+        // Add input validation for quantity field
+        document.getElementById('ms-quantity').addEventListener('input', function(event) {
+            const value = event.target.value;
+            
+            // Remove non-numeric characters
+            const numericValue = value.replace(/[^0-9]/g, '');
+            
+            if (numericValue !== value) {
+                event.target.value = numericValue;
+            }
+            
+            calculatePrice();
+        });
+
+        // Prevent negative values and decimals
+        document.getElementById('ms-quantity').addEventListener('keydown', function(event) {
+            // Allow: backspace, delete, tab, escape, enter
+            if ([8, 9, 27, 13, 46].indexOf(event.keyCode) !== -1 ||
+                // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                (event.keyCode === 65 && event.ctrlKey === true) ||
+                (event.keyCode === 67 && event.ctrlKey === true) ||
+                (event.keyCode === 86 && event.ctrlKey === true) ||
+                (event.keyCode === 88 && event.ctrlKey === true)) {
+                return;
+            }
+            
+            // Ensure that it is a number and stop the keypress
+            if ((event.shiftKey || (event.keyCode < 48 || event.keyCode > 57)) && (event.keyCode < 96 || event.keyCode > 105)) {
+                event.preventDefault();
+            }
+        });
+
+        // Global error handler
+        window.addEventListener('error', function(event) {
+            console.error('Global error:', event.error);
+            showStatus('An unexpected error occurred. Please refresh the page and try again.', 'error');
+        });
+
+        // Handle unhandled promise rejections
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('Unhandled promise rejection:', event.reason);
+            showStatus('An unexpected error occurred. Please try again.', 'error');
+        });
+
+        console.log('🏔️ MountainShares Purchase Component Loaded');
+        console.log('💎 Ready for West Virginia digital currency transactions');
+        console.log('🔒 Stripe integration: Active');
+        console.log('🦊 MetaMask integration: Active');
+    </script>
+</body>
+</html>

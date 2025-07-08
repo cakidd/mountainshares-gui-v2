@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MountainShares Purchase - West Virginia Digital Currency</title>
+    <meta name="description" content="Purchase MountainShares digital currency for West Virginia communities. 1 MountainShare = $1 USD">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏔️</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --wv-gold: #FFD700;
+            --mountain-blue: #0066FF;
+            --sky-blue: #00BFFF;
+            --mountain-dark: #0A0A0A;
+            --mountain-white: #FFFFFF;
+            --glass-gradient: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(0, 102, 255, 0.05));
+            --wv-gradient: linear-gradient(135deg, #FFD700, #0066FF, #00BFFF);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--mountain-dark);
+            color: var(--mountain-white);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 102, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
+            animation: backgroundPulse 8s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 48px;
+            font-weight: 900;
+            background: var(--wv-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .header p {
+            font-size: 20px;
+            color: var(--sky-blue);
+            opacity: 0.9;
+        }
+
+        .purchase-section {
+            background: var(--glass-gradient);
+            backdrop-filter: blur(30px);
+            border-radius: 25px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+            margin-bottom: 60px;
+        }
+
+        .purchase-iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 20px;
+            background: transparent;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .info-card {
+            background: var(--glass-gradient);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .info-card h3 {
+            color: var(--wv-gold);
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .info-card p {
+            color: var(--mountain-white);
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 60px;
+        }
+
+        .footer p {
+            color: var(--sky-blue);
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+            
+            .purchase-section {
+                padding: 20px;
+            }
+            
+            .purchase-iframe {
+                height: 700px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <header class="header">
+            <h1>🏔️ MountainShares Purchase</h1>
+            <p>Digital currency for West Virginia communities • 1 MountainShare = $1 USD</p>
+        </header>
+
+        <main>
+            <section class="purchase-section">
+                <iframe 
+                    src="../src/components/purchase/MountainSharesPurchase.html" 
+                    class="purchase-iframe"
+                    title="MountainShares Purchase Interface">
+                </iframe>
+            </section>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>💎 What are MountainShares?</h3>
+                    <p>Local digital currency that keeps money in West Virginia communities. Each MountainShare is worth exactly $1 USD and can be used at participating local businesses.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>🔒 Secure & Safe</h3>
+                    <p>Your purchase is processed securely through Stripe with bank-level encryption. Your MetaMask wallet ensures you have complete control over your digital assets.</p>
+                </div>
+                
+                <div class="info-card">
+                    <h3>🏔️ Support Local Economy</h3>
+                    <p>Every MountainShare purchase supports West Virginia's local economy by keeping money circulating within our communities instead of flowing to big corporations.</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>© 2025 MountainShares • West Virginia Digital Business Network</p>
+        </footer>
+    </div>
+
+    <script>
+        // Add floating particles for visual enhancement
+        document.addEventListener('DOMContentLoaded', function() {
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: fixed;
+                    width: 3px;
+                    height: 3px;
+                    background: var(--wv-gold);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: -1;
+                    left: ${Math.random() * 100}%;
+                    animation: particleFloat ${10 + Math.random() * 20}s linear infinite;
+                    animation-delay: ${Math.random() * 5}s;
+                    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+                `;
+                document.body.appendChild(particle);
+            }
+        });
+
+        // Add CSS animation for particles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes particleFloat {
+                0% {
+                    transform: translateY(100vh) rotate(0deg);
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 1;
+                }
+                90% {
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(-100px) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        console.log('🏔️ MountainShares Purchase Portal Loaded');
+        console.log('💎 Ready for West Virginia digital currency transactions');
+    </script>
+</body>
+</html>
