@@ -4,139 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Purchase Successful - MountainShares</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'JetBrains Mono', monospace;
-            background: #0A0A0A;
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #0A0A0A, #1A1A1A);
             color: #FFFFFF;
-            text-align: center;
-            padding: 50px 20px;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            position: relative;
+            justify-content: center;
+            text-align: center;
+            margin: 0;
         }
-        
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 20%, rgba(0, 102, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
-            animation: backgroundPulse 8s ease-in-out infinite;
-            z-index: -1;
-        }
-        
-        @keyframes backgroundPulse {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.1); }
-        }
-        
         .success-container {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(0, 102, 255, 0.05));
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(0, 102, 255, 0.1));
             backdrop-filter: blur(30px);
-            border-radius: 25px;
-            padding: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 600px;
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
-            position: relative;
-            z-index: 1;
-        }
-        
-        .success-title {
-            font-size: 48px;
-            color: #FFD700;
-            margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-        }
-        
-        .success-message {
-            font-size: 20px;
-            color: #00BFFF;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-        
-        .transaction-info {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 30px;
+            border-radius: 30px;
+            padding: 60px;
             border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.6);
+            max-width: 600px;
         }
-        
-        .return-btn {
-            padding: 15px 30px;
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: #0A0A0A;
-            border: none;
-            border-radius: 10px;
+        h1 {
+            font-size: 48px;
+            background: linear-gradient(135deg, #FFD700, #0066FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        p {
             font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .back-button {
+            background: linear-gradient(135deg, #FFD700, #0066FF);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            color: #000;
             font-weight: bold;
-            cursor: pointer;
             text-decoration: none;
             display: inline-block;
             transition: all 0.3s ease;
-            font-family: 'JetBrains Mono', monospace;
         }
-        
-        .return-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
-        }
-        
-        @media (max-width: 768px) {
-            .success-container {
-                padding: 30px;
-                margin: 20px;
-            }
-            
-            .success-title {
-                font-size: 36px;
-            }
-            
-            .success-message {
-                font-size: 18px;
-            }
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
         }
     </style>
 </head>
 <body>
     <div class="success-container">
-        <div class="success-title">🎉 Purchase Successful!</div>
-        <div class="success-message">
-            Your MountainShares have been purchased successfully!<br>
-            You will receive a confirmation email shortly.
-        </div>
-        <div class="transaction-info">
-            <p>💎 Your digital tokens are being processed</p>
-            <p>📧 Check your email for transaction details</p>
-            <p>🏔️ Welcome to the West Virginia digital economy!</p>
-        </div>
-        <a href="/" class="return-btn">Return to Purchase</a>
+        <div class="success-icon">🎉</div>
+        <h1>Purchase Successful!</h1>
+        <p>🏔️ Congratulations! Your MountainShares purchase was successful.</p>
+        <p>💎 Your tokens will be delivered to your wallet within 24-48 hours.</p>
+        <p>🧠 Thank you for joining the revolutionary neural interface community!</p>
+        <a href="/" class="back-button">Return to Home</a>
     </div>
-    
-    <script>
-        // Extract session ID from URL for tracking
-        const urlParams = new URLSearchParams(window.location.search);
-        const sessionId = urlParams.get('session_id');
-        
-        if (sessionId) {
-            console.log('✅ Payment session completed:', sessionId);
-            
-            // Optional: Send success analytics
-            // analytics.track('purchase_completed', { sessionId });
-        }
-        
-        console.log('🏔️ MountainShares Purchase Success Page Loaded');
-    </script>
 </body>
 </html>

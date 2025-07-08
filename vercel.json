@@ -1,24 +1,17 @@
 {
   "version": 2,
   "name": "mountainshares-gui-v2",
-  "builds": [
-    {
-      "src": "public/**/*",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
-    }
-  ],
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
+      "src": "/purchase",
+      "dest": "/purchase.html"
     },
     {
-      "src": "/(.*)",
-      "dest": "/public/$1"
+      "src": "/success",
+      "dest": "/success.html"
     }
   ]
 }
