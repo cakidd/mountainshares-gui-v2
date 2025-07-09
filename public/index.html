@@ -710,17 +710,69 @@
             };
         }
 
-        // Initiate purchase
+        // Show status messages
+        function showStatus(message, type = 'info') {
+            // Create or get status display
+            let statusDiv = document.getElementById('purchase-status');
+            if (!statusDiv) {
+                statusDiv = document.createElement('div');
+                statusDiv.id = 'purchase-status';
+                statusDiv.style.cssText = `
+                    margin-top: 25px;
+                    padding: 20px;
+                    border-radius: 15px;
+                    text-align: center;
+                    font-weight: bold;
+                    backdrop-filter: blur(20px);
+                    border: 2px solid;
+                    animation: statusSlideIn 0.5s ease;
+                `;
+                document.querySelector('.purchase-form').appendChild(statusDiv);
+            }
+
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+
+            // Style based on type
+            if (type === 'success') {
+                statusDiv.style.background = 'rgba(0, 255, 136, 0.1)';
+                statusDiv.style.borderColor = '#00FF88';
+                statusDiv.style.color = '#00FF88';
+            } else if (type === 'error') {
+                statusDiv.style.background = 'rgba(255, 68, 68, 0.1)';
+                statusDiv.style.borderColor = '#FF4444';
+                statusDiv.style.color = '#FF4444';
+            } else if (type === 'warning') {
+                statusDiv.style.background = 'rgba(255, 170, 0, 0.1)';
+                statusDiv.style.borderColor = '#FFAA00';
+                statusDiv.style.color = '#FFAA00';
+            } else {
+                statusDiv.style.background = 'rgba(0, 191, 255, 0.1)';
+                statusDiv.style.borderColor = '#00BFFF';
+                statusDiv.style.color = '#00BFFF';
+            }
+
+            // Auto-hide after 8 seconds unless it's an error
+            if (type !== 'error') {
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 8000);
+            }
+        }
+
+        // Initiate purchase with CORS error handling
         async function initiatePurchase() {
             try {
                 if (!connectedWallet) {
-                    alert('Please connect your MetaMask wallet first');
+                    showStatus('⚠️ Please connect your MetaMask wallet first', 'warning');
                     return;
                 }
 
                 const pricing = calculatePrice();
+                
+                showStatus('🚀 Initiating purchase...', 'info');
 
-                // Call production Vercel API
+                // Try primary API endpoint
                 const response = await fetch('https://mountainshares-gui-v2-chhnclt56-mountainshares-team.vercel.app/api/create-checkout-session', {
                     method: 'POST',
                     headers: {
@@ -744,13 +796,110 @@
 
                 const session = await response.json();
 
+                showStatus('✅ Redirecting to secure checkout...', 'success');
+                
                 // Redirect to Stripe checkout
-                window.location.href = session.url;
+                setTimeout(() => {
+                    window.location.href = session.url;
+                }, 1500);
 
             } catch (error) {
                 console.error('Purchase initiation failed:', error);
-                alert('Failed to initiate purchase. Please try again.');
+                
+                if (error.message.includes('Failed to fetch') || error.message.includes('CORS')) {
+                    // CORS error detected
+                    showStatus(`🔒 CORS Error Detected: The API server needs to allow requests from this domain (${window.location.hostname}). Please contact the MountainShares team to configure CORS headers for buy.mountainshares.us`, 'error');
+                    
+                    // Provide fallback options
+                    setTimeout(() => {
+                        const fallbackDiv = document.createElement('div');
+                        fallbackDiv.style.cssText = `
+                            margin-top: 20px;
+                            padding: 25px;
+                            background: var(--glass-gradient);
+                            backdrop-filter: blur(20px);
+                            border-radius: 15px;
+                            border: 1px solid var(--sky-blue);
+                            text-align: center;
+                        `;
+                        fallbackDiv.innerHTML = `
+                            <h4 style="color: var(--wv-gold); margin-bottom: 15px;">🔧 Technical Issue - Alternative Options:</h4>
+                            <p style="color: var(--mountain-white); margin-bottom: 20px; line-height: 1.6;">
+                                The payment system is experiencing a technical issue. You can:
+                            </p>
+                            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                <button onclick="copyPurchaseDetails()" style="padding: 12px 24px; background: var(--sky-blue); color: var(--mountain-dark); border: none; border-radius: 10px; cursor: pointer; font-weight: bold;">
+                                    📋 Copy Purchase Details
+                                </button>
+                                <button onclick="emailSupport()" style="padding: 12px 24px; background: var(--wv-gold); color: var(--mountain-dark); border: none; border-radius: 10px; cursor: pointer; font-weight: bold;">
+                                    📧 Email Support
+                                </button>
+                            </div>
+                        `;
+                        
+                        const existingFallback = document.getElementById('fallback-options');
+                        if (existingFallback) {
+                            existingFallback.remove();
+                        }
+                        fallbackDiv.id = 'fallback-options';
+                        document.querySelector('.purchase-form').appendChild(fallbackDiv);
+                    }, 2000);
+                } else {
+                    showStatus(`❌ Purchase failed: ${error.message}`, 'error');
+                }
             }
+        }
+
+        // Copy purchase details to clipboard
+        function copyPurchaseDetails() {
+            const pricing = calculatePrice();
+            const details = `
+MountainShares Purchase Request
+==============================
+Quantity: ${pricing.quantity} MountainShares
+Wallet Address: ${connectedWallet}
+Total Amount: ${pricing.totalAmount.toFixed(2)}
+
+Breakdown:
+- Token Value: ${pricing.tokenValue.toFixed(2)}
+- Platform Fee: ${pricing.platformFee.toFixed(2)}
+- Processing Fee: ${pricing.processingFee.toFixed(2)}
+- Stripe Fee: ${pricing.stripeFee.toFixed(2)}
+
+Requested from: ${window.location.href}
+Timestamp: ${new Date().toISOString()}
+            `.trim();
+
+            navigator.clipboard.writeText(details).then(() => {
+                showStatus('📋 Purchase details copied to clipboard!', 'success');
+            }).catch(() => {
+                showStatus('❌ Failed to copy to clipboard. Please manually copy the details.', 'error');
+            });
+        }
+
+        // Email support with purchase details
+        function emailSupport() {
+            const pricing = calculatePrice();
+            const subject = encodeURIComponent('MountainShares Purchase Support Request');
+            const body = encodeURIComponent(`
+Hello MountainShares Team,
+
+I'm trying to purchase MountainShares but encountered a technical issue (CORS error) on buy.mountainshares.us.
+
+Purchase Details:
+- Quantity: ${pricing.quantity} MountainShares
+- Wallet Address: ${connectedWallet}
+- Total Amount: ${pricing.totalAmount.toFixed(2)}
+- Browser: ${navigator.userAgent}
+- Error: CORS policy blocking API request
+
+Please assist with completing this purchase or provide alternative payment methods.
+
+Thank you!
+            `);
+            
+            window.open(`mailto:support@mountainshares.us?subject=${subject}&body=${body}`);
+            showStatus('📧 Email support opened. Please send the email to get assistance.', 'info');
         }
 
         // Event listeners
