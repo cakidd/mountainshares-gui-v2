@@ -374,10 +374,9 @@
                 total_amount_cents: Math.round(calculations.total * 100) // Send exact amount in cents
             };
             
-            // Send to your Vercel API endpoint
-            fetch('https://www.mountainshares.us/api/create-checkout-session', {
+            // Send to your Netlify function
+            fetch('https://api.mountainshares.us/.netlify/functions/create-checkout-session', {
                 method: 'POST',
-                mode: 'cors',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest'
