@@ -5,12 +5,12 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
+  
   if (req.method === 'OPTIONS') {
     res.status(200).end();
     return;
   }
-
+  
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     res.status(405).json({ error: 'Method Not Allowed' });
@@ -18,13 +18,14 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { tokens } = req.body;
-
+    const { tokens, total_amount_cents } = req.body;
+    
     if (!tokens || tokens <= 0) {
       return res.status(400).json({ error: 'Invalid token amount' });
     }
 
-    const unitAmount = 137; // $1.37 in cents
+    // Use frontend amount or fallback to original calculation
+    const unitAmount = total_amount_cents || (tokens * 137);
 
     const session = await stripe.checkout.create({
       payment_method_types: ['card'],
@@ -38,7 +39,7 @@ module.exports = async (req, res) => {
             },
             unit_amount: unitAmount,
           },
-          quantity: tokens,
+          quantity: 1,
         },
       ],
       mode: 'payment',
@@ -52,7 +53,7 @@ module.exports = async (req, res) => {
     res.json({ sessionId: session.id });
   } catch (error) {
     console.error('Error creating checkout session:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to create checkout session',
       details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
     });
