@@ -297,8 +297,8 @@
         }
 
         function redirectToStripe(sessionId) {
-            // Add your actual Stripe publishable key here
-            var stripe = Stripe('pk_test_51QQpLJB8s2kVm7NHdOUHaAzNtKgmZM3Ek4cq9N2xJVKWRnqZ5rXxC2nLLGHiCJV8UwKT4zLq3mPdF7sHgVnAL1R500kqMqVgQr'); // Replace with your actual key
+            // Use your live Stripe publishable key to match the live session
+            var stripe = Stripe('pk_live_51P0x4eJwby4IAnqFKrjn7N02DGPRorWWbVdl1KvIvnCnz3eg9MPCbIechFRuh0t4VqEOXOOxcbqhPbFSeJUyytsz000lYoj67w');
             stripe.redirectToCheckout({
                 sessionId: sessionId
             }).then(function(result) {
@@ -374,7 +374,7 @@
                 total_amount_cents: Math.round(calculations.total * 100) // Send exact amount in cents
             };
             
-            // Send to your Netlify function
+            // Send to your Netlify function (direct URL)
             fetch('https://eloquent-rabanadas-0a5533.netlify.app/.netlify/functions/create-checkout-session', {
                 method: 'POST',
                 headers: {
