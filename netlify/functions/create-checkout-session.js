@@ -1,7 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event, context) => {
-  // Enable CORS with all required headers
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -9,11 +8,7 @@ exports.handler = async (event, context) => {
   };
 
   if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers,
-      body: '',
-    };
+    return { statusCode: 200, headers, body: '' };
   }
 
   if (event.httpMethod !== 'POST') {
@@ -35,30 +30,25 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Use frontend amount or fallback to original calculation
     const unitAmount = total_amount_cents || (tokens * 137);
 
-    const session = await stripe.checkout.create({
+    const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: 'MountainShares Tokens',
-              description: `${tokens} Revolutionary Mountain Tokens`,
-            },
-            unit_amount: unitAmount,
+      line_items: [{
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'MountainShares Tokens',
+            description: `${tokens} Revolutionary Mountain Tokens`,
           },
-          quantity: 1,
+          unit_amount: unitAmount,
         },
-      ],
+        quantity: 1,
+      }],
       mode: 'payment',
       success_url: 'https://buy.mountainshares.us/success.html?session_id={CHECKOUT_SESSION_ID}',
       cancel_url: 'https://buy.mountainshares.us/purchase.html',
-      metadata: {
-        tokens: tokens.toString(),
-      },
+      metadata: { tokens: tokens.toString() },
     });
 
     return {
@@ -67,15 +57,11 @@ exports.handler = async (event, context) => {
       body: JSON.stringify({ sessionId: session.id }),
     };
   } catch (error) {
-    console.error('Error creating checkout session:', error);
+    console.error('Error:', error);
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({
-        error: 'Failed to create checkout session',
-        details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
-      }),
+      body: JSON.stringify({ error: 'Failed to create checkout session' }),
     };
   }
 };
-// Force update
