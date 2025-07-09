@@ -6,3 +6,6 @@ build/
 .vercel
 ecosystem.config.js
 *.env
+
+# Local Netlify folder
+.netlify
