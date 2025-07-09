@@ -12,10 +12,19 @@
             --wv-gold: #FFD700;
             --mountain-blue: #0066FF;
             --sky-blue: #00BFFF;
+            --deep-black: #000000;
             --mountain-dark: #0A0A0A;
+            --stone-gray: #1A1A1A;
             --mountain-white: #FFFFFF;
-            --glass-gradient: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(0, 102, 255, 0.05));
+            --wv-mountain-green: #228B22;
+            --appalachian-brown: #8B4513;
+            --holographic: linear-gradient(45deg, #FFD700, #0066FF, #00BFFF, #FFD700);
             --wv-gradient: linear-gradient(135deg, #FFD700, #0066FF, #00BFFF);
+            --mountain-gradient: linear-gradient(45deg, #000000, #001122, #0066FF);
+            --gold-gradient: linear-gradient(135deg, #FFD700, #FFA500, #FF6B35);
+            --glass-gradient: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(0, 102, 255, 0.05));
+            --shadow-glow: 0 0 50px rgba(255, 215, 0, 0.6), 0 0 100px rgba(0, 102, 255, 0.4);
+            --text-glow: 0 0 20px rgba(255, 215, 0, 0.8);
         }
 
         * {
@@ -25,13 +34,15 @@
         }
 
         body {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
             background: var(--mountain-dark);
             color: var(--mountain-white);
             min-height: 100vh;
             position: relative;
+            overflow-x: hidden;
         }
 
+        /* DYNAMIC HOLOGRAPHIC BACKGROUND WITH WV COLORS */
         body::before {
             content: '';
             position: fixed;
@@ -40,154 +51,362 @@
             width: 100%;
             height: 100%;
             background:
-                radial-gradient(circle at 20% 20%, rgba(0, 102, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%);
-            animation: backgroundPulse 8s ease-in-out infinite;
+                radial-gradient(circle at 10% 20%, rgba(255, 215, 0, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 102, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(0, 191, 255, 0.1) 0%, transparent 50%),
+                conic-gradient(from 0deg at 50% 50%, transparent, rgba(255, 215, 0, 0.1), transparent);
+            animation: holographicPulse 15s ease-in-out infinite;
+            z-index: -2;
+        }
+
+        /* ANIMATED MESH GRADIENT WITH WV COLORS */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(45deg, transparent 30%, rgba(255, 215, 0, 0.05) 50%, transparent 70%),
+                linear-gradient(-45deg, transparent 30%, rgba(0, 102, 255, 0.05) 50%, transparent 70%);
+            animation: meshMove 20s linear infinite;
             z-index: -1;
         }
 
-        @keyframes backgroundPulse {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.1); }
+        @keyframes holographicPulse {
+            0%, 100% {
+                opacity: 0.8;
+                transform: scale(1) rotate(0deg);
+            }
+            25% {
+                opacity: 1;
+                transform: scale(1.05) rotate(2deg);
+            }
+            50% {
+                opacity: 0.9;
+                transform: scale(1.1) rotate(-1deg);
+            }
+            75% {
+                opacity: 1;
+                transform: scale(1.02) rotate(1deg);
+            }
+        }
+
+        @keyframes meshMove {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
         }
 
         .main-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 60px 40px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(30px);
+            min-height: 100vh;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-glow);
         }
 
         .header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        /* REVOLUTIONARY 3D HOLOGRAPHIC LOGO */
+        .header::before {
+            content: '🏔️';
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 80px;
+            background: var(--wv-gradient);
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow:
+                0 0 60px rgba(255, 215, 0, 0.8),
+                inset 0 0 60px rgba(255, 255, 255, 0.2);
+            animation: logoFloat 8s ease-in-out infinite;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0) rotateY(0deg) rotateX(0deg) scale(1);
+            }
+            25% {
+                transform: translateX(-50%) translateY(-10px) rotateY(15deg) rotateX(5deg) scale(1.05);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-5px) rotateY(0deg) rotateX(-5deg) scale(1.02);
+            }
+            75% {
+                transform: translateX(-50%) translateY(-15px) rotateY(-15deg) rotateX(5deg) scale(1.05);
+            }
         }
 
         .header h1 {
             font-family: 'Orbitron', monospace;
-            font-size: 48px;
+            font-size: 64px;
             font-weight: 900;
             background: var(--wv-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            margin-top: 60px;
+            text-shadow: var(--text-glow);
+            animation: titlePulse 6s ease-in-out infinite;
+            position: relative;
+        }
+
+        .header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--wv-gradient);
+            animation: underlineGlow 4s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+            0%, 100% {
+                filter: brightness(1) saturate(1) hue-rotate(0deg);
+                transform: scale(1);
+            }
+            50% {
+                filter: brightness(1.3) saturate(1.5) hue-rotate(15deg);
+                transform: scale(1.02);
+            }
+        }
+
+        @keyframes underlineGlow {
+            0%, 100% {
+                opacity: 0.7;
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            }
+            50% {
+                opacity: 1;
+                box-shadow: 0 0 40px rgba(0, 102, 255, 0.8);
+            }
         }
 
         .header p {
-            font-size: 20px;
+            font-size: 24px;
             color: var(--sky-blue);
             opacity: 0.9;
+            text-shadow: 0 0 15px rgba(0, 191, 255, 0.8);
+            animation: taglineGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes taglineGlow {
+            0%, 100% {
+                opacity: 0.8;
+                text-shadow: 0 0 15px rgba(0, 191, 255, 0.8);
+            }
+            50% {
+                opacity: 1;
+                text-shadow: 0 0 30px rgba(0, 191, 255, 1);
+            }
         }
 
         .purchase-section {
             background: var(--glass-gradient);
-            backdrop-filter: blur(30px);
-            border-radius: 25px;
-            padding: 40px;
+            backdrop-filter: blur(40px);
+            border-radius: 40px;
+            padding: 60px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
-            margin-bottom: 60px;
+            box-shadow:
+                var(--shadow-glow),
+                inset 0 0 80px rgba(255, 255, 255, 0.1);
+            margin-bottom: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .purchase-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: var(--holographic);
+            opacity: 0.1;
+            animation: heroRotate 20s linear infinite;
+        }
+
+        .purchase-section::after {
+            content: '';
+            position: absolute;
+            inset: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 35px;
+            pointer-events: none;
+            animation: heroBorder 8s ease-in-out infinite;
+        }
+
+        @keyframes heroRotate {
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(360deg) scale(1.1); }
+        }
+
+        @keyframes heroBorder {
+            0%, 100% {
+                border-color: rgba(255, 215, 0, 0.3);
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+            }
+            50% {
+                border-color: rgba(0, 255, 255, 0.5);
+                box-shadow: 0 0 40px rgba(0, 255, 255, 0.4);
+            }
         }
 
         .purchase-form {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             text-align: center;
+            position: relative;
+            z-index: 3;
         }
 
         .wallet-section {
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
-        .wallet-button {
-            background: var(--wv-gradient);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 15px;
-            color: var(--mountain-dark);
-            font-weight: bold;
-            font-size: 16px;
+        /* REVOLUTIONARY BUTTON DESIGN */
+        .wallet-button, .purchase-button {
+            padding: 28px 56px;
+            border: 2px solid transparent;
+            border-radius: 25px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
+            font-weight: 800;
+            font-size: 20px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            min-width: 300px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-family: 'Orbitron', monospace;
+            transform-style: preserve-3d;
+            background: var(--gold-gradient);
+            color: var(--mountain-dark);
+            border-color: var(--wv-gold);
+            box-shadow: 0 15px 50px rgba(255, 215, 0, 0.5);
+            margin-bottom: 25px;
         }
 
-        .wallet-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+        .wallet-button::before, .purchase-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .wallet-button:hover::before, .purchase-button:hover::before {
+            left: 100%;
+        }
+
+        .wallet-button:hover, .purchase-button:hover {
+            transform: translateY(-10px) scale(1.05) rotateX(15deg);
+            box-shadow:
+                0 25px 80px rgba(255, 215, 0, 0.6),
+                0 0 60px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(255, 255, 255, 0.2);
         }
 
         .wallet-address {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            padding: 20px;
+            border-radius: 15px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
+            font-size: 16px;
             word-break: break-all;
-            margin-top: 15px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
         .purchase-controls {
-            margin: 30px 0;
+            margin: 40px 0;
+        }
+
+        .purchase-controls label {
+            display: block;
+            color: var(--mountain-white);
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: var(--text-glow);
         }
 
         .quantity-input {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
             border: 2px solid rgba(255, 215, 0, 0.3);
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 15px;
+            padding: 20px;
             color: var(--mountain-white);
-            font-size: 18px;
+            font-size: 22px;
             text-align: center;
-            width: 200px;
-            margin: 0 10px;
+            width: 300px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
         }
 
         .quantity-input:focus {
             outline: none;
             border-color: var(--wv-gold);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            transform: scale(1.05);
         }
 
         .price-display {
-            background: rgba(0, 102, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px 0;
+            background: var(--glass-gradient);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
         .price-row {
             display: flex;
             justify-content: space-between;
-            margin: 10px 0;
-            font-size: 16px;
+            margin: 15px 0;
+            font-size: 18px;
+            color: var(--mountain-white);
         }
 
         .total-row {
-            border-top: 1px solid rgba(255, 215, 0, 0.3);
-            padding-top: 15px;
-            margin-top: 15px;
-            font-size: 20px;
+            border-top: 2px solid rgba(255, 215, 0, 0.5);
+            padding-top: 20px;
+            margin-top: 20px;
+            font-size: 24px;
             font-weight: bold;
             color: var(--wv-gold);
-        }
-
-        .purchase-button {
-            background: var(--wv-gradient);
-            border: none;
-            padding: 20px 40px;
-            border-radius: 15px;
-            color: var(--mountain-dark);
-            font-weight: bold;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-        }
-
-        .purchase-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4);
+            text-shadow: var(--text-glow);
         }
 
         .purchase-button:disabled {
@@ -196,63 +415,151 @@
             transform: none;
         }
 
+        .purchase-button:disabled:hover {
+            transform: none;
+            box-shadow: 0 15px 50px rgba(255, 215, 0, 0.5);
+        }
+
+        /* FLOATING CARDS WITH GLASSMORPHISM */
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 60px;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 80px;
         }
 
         .info-card {
             background: var(--glass-gradient);
-            backdrop-filter: blur(20px);
-            padding: 30px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(30px);
+            padding: 40px;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             text-align: center;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--wv-gradient);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-15px) rotateX(10deg);
+            box-shadow:
+                0 30px 80px rgba(255, 215, 0, 0.4),
+                0 0 60px rgba(0, 102, 255, 0.3);
+        }
+
+        .info-card:hover::before {
+            transform: translateX(0);
         }
 
         .info-card h3 {
             color: var(--wv-gold);
-            font-size: 24px;
-            margin-bottom: 15px;
+            font-size: 28px;
+            margin-bottom: 20px;
             font-family: 'Orbitron', monospace;
+            text-shadow: var(--text-glow);
         }
 
         .info-card p {
             color: var(--mountain-white);
-            line-height: 1.6;
+            line-height: 1.7;
+            font-size: 16px;
             opacity: 0.9;
         }
 
         .footer {
             text-align: center;
-            padding: 40px 20px;
+            padding: 60px 40px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            margin-top: 60px;
+            margin-top: 80px;
         }
 
         .footer p {
             color: var(--sky-blue);
             opacity: 0.8;
+            font-size: 18px;
+            text-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+        }
+
+        /* FLOATING PARTICLES */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--wv-gold);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            animation: particleFloat 15s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg) scale(0);
+                opacity: 0;
+            }
         }
 
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 36px;
-            }
-
-            .purchase-section {
+            .main-container {
                 padding: 20px;
             }
 
+            .header h1 {
+                font-size: 42px;
+            }
+
+            .purchase-section {
+                padding: 30px;
+            }
+
             .quantity-input {
-                width: 150px;
-                margin: 10px 0;
+                width: 100%;
+                max-width: 300px;
             }
 
             .price-row {
-                font-size: 14px;
+                font-size: 16px;
+            }
+
+            .total-row {
+                font-size: 20px;
+            }
+
+            .wallet-button, .purchase-button {
+                width: 100%;
+                max-width: 400px;
+                padding: 20px 40px;
+                font-size: 16px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
             }
         }
     </style>
@@ -364,19 +671,19 @@
         // Calculate pricing with correct MountainShares fee structure
         function calculatePrice() {
             const quantity = parseInt(document.getElementById('quantity').value) || 1;
-            
+
             // Correct pricing structure: $1.00 base + fees = $1.37 total
             const baseTokenPrice = 1.00;
             const platformFeeRate = 0.02; // 2%
             const processingFeeRate = 0.0005; // 0.05%
             const stripeFeeRate = 0.029; // 2.9%
             const stripeFixedFee = 0.30; // $0.30 fixed fee
-            
+
             // Calculate fees per token
             const platformFeePerToken = baseTokenPrice * platformFeeRate; // $0.02
             const processingFeePerToken = Math.round(baseTokenPrice * processingFeeRate * 100) / 100; // $0.01 (rounded)
             const stripeFeePerToken = Math.round((baseTokenPrice * stripeFeeRate + stripeFixedFee) * 100) / 100; // $0.34 (includes SEC fee)
-            
+
             // Calculate totals for quantity
             const tokenValue = baseTokenPrice * quantity;
             const platformFee = platformFeePerToken * quantity;
@@ -392,14 +699,14 @@
             document.getElementById('stripeFee').textContent = `$${stripeFee.toFixed(2)}`;
             document.getElementById('totalAmount').textContent = `$${totalAmount.toFixed(2)}`;
 
-            return { 
-                quantity, 
-                baseTokenPrice, 
-                tokenValue, 
-                platformFee, 
-                processingFee, 
-                stripeFee, 
-                totalAmount 
+            return {
+                quantity,
+                baseTokenPrice,
+                tokenValue,
+                platformFee,
+                processingFee,
+                stripeFee,
+                totalAmount
             };
         }
 
@@ -456,49 +763,18 @@
             calculatePrice();
 
             // Add floating particles for visual enhancement
-            for (let i = 0; i < 15; i++) {
+            for (let i = 0; i < 25; i++) {
                 const particle = document.createElement('div');
-                particle.style.cssText = `
-                    position: fixed;
-                    width: 3px;
-                    height: 3px;
-                    background: var(--wv-gold);
-                    border-radius: 50%;
-                    pointer-events: none;
-                    z-index: -1;
-                    left: ${Math.random() * 100}%;
-                    animation: particleFloat ${10 + Math.random() * 20}s linear infinite;
-                    animation-delay: ${Math.random() * 5}s;
-                    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
-                `;
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 20) + 's';
                 document.body.appendChild(particle);
             }
+
+            console.log('🏔️ MountainShares Purchase Portal Loaded');
+            console.log('💎 Ready for West Virginia digital currency transactions');
         });
-
-        // Add CSS animation for particles
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes particleFloat {
-                0% {
-                    transform: translateY(100vh) rotate(0deg);
-                    opacity: 0;
-                }
-                10% {
-                    opacity: 1;
-                }
-                90% {
-                    opacity: 1;
-                }
-                100% {
-                    transform: translateY(-100px) rotate(360deg);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-
-        console.log('🏔️ MountainShares Purchase Portal Loaded');
-        console.log('💎 Ready for West Virginia digital currency transactions');
     </script>
 </body>
 </html>
