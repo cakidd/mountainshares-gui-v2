@@ -296,6 +296,18 @@
             successDiv.style.display = 'none';
         }
 
+        function redirectToStripe(sessionId) {
+            // Add your actual Stripe publishable key here
+            var stripe = Stripe('pk_test_51QQpLJB8s2kVm7NHdOUHaAzNtKgmZM3Ek4cq9N2xJVKWRnqZ5rXxC2nLLGHiCJV8UwKT4zLq3mPdF7sHgVnAL1R500kqMqVgQr'); // Replace with your actual key
+            stripe.redirectToCheckout({
+                sessionId: sessionId
+            }).then(function(result) {
+                if (result.error) {
+                    showError('Stripe redirect failed: ' + result.error.message);
+                }
+            });
+        }
+
         function connectWallet() {
             if (typeof window.ethereum === 'undefined') {
                 showError('MetaMask is not installed. Please install MetaMask to continue.');
@@ -356,23 +368,16 @@
             hideError();
             hideSuccess();
             
-            // Prepare payment data
+            // Prepare payment data for your existing API
             var paymentData = {
-                wallet_address: wallet,
-                token_quantity: quantity,
-                token_price: tokenPrice,
-                subtotal: calculations.subtotal,
-                processing_fees: calculations.totalProcessingFees,
-                total_amount: calculations.total,
-                currency: 'USD',
-                payment_method: 'stripe',
-                timestamp: new Date().toISOString(),
-                session_id: 'web_' + Date.now()
+                tokens: quantity,
+                total_amount_cents: Math.round(calculations.total * 100) // Send exact amount in cents
             };
             
-            // Send to your webhook endpoint
-            fetch('/api/webhooks/stripe', {
+            // Send to your Vercel API endpoint
+            fetch('https://www.mountainshares.us/api/create-checkout-session', {
                 method: 'POST',
+                mode: 'cors',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest'
@@ -386,21 +391,21 @@
                 return response.json();
             })
             .then(function(data) {
-                if (data.success) {
-                    if (data.payment_url) {
-                        // Redirect to Stripe Checkout
-                        window.location.href = data.payment_url;
-                    } else if (data.session_id) {
-                        // Handle Stripe session redirect
-                        var stripe = Stripe(data.publishable_key);
-                        stripe.redirectToCheckout({
-                            sessionId: data.session_id
-                        });
+                if (data.sessionId) {
+                    // Load Stripe.js and redirect to checkout
+                    if (typeof Stripe === 'undefined') {
+                        // Load Stripe.js if not already loaded
+                        var script = document.createElement('script');
+                        script.src = 'https://js.stripe.com/v3/';
+                        script.onload = function() {
+                            redirectToStripe(data.sessionId);
+                        };
+                        document.head.appendChild(script);
                     } else {
-                        showSuccess('✅ Payment initiated successfully! Transaction ID: ' + data.transaction_id);
+                        redirectToStripe(data.sessionId);
                     }
                 } else {
-                    throw new Error(data.error || 'Payment processing failed');
+                    throw new Error(data.error || 'No session ID returned');
                 }
             })
             .catch(function(error) {
