@@ -1,11 +1,11 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event, context) => {
-  // Enable CORS
+  // Enable CORS with all required headers
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With',
   };
 
   if (event.httpMethod === 'OPTIONS') {
