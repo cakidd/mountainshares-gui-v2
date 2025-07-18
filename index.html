@@ -3,338 +3,688 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MountainShares - Premium Token Investment Platform</title>
+    <title>MountainShares - World's First Community-Controlled AI Platform | West Virginia</title>
+    <meta name="description" content="Revolutionary community-controlled AI platform where West Virginia heritage creates wealth. Join the blockchain revolution built by communities, for communities.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏔️</text></svg>">
+    
     <style>
+        :root {
+            --wv-gold: #FFD700;
+            --wv-gold-dark: #B8860B;
+            --wv-blue: #1E3A8A;
+            --wv-blue-light: #3B82F6;
+            --wv-blue-accent: #0EA5E9;
+            --wv-blue-dark: #1E40AF;
+            --charcoal: #1F2937;
+            --slate-light: #94A3B8;
+            --white: #FFFFFF;
+            --gradient-hero: linear-gradient(135deg, var(--wv-blue) 0%, var(--wv-blue-dark) 50%, var(--charcoal) 100%);
+            --gradient-gold: linear-gradient(135deg, var(--wv-gold) 0%, var(--wv-gold-dark) 100%);
+            --gradient-blue: linear-gradient(135deg, var(--wv-blue) 0%, var(--wv-blue-light) 100%);
+            --gradient-text: linear-gradient(135deg, var(--wv-gold) 0%, var(--white) 50%, var(--wv-blue-accent) 100%);
+            --shadow-gold: 0 0 40px rgba(255, 215, 0, 0.3);
+            --shadow-blue: 0 0 40px rgba(30, 58, 138, 0.3);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Orbitron', monospace;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            --space-4xl: 5rem;
+            --space-5xl: 6rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            font-family: var(--font-primary);
+            font-weight: 400;
+            line-height: 1.6;
+            color: var(--white);
+            background: var(--charcoal);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .homepage-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(30, 58, 138, 0.06) 0%, transparent 50%),
+                linear-gradient(135deg, var(--charcoal) 0%, #0F172A 100%);
+            animation: backgroundPulse 20s ease-in-out infinite;
+        }
+        
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.02); }
+        }
+        
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(31, 41, 55, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: var(--space-lg) 0;
+            transition: all var(--transition);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            text-decoration: none;
+        }
+        
+        .brand-logo {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-gold);
+            border-radius: var(--radius-xl);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            font-size: 24px;
+            box-shadow: var(--shadow-gold);
+            animation: logoFloat 3s ease-in-out infinite;
         }
         
-        .container {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
         }
         
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
+        .brand h1 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
-        .logo {
-            color: #667eea;
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .subtitle {
-            color: #666;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-        }
-        
-        .price-display {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .current-price {
-            color: #667eea;
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .token-input {
-            margin-bottom: 30px;
-        }
-        
-        .token-input label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #333;
-        }
-        
-        .token-input input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e5e9;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-        
-        .token-input input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .purchase-summary {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-        }
-        
-        .purchase-summary h3 {
-            margin-bottom: 15px;
-            color: #333;
-            font-size: 1.3rem;
-        }
-        
-        .summary-item {
+        .nav-menu {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 5px 0;
-            color: #666;
+            align-items: center;
+            gap: var(--space-xl);
         }
         
-        .summary-item.total {
-            border-top: 2px solid #667eea;
-            padding-top: 15px;
-            margin-top: 15px;
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: #333;
+        .nav-link {
+            color: var(--slate-light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            transition: all var(--transition);
         }
         
-        .summary-item.total .amount {
-            color: #667eea;
-            font-size: 1.4rem;
+        .nav-link:hover {
+            color: var(--wv-gold);
+            background: rgba(255, 215, 0, 0.1);
         }
         
-        .button {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 15px;
+        .nav-cta {
+            background: var(--gradient-gold);
+            color: var(--charcoal);
+            padding: var(--space-md) var(--space-xl);
+            border-radius: var(--radius-lg);
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: var(--shadow-gold);
+            transition: all var(--transition);
         }
         
-        .connect-wallet {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-        }
-        
-        .connect-wallet:hover {
+        .nav-cta:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: var(--shadow-xl), var(--shadow-gold);
         }
         
-        .purchase-tokens {
-            background: #6c757d;
-            color: white;
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: calc(80px + var(--space-4xl)) var(--space-xl) var(--space-4xl);
+            background: var(--gradient-hero);
+            position: relative;
+            overflow: hidden;
         }
         
-        .purchase-tokens:hover {
-            background: #5a6268;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(30, 58, 138, 0.08) 0%, transparent 50%);
+            animation: heroGlow 15s ease-in-out infinite;
         }
         
-        .processing-fee-note {
-            font-size: 0.9rem;
-            color: #666;
+        @keyframes heroGlow {
+            0%, 100% { opacity: 0.5; transform: rotate(0deg) scale(1); }
+            50% { opacity: 0.8; transform: rotate(180deg) scale(1.05); }
+        }
+        
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
             text-align: center;
-            margin-top: 10px;
-            font-style: italic;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-content h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: var(--space-xl);
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--wv-gold);
+            font-weight: 600;
+            margin-bottom: var(--space-lg);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .hero-description {
+            font-size: 1.125rem;
+            color: var(--slate-light);
+            margin-bottom: var(--space-2xl);
+            line-height: 1.7;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-lg) var(--space-2xl);
+            border-radius: var(--radius-xl);
+            font-weight: 700;
+            font-size: 1.125rem;
+            text-decoration: none;
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-gold);
+            color: var(--charcoal);
+            box-shadow: var(--shadow-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl), var(--shadow-gold);
+        }
+        
+        .btn-secondary {
+            background: var(--gradient-blue);
+            color: var(--white);
+            box-shadow: var(--shadow-blue);
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl), var(--shadow-blue);
+        }
+        
+        .features {
+            padding: var(--space-5xl) var(--space-xl);
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto var(--space-5xl);
+        }
+        
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: var(--space-xl);
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--slate-light);
+            line-height: 1.7;
+        }
+        
+        .features-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--space-2xl);
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-2xl);
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-blue);
+            opacity: 0.7;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-blue);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: var(--shadow-blue);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--wv-blue-accent);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .feature-description {
+            color: var(--slate-light);
+            line-height: 1.7;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .feature-highlights {
+            list-style: none;
+        }
+        
+        .feature-highlights li {
+            color: var(--slate-light);
+            margin-bottom: var(--space-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .feature-highlights li::before {
+            content: '✓';
+            color: var(--wv-gold);
+            font-weight: bold;
+            font-size: 1.125rem;
+        }
+        
+        .cta {
+            padding: var(--space-5xl) var(--space-xl);
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .cta-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            margin-bottom: var(--space-xl);
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .cta-description {
+            font-size: 1.25rem;
+            color: var(--slate-light);
+            margin-bottom: var(--space-2xl);
+            line-height: 1.7;
+        }
+        
+        .cta-actions {
+            display: flex;
+            gap: var(--space-lg);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .main-footer {
+            background: var(--charcoal);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: var(--space-3xl) var(--space-xl) var(--space-xl);
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .footer-container h3 {
+            color: var(--wv-gold);
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .footer-container p {
+            color: var(--slate-light);
+            line-height: 1.7;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 var(--space-lg);
+                flex-direction: column;
+                gap: var(--space-md);
+            }
+            
+            .nav-menu {
+                gap: var(--space-lg);
+            }
+            
+            .hero {
+                padding: calc(120px + var(--space-3xl)) var(--space-lg) var(--space-3xl);
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .features,
+            .cta {
+                padding: var(--space-3xl) var(--space-lg);
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .brand h1 {
+                font-size: 1.25rem;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">🏔️ MountainShares</div>
-            <div class="subtitle">Premium Token Investment Platform</div>
+    <div class="homepage-background"></div>
+    
+    <header class="main-header">
+        <div class="nav-container">
+            <a href="#" class="brand">
+                <div class="brand-logo">🏔️</div>
+                <h1>MountainShares</h1>
+            </a>
+            <nav class="nav-menu">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#platform" class="nav-link">Platform</a>
+                <a href="#community" class="nav-link">Community</a>
+            </nav>
+            <a href="https://buy.mountainshares.us" class="nav-cta">Buy Tokens</a>
         </div>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1>The World's First Community-Controlled AI Platform</h1>
+                    <p class="hero-subtitle">Where West Virginia Heritage Creates Wealth</p>
+                    <p class="hero-description">Revolutionary B2B social platform combining AI-powered business networking, cultural heritage monetization, and democratic governance. Built by West Virginia, for communities everywhere.</p>
+                    <div class="hero-actions">
+                        <a href="https://buy.mountainshares.us" class="btn btn-primary">
+                            🔥 Buy MountainShares
+                        </a>
+                        <a href="#features" class="btn btn-secondary">
+                            🚀 Explore Platform
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
         
-        <div class="price-display">
-            <div class="current-price">Current Price: $1.40 per token</div>
+        <section id="features" class="features">
+            <div class="section-header">
+                <h2 class="section-title">Revolutionary Platform Features</h2>
+                <p class="section-subtitle">The most sophisticated community-controlled technology ecosystem ever built, designed to empower rural communities while preserving cultural heritage.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3 class="feature-title">Heritage NFT Complex</h3>
+                    <p class="feature-description">Transform your cultural heritage into economic assets through advanced NFT technology.</p>
+                    <ul class="feature-highlights">
+                        <li>Tokenize music, art, and stories</li>
+                        <li>Community ownership and control</li>
+                        <li>Revenue sharing for creators</li>
+                        <li>Permanent cultural preservation</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💼</div>
+                    <h3 class="feature-title">Complete Business Ecosystem</h3>
+                    <p class="feature-description">Integrated payroll, employee rewards, and business networking in one platform.</p>
+                    <ul class="feature-highlights">
+                        <li>$1:$1 EMS reward system</li>
+                        <li>Advanced KYC verification</li>
+                        <li>Multi-currency settlement</li>
+                        <li>Gift card integration</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🗳️</div>
+                    <h3 class="feature-title">Democratic Governance</h3>
+                    <p class="feature-description">Community-controlled decision making with transparent, verifiable voting systems.</p>
+                    <ul class="feature-highlights">
+                        <li>All 55 WV counties represented</li>
+                        <li>AI parameter community control</li>
+                        <li>Transparent proposal system</li>
+                        <li>Cultural sensitivity weighting</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3 class="feature-title">Location-Based Discovery</h3>
+                    <p class="feature-description">Business networking across all West Virginia counties with interactive exploration.</p>
+                    <ul class="feature-highlights">
+                        <li>Interactive county exploration</li>
+                        <li>Business verification system</li>
+                        <li>Service marketplace</li>
+                        <li>Partnership facilitation</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title">Privacy-First Security</h3>
+                    <p class="feature-description">Advanced cryptographic security with local data processing and community sovereignty.</p>
+                    <ul class="feature-highlights">
+                        <li>Merkle tree verification</li>
+                        <li>Local DeepSeek processing</li>
+                        <li>Community data control</li>
+                        <li>Emergency response systems</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">AI-Powered Efficiency</h3>
+                    <p class="feature-description">15 specialized AI agents optimizing platform operations with community oversight.</p>
+                    <ul class="feature-highlights">
+                        <li>Emotional intelligence processing</li>
+                        <li>Community-controlled parameters</li>
+                        <li>Cultural sensitivity algorithms</li>
+                        <li>Continuous learning systems</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section id="community" class="cta">
+            <div class="cta-container">
+                <h2 class="cta-title">Join the Revolution</h2>
+                <p class="cta-description">Be part of the world's first community-controlled AI platform. Where technology serves people, not the other way around.</p>
+                <div class="cta-actions">
+                    <a href="https://buy.mountainshares.us" class="btn btn-primary">
+                        🏔️ Buy MountainShares
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="main-footer">
+        <div class="footer-container">
+            <h3>MountainShares Platform</h3>
+            <p>The world's first community-controlled AI-powered B2B social platform. Built in West Virginia, designed for communities everywhere.</p>
+            <br>
+            <p>&copy; 2025 MountainShares Platform. Serving West Virginia communities with revolutionary technology.</p>
         </div>
-        
-        <div class="token-input">
-            <label for="tokenQuantity">Number of Tokens:</label>
-            <input type="number" id="tokenQuantity" value="1" min="1" max="1000" onchange="updatePurchaseSummary()">
-        </div>
-        
-        <div class="purchase-summary">
-            <h3>Purchase Summary</h3>
-            <div class="summary-item">
-                <span>Token Price:</span>
-                <span id="tokenPrice">$1.00</span>
-            </div>
-            <div class="summary-item">
-                <span>Quantity:</span>
-                <span id="quantity">1</span>
-            </div>
-            <div class="summary-item">
-                <span>Subtotal:</span>
-                <span id="subtotal">$1.00</span>
-            </div>
-            <div class="summary-item">
-                <span>Processing Fees:</span>
-                <span id="processingFees">$0.40</span>
-            </div>
-            <div class="summary-item total">
-                <span>Total Amount:</span>
-                <span class="amount" id="totalAmount">$1.40</span>
-            </div>
-        </div>
-        
-        <button class="button connect-wallet" onclick="connectWallet()">Connect Wallet</button>
-        <button class="button purchase-tokens" onclick="purchaseTokens()">Purchase Tokens</button>
-        
-        <div class="processing-fee-note">
-            Processing fees include platform fee (2% + $0.03), additional processing (0.5%), Stripe processing (2.9% + $0.30), and SEC regulatory fees ($0.01)
-        </div>
-    </div>
+    </footer>
 
     <script>
-        // MountainShares Fee Formula Implementation
-        const MOUNTAINSHARES_PRICING = {
-            TOKEN_BASE_PRICE: 1.00
-        };
-
-        function calculateProcessingFees(tokenPrice) {
-            // Platform Fee: X(2% + $0.03) = $0.05
-            const platformFee = Math.round((tokenPrice * 0.02 + 0.03) * 100) / 100;
-            
-            // Additional Processing: X(0.5%) rounded to nearest penny = $0.01
-            const additionalProcessing = Math.round((tokenPrice * 0.005) * 100) / 100;
-            
-            // Stripe Processing: X(2.9% + $0.30) rounded to nearest penny = $0.33
-            const stripeProcessing = Math.round((tokenPrice * 0.029 + 0.30) * 100) / 100;
-            
-            // Hidden Stripe SEC regulatory fees = $0.01
-            const hiddenSECFees = 0.01;
-            
-            return platformFee + additionalProcessing + stripeProcessing + hiddenSECFees;
-        }
-
-        function updatePurchaseSummary() {
-            const quantity = parseInt(document.getElementById('tokenQuantity').value) || 1;
-            const tokenPrice = MOUNTAINSHARES_PRICING.TOKEN_BASE_PRICE;
-            const subtotal = tokenPrice * quantity;
-            const processingFees = calculateProcessingFees(tokenPrice) * quantity;
-            const totalAmount = subtotal + processingFees;
-            
-            // Update display elements
-            document.getElementById('tokenPrice').textContent = `$${tokenPrice.toFixed(2)}`;
-            document.getElementById('quantity').textContent = quantity;
-            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-            document.getElementById('processingFees').textContent = `$${processingFees.toFixed(2)}`;
-            document.getElementById('totalAmount').textContent = `$${totalAmount.toFixed(2)}`;
-            
-            // Update header price display
-            const priceDisplay = document.querySelector('.current-price');
-            if (priceDisplay) {
-                priceDisplay.textContent = `Current Price: $${totalAmount.toFixed(2)} per token`;
-            }
-            
-            console.log('MountainShares pricing updated:', {
-                quantity: quantity,
-                tokenPrice: tokenPrice,
-                subtotal: subtotal,
-                processingFees: processingFees,
-                totalAmount: totalAmount
-            });
-        }
-
-        function connectWallet() {
-            console.log('🔗 Connecting wallet for MountainShares...');
-            
-            const button = document.querySelector('.connect-wallet');
-            button.textContent = 'Wallet Connected ✓';
-            button.style.background = '#28a745';
-            button.disabled = true;
-            
-            setTimeout(() => {
-                button.textContent = 'Connect Wallet';
-                button.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
-                button.disabled = false;
-            }, 3000);
-        }
-
-        async function purchaseTokens() {
-            console.log('🏔️ Initiating MountainShares token purchase...');
-            
-            const quantity = parseInt(document.getElementById('tokenQuantity').value) || 1;
-            const tokenPrice = MOUNTAINSHARES_PRICING.TOKEN_BASE_PRICE;
-            const processingFees = calculateProcessingFees(tokenPrice) * quantity;
-            const totalAmount = (tokenPrice * quantity) + processingFees;
-            
-            console.log(`💰 Purchase: ${quantity} tokens for $${totalAmount.toFixed(2)}`);
-            
-            const button = document.querySelector('.purchase-tokens');
-            const originalText = button.textContent;
-            
-            button.textContent = 'Processing Purchase...';
-            button.disabled = true;
-            
-            try {
-                const response = await fetch('/netlify/functions/create-checkout-session', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        quantity: quantity,
-                        totalAmount: totalAmount,
-                        tokenPrice: tokenPrice,
-                        processingFees: processingFees,
-                        platform: 'MountainShares',
-                        community: 'Mount Hope, WV'
-                    })
-                });
-                
-                const session = await response.json();
-                
-                if (session.error) {
-                    throw new Error(session.error);
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
-                
-                window.location.href = session.url;
-                
-            } catch (error) {
-                console.error('❌ Purchase failed:', error);
-                alert(`Purchase failed: ${error.message}`);
-                
-                button.textContent = originalText;
-                button.disabled = false;
+            });
+        });
+        
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.main-header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(31, 41, 55, 0.98)';
+            } else {
+                header.style.background = 'rgba(31, 41, 55, 0.95)';
             }
-        }
-
-        // Initialize on page load
+        });
+        
         document.addEventListener('DOMContentLoaded', function() {
-            updatePurchaseSummary();
-            
-            // Bind quantity input changes
-            const quantityInput = document.getElementById('tokenQuantity');
-            if (quantityInput) {
-                quantityInput.addEventListener('input', updatePurchaseSummary);
-            }
-            
-            console.log('🏔️ MountainShares platform initialized');
-            console.log('💰 Fee formula: 2% + $0.03 + 0.5% + 2.9% + $0.30 + $0.01 = $0.40');
+            console.log('🚀 MOUNTAINSHARES HOMEPAGE LOADED 🚀');
+            console.log('🏔️ Revolutionary Community-Controlled AI Platform');
+            console.log('💎 Visit https://buy.mountainshares.us to purchase tokens');
         });
     </script>
 </body>
