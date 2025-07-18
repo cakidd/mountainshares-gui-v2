@@ -187,6 +187,11 @@
             cursor: not-allowed;
         }
         
+        .btn.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
         .community-info {
             background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
             border-radius: 10px;
@@ -249,6 +254,18 @@
             background: #fff3cd;
             border-color: #ffeaa7;
             color: #856404;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
         }
         
         @media (max-width: 768px) {
@@ -456,6 +473,7 @@
         function purchaseTokens() {
             var quantity = parseInt(document.getElementById('quantity').value) || 1;
             var calculations = calculateTotals(quantity);
+            var purchaseButton = document.getElementById('purchaseButton');
             
             console.log('MountainShares Purchase:', {
                 quantity: quantity,
@@ -465,18 +483,63 @@
                 community: 'Mount Hope, WV'
             });
             
-            // Create checkout session with variable pricing
+            // Disable button and show loading state
+            purchaseButton.disabled = true;
+            purchaseButton.textContent = 'Creating checkout session...';
+            purchaseButton.classList.add('loading');
+            
+            // Create checkout session data
             var checkoutData = {
                 quantity: quantity,
                 amount: Math.round(calculations.total * 100), // Convert to cents
-                description: 'MountainShares Token Purchase - Mount Hope, WV'
+                totalAmount: calculations.total,
+                description: 'MountainShares Token Purchase - Mount Hope, WV',
+                community: 'Mount Hope, WV',
+                platform: 'MountainShares'
             };
             
-            // Redirect to Netlify function
-            window.location.href = '/.netlify/functions/create-checkout-session?' + 
-                'quantity=' + encodeURIComponent(quantity) + 
-                '&amount=' + encodeURIComponent(checkoutData.amount) + 
-                '&description=' + encodeURIComponent(checkoutData.description);
+            // Send POST request to Netlify function
+            fetch('/.netlify/functions/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(checkoutData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.url) {
+                    console.log('✅ Checkout session created successfully');
+                    console.log('🔗 Redirecting to Stripe checkout...');
+                    // Redirect to Stripe checkout
+                    window.location.href = data.url;
+                } else if (data.error) {
+                    console.error('❌ Error creating checkout session:', data.error);
+                    alert('Error creating checkout session: ' + data.error);
+                    resetPurchaseButton();
+                } else {
+                    console.error('❌ Unexpected response format:', data);
+                    alert('Unexpected response from payment system. Please try again.');
+                    resetPurchaseButton();
+                }
+            })
+            .catch(error => {
+                console.error('❌ Network error:', error);
+                alert('Error connecting to payment system. Please check your connection and try again.');
+                resetPurchaseButton();
+            });
+        }
+
+        function resetPurchaseButton() {
+            var purchaseButton = document.getElementById('purchaseButton');
+            purchaseButton.disabled = false;
+            purchaseButton.textContent = 'Purchase Tokens';
+            purchaseButton.classList.remove('loading');
         }
 
         function calculateAndUpdate() {
@@ -503,6 +566,6 @@
             calculateAndUpdate();
         });
     </script>
-    <!-- Cache clear: 1752871855 -->
+    <!-- Cache clear: 1752872455 -->
 </body>
 </html>
