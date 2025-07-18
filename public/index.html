@@ -216,28 +216,26 @@
     <script>
         var wallet = null;
         var isConnected = false;
-        var tokenPrice = 1.00;
-        var platformFeeRate = 0.025;
-        var stripeFeeRate = 0.029;
-        var stripeFixedFee = 0.30;
-        var stripeSurchargeRate = 0.003;
-        var minimumStripeSurcharge = 0.01;
-
-        function roundToCents(value) {
-            return Math.round(value * 100) / 100;
-        }
-
+                var tokenPrice = 1.00;
+        var platformFee = 0.05;
+        var processingFee = 0.01;
+        var stripeFee = 0.33;
+        var secFee = 0.01;
+        var totalFees = 0.40;
+        var totalAmount = 1.40;
+        
         function calculateTotals(quantity) {
             var subtotal = roundToCents(quantity * tokenPrice);
-            var platformFee = roundToCents(subtotal * platformFeeRate);
-            var stripePercentFee = roundToCents(subtotal * stripeFeeRate);
+            var totalProcessingFees = roundToCents(quantity * totalFees);
+            var total = roundToCents(subtotal + totalProcessingFees);
             
-            var calculatedSurcharge = subtotal * stripeSurchargeRate;
-            var stripeSurcharge = Math.max(
-                Math.ceil(calculatedSurcharge * 100) / 100,
-                minimumStripeSurcharge
-            );
-            
+            return {
+                subtotal: subtotal,
+                totalProcessingFees: totalProcessingFees,
+                total: total
+            };
+        }
+    
             var totalProcessingFees = roundToCents(platformFee + stripePercentFee + stripeFixedFee + stripeSurcharge);
             var total = roundToCents(subtotal + totalProcessingFees);
 
