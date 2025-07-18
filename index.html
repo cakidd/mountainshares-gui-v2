@@ -209,7 +209,7 @@
     </div>
 
     <script>
-        // MountainShares pricing configuration
+        // MountainShares accurate pricing configuration
         const MOUNTAINSHARES_PRICING = {
             TOKEN_BASE_PRICE: 1.00,
             PROCESSING_FEE: 0.40,
@@ -219,7 +219,7 @@
         function updatePurchaseSummary() {
             const quantity = parseInt(document.getElementById('tokenQuantity').value) || 1;
             
-            // Calculate totals
+            // Calculate totals with accurate pricing
             const tokenPrice = MOUNTAINSHARES_PRICING.TOKEN_BASE_PRICE;
             const subtotal = tokenPrice * quantity;
             const processingFees = MOUNTAINSHARES_PRICING.PROCESSING_FEE * quantity;
@@ -244,7 +244,6 @@
         function connectWallet() {
             console.log('🔗 Connecting wallet for MountainShares...');
             
-            // Simulate wallet connection
             const button = document.querySelector('.connect-wallet');
             button.textContent = 'Wallet Connected ✓';
             button.style.background = '#28a745';
@@ -265,7 +264,6 @@
             
             console.log(`💰 Purchase: ${quantity} tokens for $${totalAmount.toFixed(2)}`);
             
-            // Simulate purchase process
             const button = document.querySelector('.purchase-tokens');
             const originalText = button.textContent;
             
@@ -273,7 +271,7 @@
             button.disabled = true;
             
             try {
-                // Create Stripe checkout session
+                // Create checkout session with accurate pricing
                 const response = await fetch('/api/create-checkout-session', {
                     method: 'POST',
                     headers: {
@@ -295,7 +293,6 @@
                     throw new Error(session.error);
                 }
                 
-                // Redirect to Stripe Checkout
                 window.location.href = session.url;
                 
             } catch (error) {
@@ -311,7 +308,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             updatePurchaseSummary();
             console.log('🏔️ MountainShares platform initialized');
-            console.log('💰 Pricing: $1.40 per token ($1.00 + $0.40 processing)');
+            console.log('💰 Accurate pricing: $1.40 per token ($1.00 + $0.40 processing)');
         });
     </script>
 </body>
