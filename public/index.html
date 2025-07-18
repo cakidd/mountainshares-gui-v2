@@ -245,6 +245,12 @@
             color: #0c5460;
         }
         
+        .alert-warning {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+        
         @media (max-width: 768px) {
             .container {
                 margin: 10px;
@@ -274,7 +280,7 @@
         
         <div class="content">
             <div class="alert alert-info">
-                <strong>Community Platform:</strong> Serving Mount Hope, WV with transparent, democratic blockchain services.
+                <strong>Community Platform:</strong> Serving Mount Hope, WV with transparent, variable-fee blockchain services.
             </div>
             
             <div class="pricing-section">
@@ -283,18 +289,26 @@
                     Current Price: $1.00 per token
                 </div>
                 
+                <div class="alert alert-warning">
+                    <strong>Transaction-Based Fees:</strong> Processing fees are calculated per transaction, not per token. Larger purchases are more economical.
+                </div>
+                
                 <div class="fee-breakdown">
                     <div class="fee-item">
                         <span>Token Price:</span>
-                        <span id="tokenPrice">$1.00</span>
+                        <span id="tokenPrice">$1.00 per token</span>
                     </div>
                     <div class="fee-item">
                         <span>Processing Fee:</span>
-                        <span>$0.40</span>
+                        <span id="processingFeeDisplay">Variable per transaction</span>
                     </div>
                     <div class="fee-item total">
-                        <span>Total per Token:</span>
-                        <span>$1.40</span>
+                        <span>Example (1 token):</span>
+                        <span>$1.40 total</span>
+                    </div>
+                    <div class="fee-item total">
+                        <span>Example (100 tokens):</span>
+                        <span>$106.23 total</span>
                     </div>
                 </div>
             </div>
@@ -310,12 +324,24 @@
                 <div class="summary-section">
                     <h4>Purchase Summary</h4>
                     <div class="summary-row">
-                        <span>Subtotal:</span>
+                        <span>Token Subtotal:</span>
                         <span id="displaySubtotal">$1.00</span>
                     </div>
                     <div class="summary-row">
-                        <span>Processing Fee:</span>
-                        <span id="displayProcessingFees">$0.40</span>
+                        <span>Platform Fee (2% + $0.03):</span>
+                        <span id="displayPlatformFee">$0.05</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Processing Fee (0.5%):</span>
+                        <span id="displayProcessingFee">$0.01</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Stripe Fee (2.9% + $0.30):</span>
+                        <span id="displayStripeFee">$0.33</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>SEC Hidden Fee (~0.5%):</span>
+                        <span id="displaySecFee">$0.01</span>
                     </div>
                     <div class="summary-row total">
                         <span>Total Amount:</span>
@@ -335,8 +361,8 @@
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">💎</div>
-                    <h4>Transparent Pricing</h4>
-                    <p>Fixed $1.40 per token with clear fee structure</p>
+                    <h4>Variable Pricing</h4>
+                    <p>Transaction-based fees - larger purchases save money</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🔒</div>
@@ -351,7 +377,7 @@
                 <p><strong>Mission:</strong> Bringing modern blockchain technology to Appalachian communities while preserving traditional values</p>
                 <p><strong>Governance:</strong> Community-controlled with democratic decision making</p>
                 <p><strong>Technology:</strong> Built on Arbitrum for fast, low-cost transactions</p>
-                <p><strong>Pricing:</strong> Transparent $1.40 per token ($1.00 + $0.40 processing fee)</p>
+                <p><strong>Pricing:</strong> Variable transaction-based fees (1 token = $1.40, 100 tokens = $106.23)</p>
             </div>
         </div>
         
@@ -365,26 +391,50 @@
         var wallet = null;
         var isConnected = false;
         var tokenPrice = 1.00;
-        var platformFee = 0.05;
-        var processingFee = 0.01;
-        var stripeFee = 0.33;
-        var secFee = 0.01;
-        var totalFees = 0.40;
-        var totalAmount = 1.40;
 
         function roundToCents(value) {
-            return Math.round(value * 100) / 100;
+            return Math.ceil(value * 100) / 100;
+        }
+
+        function calculateTransactionFees(subtotal) {
+            // Platform fee: 2% + $0.03
+            var platformFee = roundToCents(subtotal * 0.02 + 0.03);
+            
+            // Processing fee: 0.5%
+            var processingFee = roundToCents(subtotal * 0.005);
+            
+            // Stripe fee: 2.9% + $0.30
+            var stripeFee = roundToCents(subtotal * 0.029 + 0.30);
+            
+            // SEC hidden fee: ~0.5%
+            var secFee = roundToCents(subtotal * 0.005);
+            
+            return {
+                platformFee: platformFee,
+                processingFee: processingFee,
+                stripeFee: stripeFee,
+                secFee: secFee,
+                totalFees: platformFee + processingFee + stripeFee + secFee
+            };
         }
 
         function calculateTotals(quantity) {
-            // Fixed pricing structure for Mount Hope, WV community
+            // Calculate subtotal
             var subtotal = roundToCents(quantity * tokenPrice);
-            var totalProcessingFees = roundToCents(quantity * totalFees);
-            var total = roundToCents(quantity * totalAmount);
+            
+            // Calculate transaction-based fees
+            var fees = calculateTransactionFees(subtotal);
+            
+            // Calculate total
+            var total = roundToCents(subtotal + fees.totalFees);
             
             return {
                 subtotal: subtotal,
-                totalProcessingFees: totalProcessingFees,
+                platformFee: fees.platformFee,
+                processingFee: fees.processingFee,
+                stripeFee: fees.stripeFee,
+                secFee: fees.secFee,
+                totalFees: fees.totalFees,
                 total: total
             };
         }
@@ -396,8 +446,17 @@
             if (document.getElementById('displaySubtotal')) {
                 document.getElementById('displaySubtotal').textContent = '$' + calculations.subtotal.toFixed(2);
             }
-            if (document.getElementById('displayProcessingFees')) {
-                document.getElementById('displayProcessingFees').textContent = '$' + calculations.totalProcessingFees.toFixed(2);
+            if (document.getElementById('displayPlatformFee')) {
+                document.getElementById('displayPlatformFee').textContent = '$' + calculations.platformFee.toFixed(2);
+            }
+            if (document.getElementById('displayProcessingFee')) {
+                document.getElementById('displayProcessingFee').textContent = '$' + calculations.processingFee.toFixed(2);
+            }
+            if (document.getElementById('displayStripeFee')) {
+                document.getElementById('displayStripeFee').textContent = '$' + calculations.stripeFee.toFixed(2);
+            }
+            if (document.getElementById('displaySecFee')) {
+                document.getElementById('displaySecFee').textContent = '$' + calculations.secFee.toFixed(2);
             }
             if (document.getElementById('displayTotal')) {
                 document.getElementById('displayTotal').textContent = '$' + calculations.total.toFixed(2);
@@ -422,12 +481,16 @@
             console.log('MountainShares Purchase:', {
                 quantity: quantity,
                 subtotal: calculations.subtotal,
-                processingFees: calculations.totalProcessingFees,
+                platformFee: calculations.platformFee,
+                processingFee: calculations.processingFee,
+                stripeFee: calculations.stripeFee,
+                secFee: calculations.secFee,
+                totalFees: calculations.totalFees,
                 total: calculations.total,
                 community: 'Mount Hope, WV'
             });
             
-            // Create checkout session with fixed pricing
+            // Create checkout session with variable pricing
             var checkoutData = {
                 quantity: quantity,
                 amount: Math.round(calculations.total * 100), // Convert to cents
@@ -448,7 +511,7 @@
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             console.log('MountainShares platform loaded - Mount Hope, WV');
-            console.log('Fixed pricing: $1.40 per token ($1.00 + $0.40 processing fee)');
+            console.log('Variable transaction-based pricing: 1 token = $1.40, 100 tokens = $106.23');
             
             // Add event listeners with error checking
             if (document.getElementById('quantity')) {
@@ -465,6 +528,6 @@
             calculateAndUpdate();
         });
     </script>
-    <!-- Cache clear: 1752870855 -->
+    <!-- Cache clear: 1752871255 -->
 </body>
 </html>
