@@ -13,25 +13,41 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏔️</text></svg>">
     
     <style>
+        /* MOUNTAINSHARES NEW HOMEPAGE DESIGN SYSTEM */
         :root {
+            /* West Virginia Brand Colors */
             --wv-gold: #FFD700;
             --wv-gold-dark: #B8860B;
             --wv-blue: #1E3A8A;
             --wv-blue-light: #3B82F6;
             --wv-blue-accent: #0EA5E9;
             --wv-blue-dark: #1E40AF;
+            
+            /* Professional Palette */
             --charcoal: #1F2937;
+            --charcoal-light: #374151;
+            --slate: #64748B;
             --slate-light: #94A3B8;
             --white: #FFFFFF;
+            --off-white: #F9FAFB;
+            
+            /* Revolutionary Gradients */
             --gradient-hero: linear-gradient(135deg, var(--wv-blue) 0%, var(--wv-blue-dark) 50%, var(--charcoal) 100%);
             --gradient-gold: linear-gradient(135deg, var(--wv-gold) 0%, var(--wv-gold-dark) 100%);
             --gradient-blue: linear-gradient(135deg, var(--wv-blue) 0%, var(--wv-blue-light) 100%);
             --gradient-text: linear-gradient(135deg, var(--wv-gold) 0%, var(--white) 50%, var(--wv-blue-accent) 100%);
+            
+            /* Premium Shadows */
             --shadow-gold: 0 0 40px rgba(255, 215, 0, 0.3);
             --shadow-blue: 0 0 40px rgba(30, 58, 138, 0.3);
             --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            
+            /* Typography */
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             --font-display: 'Orbitron', monospace;
+            
+            /* Spacing System */
+            --space-xs: 0.25rem;
             --space-sm: 0.5rem;
             --space-md: 1rem;
             --space-lg: 1.5rem;
@@ -40,13 +56,19 @@
             --space-3xl: 4rem;
             --space-4xl: 5rem;
             --space-5xl: 6rem;
+            
+            /* Border Radius */
             --radius-md: 0.5rem;
             --radius-lg: 0.75rem;
             --radius-xl: 1rem;
             --radius-2xl: 1.5rem;
+            --radius-3xl: 2rem;
+            
+            /* Transitions */
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
+        /* RESET & BASE */
         * {
             margin: 0;
             padding: 0;
@@ -69,6 +91,7 @@
             -moz-osx-font-smoothing: grayscale;
         }
         
+        /* DYNAMIC BACKGROUND */
         .homepage-background {
             position: fixed;
             top: 0;
@@ -88,6 +111,7 @@
             50% { opacity: 0.9; transform: scale(1.02); }
         }
         
+        /* NAVIGATION HEADER */
         .main-header {
             position: fixed;
             top: 0;
@@ -183,6 +207,7 @@
             box-shadow: var(--shadow-xl), var(--shadow-gold);
         }
         
+        /* HERO SECTION */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -214,7 +239,10 @@
         .hero-container {
             max-width: 1400px;
             margin: 0 auto;
-            text-align: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-5xl);
+            align-items: center;
             position: relative;
             z-index: 2;
         }
@@ -244,16 +272,12 @@
             color: var(--slate-light);
             margin-bottom: var(--space-2xl);
             line-height: 1.7;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
         }
         
         .hero-actions {
             display: flex;
             gap: var(--space-lg);
             flex-wrap: wrap;
-            justify-content: center;
         }
         
         .btn {
@@ -309,6 +333,57 @@
             box-shadow: var(--shadow-xl), var(--shadow-blue);
         }
         
+        .hero-visual {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xl);
+        }
+        
+        .feature-preview {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            transition: all var(--transition);
+        }
+        
+        .feature-preview:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 215, 0, 0.3);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .preview-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .preview-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-gold);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .preview-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--wv-gold);
+        }
+        
+        .preview-description {
+            color: var(--slate-light);
+            line-height: 1.6;
+        }
+        
+        /* FEATURES SECTION */
         .features {
             padding: var(--space-5xl) var(--space-xl);
             background: rgba(0, 0, 0, 0.3);
@@ -352,25 +427,12 @@
             border-radius: var(--radius-2xl);
             padding: var(--space-2xl);
             transition: all var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--gradient-blue);
-            opacity: 0.7;
         }
         
         .feature-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(59, 130, 246, 0.3);
-            box-shadow: var(--shadow-xl);
+            transform: translateY(-8px);
+            border-color: rgba(30, 58, 138, 0.3);
+            box-shadow: var(--shadow-xl), var(--shadow-blue);
         }
         
         .feature-icon {
@@ -381,7 +443,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 30px;
             box-shadow: var(--shadow-blue);
             margin-bottom: var(--space-xl);
         }
@@ -399,11 +461,12 @@
             margin-bottom: var(--space-lg);
         }
         
-        .feature-highlights {
+        .feature-list {
             list-style: none;
+            padding: 0;
         }
         
-        .feature-highlights li {
+        .feature-list li {
             color: var(--slate-light);
             margin-bottom: var(--space-sm);
             display: flex;
@@ -411,13 +474,52 @@
             gap: var(--space-sm);
         }
         
-        .feature-highlights li::before {
+        .feature-list li::before {
             content: '✓';
             color: var(--wv-gold);
             font-weight: bold;
             font-size: 1.125rem;
         }
         
+        /* STATS SECTION */
+        .stats {
+            padding: var(--space-5xl) var(--space-xl);
+            background: var(--gradient-hero);
+        }
+        
+        .stats-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-2xl);
+            margin-top: var(--space-2xl);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--wv-gold);
+            margin-bottom: var(--space-sm);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .stat-label {
+            font-size: 1.125rem;
+            color: var(--slate-light);
+            font-weight: 600;
+        }
+        
+        /* CTA SECTION */
         .cta {
             padding: var(--space-5xl) var(--space-xl);
             background: rgba(0, 0, 0, 0.5);
@@ -454,7 +556,8 @@
             flex-wrap: wrap;
         }
         
-        .main-footer {
+        /* FOOTER */
+        .footer {
             background: var(--charcoal);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding: var(--space-3xl) var(--space-xl) var(--space-xl);
@@ -463,33 +566,58 @@
         .footer-container {
             max-width: 1400px;
             margin: 0 auto;
-            text-align: center;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-2xl);
         }
         
-        .footer-container h3 {
+        .footer-section h3 {
             color: var(--wv-gold);
             font-weight: 700;
             margin-bottom: var(--space-lg);
         }
         
-        .footer-container p {
+        .footer-section p,
+        .footer-section a {
             color: var(--slate-light);
             line-height: 1.7;
+            text-decoration: none;
+            margin-bottom: var(--space-sm);
+            display: block;
+        }
+        
+        .footer-section a:hover {
+            color: var(--wv-gold);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: var(--space-xl);
+            margin-top: var(--space-2xl);
+            text-align: center;
+            color: var(--slate-light);
+        }
+        
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: var(--space-3xl);
+                text-align: center;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
         }
         
         @media (max-width: 768px) {
             .nav-container {
                 padding: 0 var(--space-lg);
-                flex-direction: column;
-                gap: var(--space-md);
-            }
-            
-            .nav-menu {
-                gap: var(--space-lg);
             }
             
             .hero {
-                padding: calc(120px + var(--space-3xl)) var(--space-lg) var(--space-3xl);
+                padding: calc(80px + var(--space-3xl)) var(--space-lg) var(--space-3xl);
             }
             
             .hero-actions {
@@ -504,6 +632,7 @@
             }
             
             .features,
+            .stats,
             .cta {
                 padding: var(--space-3xl) var(--space-lg);
             }
@@ -511,15 +640,25 @@
             .features-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .cta-actions {
+                flex-direction: column;
+                align-items: center;
+            }
         }
         
         @media (max-width: 480px) {
-            .brand h1 {
-                font-size: 1.25rem;
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
             
-            .nav-menu {
-                display: none;
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
             }
         }
     </style>
@@ -558,6 +697,29 @@
                         </a>
                     </div>
                 </div>
+                <div class="hero-visual">
+                    <div class="feature-preview">
+                        <div class="preview-header">
+                            <div class="preview-icon">🤖</div>
+                            <h3 class="preview-title">Community-Controlled AI</h3>
+                        </div>
+                        <p class="preview-description">15 AI agents with emotional intelligence, locally processed with DeepSeek R1, democratically controlled by community vote.</p>
+                    </div>
+                    <div class="feature-preview">
+                        <div class="preview-header">
+                            <div class="preview-icon">🏛️</div>
+                            <h3 class="preview-title">Heritage Monetization</h3>
+                        </div>
+                        <p class="preview-description">Convert Appalachian traditions, music, and stories into NFT assets that generate revenue for cultural creators.</p>
+                    </div>
+                    <div class="feature-preview">
+                        <div class="preview-header">
+                            <div class="preview-icon">🤝</div>
+                            <h3 class="preview-title">B2B Social Network</h3>
+                        </div>
+                        <p class="preview-description">Location-based business discovery, integrated payroll systems, and democratic governance for 55 WV counties.</p>
+                    </div>
+                </div>
             </div>
         </section>
         
@@ -571,7 +733,7 @@
                     <div class="feature-icon">🎨</div>
                     <h3 class="feature-title">Heritage NFT Complex</h3>
                     <p class="feature-description">Transform your cultural heritage into economic assets through advanced NFT technology.</p>
-                    <ul class="feature-highlights">
+                    <ul class="feature-list">
                         <li>Tokenize music, art, and stories</li>
                         <li>Community ownership and control</li>
                         <li>Revenue sharing for creators</li>
@@ -582,7 +744,7 @@
                     <div class="feature-icon">💼</div>
                     <h3 class="feature-title">Complete Business Ecosystem</h3>
                     <p class="feature-description">Integrated payroll, employee rewards, and business networking in one platform.</p>
-                    <ul class="feature-highlights">
+                    <ul class="feature-list">
                         <li>$1:$1 EMS reward system</li>
                         <li>Advanced KYC verification</li>
                         <li>Multi-currency settlement</li>
@@ -593,7 +755,7 @@
                     <div class="feature-icon">🗳️</div>
                     <h3 class="feature-title">Democratic Governance</h3>
                     <p class="feature-description">Community-controlled decision making with transparent, verifiable voting systems.</p>
-                    <ul class="feature-highlights">
+                    <ul class="feature-list">
                         <li>All 55 WV counties represented</li>
                         <li>AI parameter community control</li>
                         <li>Transparent proposal system</li>
@@ -604,7 +766,7 @@
                     <div class="feature-icon">🔍</div>
                     <h3 class="feature-title">Location-Based Discovery</h3>
                     <p class="feature-description">Business networking across all West Virginia counties with interactive exploration.</p>
-                    <ul class="feature-highlights">
+                    <ul class="feature-list">
                         <li>Interactive county exploration</li>
                         <li>Business verification system</li>
                         <li>Service marketplace</li>
@@ -615,7 +777,7 @@
                     <div class="feature-icon">🛡️</div>
                     <h3 class="feature-title">Privacy-First Security</h3>
                     <p class="feature-description">Advanced cryptographic security with local data processing and community sovereignty.</p>
-                    <ul class="feature-highlights">
+                    <ul class="feature-list">
                         <li>Merkle tree verification</li>
                         <li>Local DeepSeek processing</li>
                         <li>Community data control</li>
@@ -626,12 +788,37 @@
                     <div class="feature-icon">⚡</div>
                     <h3 class="feature-title">AI-Powered Efficiency</h3>
                     <p class="feature-description">15 specialized AI agents optimizing platform operations with community oversight.</p>
-                    <ul class="feature-highlights">
+                    <ul class="feature-list">
                         <li>Emotional intelligence processing</li>
                         <li>Community-controlled parameters</li>
                         <li>Cultural sensitivity algorithms</li>
                         <li>Continuous learning systems</li>
                     </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section id="platform" class="stats">
+            <div class="stats-container">
+                <h2 class="section-title">Platform by the Numbers</h2>
+                <p class="section-subtitle">Real results from West Virginia's revolutionary community-controlled platform</p>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">55</div>
+                        <div class="stat-label">WV Counties Served</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">15</div>
+                        <div class="stat-label">AI Agents Active</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">$1.40</div>
+                        <div class="stat-label">Token Price (Fixed)</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Community Controlled</div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -642,23 +829,50 @@
                 <p class="cta-description">Be part of the world's first community-controlled AI platform. Where technology serves people, not the other way around.</p>
                 <div class="cta-actions">
                     <a href="https://buy.mountainshares.us" class="btn btn-primary">
-                        🏔️ Buy MountainShares
+                        🏔️ Buy MountainShares Now
                     </a>
                 </div>
             </div>
         </section>
     </main>
     
-    <footer class="main-footer">
+    <footer class="footer">
         <div class="footer-container">
-            <h3>MountainShares Platform</h3>
-            <p>The world's first community-controlled AI-powered B2B social platform. Built in West Virginia, designed for communities everywhere.</p>
-            <br>
+            <div class="footer-section">
+                <h3>MountainShares Platform</h3>
+                <p>The world's first community-controlled AI-powered B2B social platform. Built in West Virginia, designed for communities everywhere.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Platform Features</h3>
+                <a href="#features">Heritage NFT Complex</a>
+                <a href="#features">Business Ecosystem</a>
+                <a href="#features">Democratic Governance</a>
+                <a href="#features">AI-Powered Efficiency</a>
+            </div>
+            <div class="footer-section">
+                <h3>Community</h3>
+                <a href="https://mammakidd.substack.com">Mamma Kidd's Substack</a>
+                <a href="#community">Join the Revolution</a>
+                <a href="https://buy.mountainshares.us">Buy Tokens</a>
+                <a href="#platform">Platform Stats</a>
+            </div>
+            <div class="footer-section">
+                <h3>Technology</h3>
+                <p>Community-Controlled AI</p>
+                <p>DeepSeek R1 Processing</p>
+                <p>Blockchain Infrastructure</p>
+                <p>Privacy-First Design</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
             <p>&copy; 2025 MountainShares Platform. Serving West Virginia communities with revolutionary technology.</p>
         </div>
     </footer>
 
     <script>
+        // MOUNTAINSHARES HOMEPAGE INTERACTIVITY
+        
+        // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -672,15 +886,67 @@
             });
         });
         
+        // Header background on scroll
         window.addEventListener('scroll', () => {
             const header = document.querySelector('.main-header');
             if (window.scrollY > 100) {
                 header.style.background = 'rgba(31, 41, 55, 0.98)';
+                header.style.backdropFilter = 'blur(30px)';
             } else {
                 header.style.background = 'rgba(31, 41, 55, 0.95)';
+                header.style.backdropFilter = 'blur(20px)';
             }
         });
         
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(stat => {
+                        const finalNumber = stat.textContent;
+                        if (finalNumber.includes('$')) {
+                            stat.textContent = finalNumber;
+                        } else if (finalNumber.includes('%')) {
+                            animateCounter(stat, 0, 100, '%');
+                        } else {
+                            animateCounter(stat, 0, parseInt(finalNumber), '');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+        
+        const statsSection = document.querySelector('.stats');
+        if (statsSection) {
+            statsObserver.observe(statsSection);
+        }
+        
+        function animateCounter(element, start, end, suffix) {
+            const duration = 2000;
+            const startTime = performance.now();
+            
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const current = Math.floor(start + (end - start) * progress);
+                
+                element.textContent = current + suffix;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+            
+            requestAnimationFrame(updateCounter);
+        }
+        
+        // Initialize homepage
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 MOUNTAINSHARES HOMEPAGE LOADED 🚀');
             console.log('🏔️ Revolutionary Community-Controlled AI Platform');

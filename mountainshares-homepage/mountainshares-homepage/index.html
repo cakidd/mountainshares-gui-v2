@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MountainShares - Revolutionary Community-Controlled AI Platform | West Virginia</title>
+    <meta name="description" content="The world's first community-controlled AI-powered B2B social platform. Where West Virginia heritage creates wealth and communities control their technological destiny.">
+    
+    <!-- PERFORMANCE & CACHE OPTIMIZATION -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏔️</text></svg>">
+    
+    <style>
+        /* MOUNTAINSHARES HOMEPAGE DESIGN SYSTEM 2025 */
+        :root {
+            /* West Virginia Color Palette */
+            --wv-gold: #FFD700;
+            --wv-gold-dark: #B8860B;
+            --wv-gold-light: #FFF8DC;
+            --wv-blue: #1E3A8A;
+            --wv-blue-light: #3B82F6;
+            --wv-blue-accent: #0EA5E9;
+            --wv-blue-dark: #1E40AF;
+            
+            /* Professional Neutrals */
+            --charcoal: #1F2937;
+            --charcoal-light: #374151;
+            --slate: #64748B;
+            --slate-light: #94A3B8;
+            --white: #FFFFFF;
+            --off-white: #F9FAFB;
+            --cream: #FFFEF7;
+            
+            /* Semantic Colors */
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --info: var(--wv-blue-accent);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--wv-gold) 0%, var(--wv-gold-dark) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--wv-blue) 0%, var(--wv-blue-light) 100%);
+            --gradient-hero: linear-gradient(135deg, var(--wv-blue) 0%, var(--wv-blue-dark) 50%, var(--charcoal) 100%);
+            --gradient-card: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            --gradient-hero-text: linear-gradient(135deg, var(--wv-gold) 0%, var(--white) 50%, var(--wv-blue-accent) 100%);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-gold: 0 0 40px rgba(255, 215, 0, 0.3);
+            --shadow-blue: 0 0 40px rgba(30, 58, 138, 0.3);
+            
+            /* Typography */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            
+            /* Spacing */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            --space-4xl: 5rem;
+            --space-5xl: 6rem;
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-2xl: 1.5rem;
+            --radius-3xl: 2rem;
+            
+            /* Transitions */
+            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* RESET & BASE STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            font-weight: 400;
+            line-height: 1.6;
+            color: var(--white);
+            background: var(--charcoal);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* SOPHISTICATED BACKGROUND SYSTEM */
+        .app-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 215, 0, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(30, 58, 138, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.02) 0%, transparent 50%),
+                linear-gradient(135deg, var(--charcoal) 0%, #0F172A 100%);
+            animation: backgroundShift 30s ease-in-out infinite;
+        }
+        
+        @keyframes backgroundShift {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+        
+        /* MAIN CONTAINER */
+        .homepage-container {
+            max-width: 100%;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* PREMIUM HEADER */
+        .homepage-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(31, 41, 55, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: var(--space-lg) 0;
+            transition: all var(--transition-normal);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+            gap: var(--space-lg);
+        }
+        
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+        }
+        
+        .brand-logo {
+            width: 56px;
+            height: 56px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: var(--shadow-gold);
+            position: relative;
+            overflow: hidden;
+            animation: logoFloat 4s ease-in-out infinite;
+        }
+        
+        .brand-logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            animation: logoScan 3s linear infinite;
+        }
+        
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+        }
+        
+        @keyframes logoScan {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .brand-text h1 {
+            font-size: 1.75rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--space-xs);
+            line-height: 1.1;
+        }
+        
+        .brand-text .tagline {
+            font-size: 0.75rem;
+            color: var(--wv-blue-accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-shadow: 0 0 20px rgba(14, 165, 233, 0.5);
+        }
+        
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xl);
+        }
+        
+        .nav-link {
+            color: var(--slate-light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            transition: all var(--transition-normal);
+        }
+        
+        .nav-link:hover {
+            color: var(--wv-gold);
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        .header-cta {
+            background: var(--gradient-primary);
+            color: var(--charcoal);
+            padding: var(--space-md) var(--space-xl);
+            border-radius: var(--radius-lg);
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: var(--shadow-gold);
+            transition: all var(--transition-normal);
+        }
+        
+        .header-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl), var(--shadow-gold);
+        }
+        
+        /* HERO SECTION */
+        .hero-section {
+            padding: calc(80px + var(--space-5xl)) var(--space-xl) var(--space-5xl);
+            background: var(--gradient-hero);
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(30, 58, 138, 0.1) 0%, transparent 50%);
+            animation: heroFlow 20s ease-in-out infinite;
+        }
+        
+        @keyframes heroFlow {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.05); }
+        }
+        
+        .hero-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-5xl);
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-text {
+            max-width: 600px;
+        }
+        
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: var(--space-xl);
+            background: var(--gradient-hero-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(255, 215, 0, 0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--slate-light);
+            margin-bottom: var(--space-2xl);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+        
+        .hero-description {
+            font-size: 1.125rem;
+            color: var(--slate-light);
+            margin-bottom: var(--space-2xl);
+            line-height: 1.7;
+        }
+        
+        .hero-cta-group {
+            display: flex;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+        }
+        
+        .hero-cta-primary {
+            background: var(--gradient-primary);
+            color: var(--charcoal);
+            padding: var(--space-lg) var(--space-2xl);
+            border-radius: var(--radius-xl);
+            font-weight: 700;
+            font-size: 1.125rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: var(--shadow-gold);
+            transition: all var(--transition-normal);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .hero-cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl), var(--shadow-gold);
+        }
+        
+        .hero-cta-secondary {
+            background: var(--gradient-secondary);
+            color: var(--white);
+            padding: var(--space-lg) var(--space-2xl);
+            border-radius: var(--radius-xl);
+            font-weight: 600;
+            font-size: 1.125rem;
+            text-decoration: none;
+            box-shadow: var(--shadow-blue);
+            transition: all var(--transition-normal);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .hero-cta-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl), var(--shadow-blue);
+        }
+        
+        .hero-visual {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xl);
+        }
+        
+        .hero-card {
+            background: var(--gradient-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            position: relative;
+            overflow: hidden;
+            transition: all var(--transition-normal);
+        }
+        
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-primary);
+            opacity: 0.7;
+        }
+        
+        .hero-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl), var(--shadow-gold);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: var(--shadow-gold);
+        }
+        
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--wv-gold);
+            margin: 0;
+        }
+        
+        .card-description {
+            color: var(--slate-light);
+            line-height: 1.6;
+        }
+        
+        /* FEATURES SECTION */
+        .features-section {
+            padding: var(--space-5xl) var(--space-xl);
+            background: rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto var(--space-5xl);
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: var(--space-xl);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--slate-light);
+            line-height: 1.7;
+        }
+        
+        .features-grid {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: var(--space-2xl);
+        }
+        
+        .feature-card {
+            background: var(--gradient-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-2xl);
+            position: relative;
+            overflow: hidden;
+            transition: all var(--transition-normal);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-secondary);
+            opacity: 0.7;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-xl), var(--shadow-blue);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-secondary);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: var(--shadow-blue);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--wv-blue-accent);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .feature-description {
+            color: var(--slate-light);
+            line-height: 1.7;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            color: var(--slate-light);
+            margin-bottom: var(--space-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .feature-list li::before {
+            content: '✓';
+            color: var(--wv-gold);
+            font-weight: bold;
+            font-size: 1.125rem;
+        }
+        
+        /* STATS SECTION */
+        .stats-section {
+            padding: var(--space-5xl) var(--space-xl);
+            background: var(--gradient-hero);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stats-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-2xl);
+            margin-top: var(--space-2xl);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--wv-gold);
+            margin-bottom: var(--space-sm);
+            font-family: var(--font-mono);
+        }
+        
+        .stat-label {
+            font-size: 1.125rem;
+            color: var(--slate-light);
+            font-weight: 600;
+        }
+        
+        /* CTA SECTION */
+        .cta-section {
+            padding: var(--space-5xl) var(--space-xl);
+            background: rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .cta-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            margin-bottom: var(--space-xl);
+            background: var(--gradient-hero-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .cta-description {
+            font-size: 1.25rem;
+            color: var(--slate-light);
+            margin-bottom: var(--space-2xl);
+            line-height: 1.7;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: var(--space-lg);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .cta-primary {
+            background: var(--gradient-primary);
+            color: var(--charcoal);
+            padding: var(--space-xl) var(--space-2xl);
+            border-radius: var(--radius-xl);
+            font-weight: 700;
+            font-size: 1.25rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: var(--shadow-gold);
+            transition: all var(--transition-normal);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .cta-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--shadow-xl), var(--shadow-gold);
+        }
+        
+        .cta-secondary {
+            background: transparent;
+            color: var(--wv-blue-accent);
+            padding: var(--space-xl) var(--space-2xl);
+            border: 2px solid var(--wv-blue-accent);
+            border-radius: var(--radius-xl);
+            font-weight: 600;
+            font-size: 1.25rem;
+            text-decoration: none;
+            transition: all var(--transition-normal);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .cta-secondary:hover {
+            background: var(--wv-blue-accent);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+        
+        /* FOOTER */
+        .homepage-footer {
+            background: var(--charcoal);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: var(--space-3xl) var(--space-xl) var(--space-xl);
+        }
+        
+        .footer-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-2xl);
+        }
+        
+        .footer-section h3 {
+            color: var(--wv-gold);
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .footer-section p,
+        .footer-section a {
+            color: var(--slate-light);
+            line-height: 1.7;
+            text-decoration: none;
+        }
+        
+        .footer-section a:hover {
+            color: var(--wv-gold);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: var(--space-xl);
+            margin-top: var(--space-2xl);
+            text-align: center;
+            color: var(--slate-light);
+        }
+        
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: var(--space-3xl);
+                text-align: center;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 var(--space-lg);
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .hero-section {
+                padding: calc(80px + var(--space-3xl)) var(--space-lg) var(--space-3xl);
+            }
+            
+            .hero-cta-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-cta-primary,
+            .hero-cta-secondary {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .features-section,
+            .stats-section,
+            .cta-section {
+                padding: var(--space-3xl) var(--space-lg);
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-primary,
+            .cta-secondary {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .brand-text h1 {
+                font-size: 1.5rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.25rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* PERFORMANCE OPTIMIZATIONS */
+        .homepage-container {
+            will-change: transform;
+        }
+        
+        .hero-card,
+        .feature-card,
+        .hero-cta-primary,
+        .hero-cta-secondary {
+            will-change: transform;
+        }
+        
+        /* ACCESSIBILITY */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* FOCUS MANAGEMENT */
+        .nav-link:focus,
+        .header-cta:focus,
+        .hero-cta-primary:focus,
+        .hero-cta-secondary:focus,
+        .cta-primary:focus,
+        .cta-secondary:focus {
+            outline: 2px solid var(--wv-gold);
+            outline-offset: 2px;
+        }
+        
+        /* HIGH CONTRAST MODE */
+        @media (prefers-contrast: high) {
+            :root {
+                --wv-gold: #FFFF00;
+                --wv-blue: #0000FF;
+                --white: #FFFFFF;
+                --charcoal: #000000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-background"></div>
+    
+    <div class="homepage-container">
+        <header class="homepage-header">
+            <div class="header-content">
+                <div class="brand-section">
+                    <div class="brand-logo">🏔️</div>
+                    <div class="brand-text">
+                        <h1>MountainShares</h1>
+                        <div class="tagline">Revolutionary AI Platform</div>
+                    </div>
+                </div>
+                <nav class="nav-menu">
+                    <a href="#features" class="nav-link">Features</a>
+                    <a href="#platform" class="nav-link">Platform</a>
+                    <a href="#community" class="nav-link">Community</a>
+                    <a href="#about" class="nav-link">About</a>
+                </nav>
+                <a href="https://buy.mountainshares.us" class="header-cta">Buy Tokens</a>
+            </div>
+        </header>
+        
+        <main>
+            <section class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1 class="hero-title">The World's First Community-Controlled AI Platform</h1>
+                        <p class="hero-subtitle">Where West Virginia Heritage Creates Wealth</p>
+                        <p class="hero-description">Revolutionary B2B social platform combining AI-powered business networking, cultural heritage monetization, and democratic governance. Built by West Virginia, for communities everywhere.</p>
+                        <div class="hero-cta-group">
+                            <a href="https://buy.mountainshares.us" class="hero-cta-primary">
+                                🔥 Buy MountainShares
+                            </a>
+                            <a href="#features" class="hero-cta-secondary">
+                                🚀 Explore Platform
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="hero-card">
+                            <div class="card-header">
+                                <div class="card-icon">🤖</div>
+                                <h3 class="card-title">Community-Controlled AI</h3>
+                            </div>
+                            <p class="card-description">15 AI agents with emotional intelligence, locally processed with DeepSeek R1, democratically controlled by community vote.</p>
+                        </div>
+                        <div class="hero-card">
+                            <div class="card-header">
+                                <div class="card-icon">🏛️</div>
+                                <h3 class="card-title">Heritage Monetization</h3>
+                            </div>
+                            <p class="card-description">Convert Appalachian traditions, music, and stories into NFT assets that generate revenue for cultural creators.</p>
+                        </div>
+                        <div class="hero-card">
+                            <div class="card-header">
+                                <div class="card-icon">🤝</div>
+                                <h3 class="card-title">B2B Social Network</h3>
+                            </div>
+                            <p class="card-description">Location-based business discovery, integrated payroll systems, and democratic governance for 55 WV counties.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="features" class="features-section">
+                <div class="section-header">
+                    <h2 class="section-title">Revolutionary Platform Features</h2>
+                    <p class="section-subtitle">The most sophisticated community-controlled technology ecosystem ever built, designed to empower rural communities while preserving cultural heritage.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h3 class="feature-title">Heritage NFT Complex</h3>
+                        <p class="feature-description">Transform your cultural heritage into economic assets through advanced NFT technology.</p>
+                        <ul class="feature-list">
+                            <li>Tokenize music, art, and stories</li>
+                            <li>Community ownership and control</li>
+                            <li>Revenue sharing for creators</li>
+                            <li>Permanent cultural preservation</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💼</div>
+                        <h3 class="feature-title">Complete Business Ecosystem</h3>
+                        <p class="feature-description">Integrated payroll, employee rewards, and business networking in one platform.</p>
+                        <ul class="feature-list">
+                            <li>$1:$1 EMS reward system</li>
+                            <li>Advanced KYC verification</li>
+                            <li>Multi-currency settlement</li>
+                            <li>Gift card integration</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🗳️</div>
+                        <h3 class="feature-title">Democratic Governance</h3>
+                        <p class="feature-description">Community-controlled decision making with transparent, verifiable voting systems.</p>
+                        <ul class="feature-list">
+                            <li>All 55 WV counties represented</li>
+                            <li>AI parameter community control</li>
+                            <li>Transparent proposal system</li>
+                            <li>Cultural sensitivity weighting</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <h3 class="feature-title">Location-Based Discovery</h3>
+                        <p class="feature-description">Pokémon GO-style business networking across all West Virginia counties.</p>
+                        <ul class="feature-list">
+                            <li>Interactive county exploration</li>
+                            <li>Business verification system</li>
+                            <li>Service marketplace</li>
+                            <li>Partnership facilitation</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3 class="feature-title">Privacy-First Security</h3>
+                        <p class="feature-description">Advanced cryptographic security with local data processing and community sovereignty.</p>
+                        <ul class="feature-list">
+                            <li>Merkle tree verification</li>
+                            <li>Local DeepSeek processing</li>
+                            <li>Community data control</li>
+                            <li>Emergency response systems</li>
+                        </ul>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">AI-Powered Efficiency</h3>
+                        <p class="feature-description">15 specialized AI agents optimizing platform operations with community oversight.</p>
+                        <ul class="feature-list">
+                            <li>Emotional intelligence processing</li>
+                            <li>Community-controlled parameters</li>
+                            <li>Cultural sensitivity algorithms</li>
+                            <li>Continuous learning systems</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="platform" class="stats-section">
+                <div class="stats-content">
+                    <h2 class="section-title">Platform by the Numbers</h2>
+                    <p class="section-subtitle">Real results from West Virginia's revolutionary community-controlled platform</p>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">55</div>
+                            <div class="stat-label">WV Counties Served</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">15</div>
+                            <div class="stat-label">AI Agents Active</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">$1.40</div>
+                            <div class="stat-label">Token Price (Fixed)</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">Community Controlled</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="community" class="cta-section">
+                <div class="cta-content">
+                    <h2 class="cta-title">Join the Revolution</h2>
+                    <p class="cta-description">Be part of the world's first community-controlled AI platform. Where technology serves people, not the other way around.</p>
+                    <div class="cta-buttons">
+                        <a href="https://buy.mountainshares.us" class="cta-primary">
+                            🏔️ Buy MountainShares
+                        </a>
+                        <a href="#about" class="cta-secondary">
+                            📖 Learn More
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer id="about" class="homepage-footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>MountainShares Platform</h3>
+                    <p>The world's first community-controlled AI-powered B2B social platform. Built in West Virginia, designed for communities everywhere.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Platform Features</h3>
+                    <p><a href="#features">Heritage NFT Complex</a></p>
+                    <p><a href="#features">Business Ecosystem</a></p>
+                    <p><a href="#features">Democratic Governance</a></p>
+                    <p><a href="#features">AI-Powered Efficiency</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3>Community</h3>
+                    <p><a href="https://mammakidd.substack.com">Mamma Kidd's Substack</a></p>
+                    <p><a href="#community">Join the Revolution</a></p>
+                    <p><a href="https://buy.mountainshares.us">Buy Tokens</a></p>
+                    <p><a href="#platform">Platform Stats</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3>Technology</h3>
+                    <p>Community-Controlled AI</p>
+                    <p>DeepSeek R1 Processing</p>
+                    <p>Blockchain Infrastructure</p>
+                    <p>Privacy-First Design</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 MountainShares Platform. Serving West Virginia communities with revolutionary technology.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // MOUNTAINSHARES HOMEPAGE INTERACTIVITY
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.homepage-header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(31, 41, 55, 0.98)';
+                header.style.backdropFilter = 'blur(30px)';
+            } else {
+                header.style.background = 'rgba(31, 41, 55, 0.95)';
+                header.style.backdropFilter = 'blur(20px)';
+            }
+        });
+        
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(stat => {
+                        const finalNumber = stat.textContent;
+                        if (finalNumber.includes('$')) {
+                            stat.textContent = finalNumber;
+                        } else if (finalNumber.includes('%')) {
+                            animateCounter(stat, 0, 100, '%');
+                        } else {
+                            animateCounter(stat, 0, parseInt(finalNumber), '');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+        
+        const statsSection = document.querySelector('.stats-section');
+        if (statsSection) {
+            statsObserver.observe(statsSection);
+        }
+        
+        function animateCounter(element, start, end, suffix) {
+            const duration = 2000;
+            const startTime = performance.now();
+            
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const current = Math.floor(start + (end - start) * progress);
+                
+                element.textContent = current + suffix;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+            
+            requestAnimationFrame(updateCounter);
+        }
+        
+        // Initialize homepage
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 MOUNTAINSHARES HOMEPAGE LOADED 🚀');
+            console.log('🏔️ Revolutionary Community-Controlled AI Platform');
+            console.log('💎 Visit https://buy.mountainshares.us to purchase tokens');
+        });
+    </script>
+    <!-- Homepage cache: 1752874255 -->
+</body>
+</html>
