@@ -224,17 +224,17 @@
         var totalFees = 0.40;
         var totalAmount = 1.40;
         
-        function calculateTotals(quantity) {
-            var subtotal = roundToCents(quantity * tokenPrice);
-            var totalProcessingFees = roundToCents(quantity * totalFees);
-            var total = roundToCents(subtotal + totalProcessingFees);
-            
-            return {
-                subtotal: subtotal,
-                totalProcessingFees: totalProcessingFees,
-                total: total
-            };
-        }
+     function calculateTotals(quantity) {
+        var subtotal = roundToCents(quantity * tokenPrice);
+        var totalProcessingFees = roundToCents(quantity * totalFees);
+        var total = roundToCents(quantity * totalAmount);
+    
+      return {
+        subtotal: subtotal,
+        totalProcessingFees: totalProcessingFees,
+        total: total
+    };
+ }
     
             var totalProcessingFees = roundToCents(platformFee + stripePercentFee + stripeFixedFee + stripeSurcharge);
             var total = roundToCents(subtotal + totalProcessingFees);
@@ -247,12 +247,17 @@
             };
         }
 
-        function updateDisplay(calculations) {
-            document.getElementById('displayQuantity').textContent = calculations.quantity.toString();
-            document.getElementById('displaySubtotal').textContent = '$' + calculations.subtotal.toFixed(2);
-            document.getElementById('displayProcessingFees').textContent = '$' + calculations.totalProcessingFees.toFixed(2);
-            document.getElementById('displayTotal').textContent = '$' + calculations.total.toFixed(2);
-        }
+        function updateDisplay() {
+          var quantity = parseInt(document.getElementById('quantity').value) || 1;
+    	  var calculations = calculateTotals(quantity);
+    
+    	document.getElementById('displaySubtotal').textContent = '$' + 
+	 calculations.subtotal.toFixed(2);
+    	document.getElementById('displayProcessingFees').textContent = '$' + 
+	 calculations.totalProcessingFees.toFixed(2);
+    	document.getElementById('displayTotal').textContent = '$' + 
+         calculations.total.toFixed(2);
+      }
 
         function calculateAndUpdate() {
             var quantity = parseInt(document.getElementById('tokenQuantity').value) || 0;
