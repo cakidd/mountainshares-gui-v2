@@ -1,0 +1,25 @@
+{
+  "contractName": "MountainSharesUSDCPurchase",
+  "network": "Sepolia → Arbitrum One",
+  "deployer": "Wallet configured",
+  "constructorParams": [
+    "0xE8A9c6fFE6b2344147D886EcB8608C5F7863B20D",
+    "0xF8F09E81aD1AB49ecdFC79A5DC52931f85DdFfd4",
+    "0x0Db55E82bcC746F839A18Efb525C3a87BF2150da",
+    "0xde75f5168e33db23fa5601b5fc88545be7b287a4",
+    "0xf8c739a101e53f6fe4e24df768be833ceecefa84",
+    "0x2b686a6c1c4b40ffc748b56b6c7a06c49e361167",
+    "0x8c09e686bdfd283bdf5f6fffc780e62a695014f3",
+    "0xd8bb25076e61b5a382e17171b48d8e0952b5b4f3"
+  ],
+  "parameterNames": [
+    "mountainSharesToken",
+    "settlementReserve",
+    "treasuryReinforcement",
+    "h4hNonprofit",
+    "h4hCommunityPrograms",
+    "h4hTreasury",
+    "h4hGovernance",
+    "development"
+  ]
+}

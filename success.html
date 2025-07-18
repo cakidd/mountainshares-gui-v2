@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Successful - MountainShares</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #28a745;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header h2 {
+            color: #666;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            color: #888;
+            font-size: 1rem;
+        }
+        
+        .transaction-details {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .transaction-details h3 {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-item.total {
+            border-top: 2px solid #28a745;
+            padding-top: 15px;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #28a745;
+        }
+        
+        .community-info {
+            background: #e3f2fd;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .community-info h3 {
+            color: #1976d2;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .community-info ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .community-info li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .community-info li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .next-steps {
+            background: #fff3cd;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .next-steps h3 {
+            color: #856404;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .next-steps ol {
+            padding-left: 20px;
+        }
+        
+        .next-steps li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        .button-primary {
+            background: #28a745;
+            color: white;
+        }
+        
+        .button-primary:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .button-secondary {
+            background: transparent;
+            color: #28a745;
+            border: 2px solid #28a745;
+        }
+        
+        .button-secondary:hover {
+            background: #28a745;
+            color: white;
+        }
+        
+        .session-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-icon">🎉</div>
+        
+        <div class="header">
+            <h1>Purchase Successful!</h1>
+            <h2>Welcome to MountainShares</h2>
+            <p>Mount Hope, WV • Community-Controlled Platform</p>
+        </div>
+        
+        <div class="transaction-details">
+            <h3>💰 Transaction Summary</h3>
+            <div class="detail-item">
+                <span>MountainShares Tokens:</span>
+                <span id="tokenQuantity">1</span>
+            </div>
+            <div class="detail-item">
+                <span>Token Price (per token):</span>
+                <span>$1.00</span>
+            </div>
+            <div class="detail-item">
+                <span>Subtotal:</span>
+                <span id="subtotal">$1.00</span>
+            </div>
+            <div class="detail-item">
+                <span>Processing Fees:</span>
+                <span id="processingFees">$0.40</span>
+            </div>
+            <div class="detail-item total">
+                <span>Total Paid:</span>
+                <span id="totalPaid">$1.40</span>
+            </div>
+        </div>
+        
+        <div class="community-info">
+            <h3>🏔️ Your MountainShares Benefits</h3>
+            <ul>
+                <li><strong>Governance Rights:</strong> Vote on community decisions and platform improvements</li>
+                <li><strong>1:1 USDC Backing:</strong> Each token backed by $1.00 USDC in settlement reserve</li>
+                <li><strong>Zero Gas Fees:</strong> All blockchain costs absorbed by community treasury</li>
+                <li><strong>Cultural Preservation:</strong> Traditional Appalachian values respected in all decisions</li>
+                <li><strong>Economic Empowerment:</strong> Direct participation in Mount Hope, WV development</li>
+                <li><strong>AI Oversight:</strong> Democratic control over AI-powered platform management</li>
+            </ul>
+        </div>
+        
+        <div class="next-steps">
+            <h3>🚀 What Happens Next</h3>
+            <ol>
+                <li><strong>Token Delivery:</strong> Your MountainShares tokens will be delivered to your wallet within 24 hours</li>
+                <li><strong>Community Access:</strong> Join democratic governance and participate in platform decisions</li>
+                <li><strong>Settlement Processing:</strong> Your payment supports 1:1 USDC backing and community programs</li>
+                <li><strong>Platform Benefits:</strong> Access professional blockchain infrastructure with zero ongoing fees</li>
+                <li><strong>Cultural Participation:</strong> Engage in preserving traditional values through advanced technology</li>
+            </ol>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="/" class="button button-primary">🏠 Return to MountainShares</a>
+            <a href="/governance" class="button button-secondary">🏛️ Community Governance</a>
+        </div>
+        
+        <div class="session-info">
+            <p><strong>Transaction ID:</strong> <span id="sessionId">Loading...</span></p>
+            <p><strong>Platform:</strong> MountainShares Darwin Gödel Machine</p>
+            <p><strong>Community:</strong> Mount Hope, WV • Fayette County</p>
+        </div>
+    </div>
+
+    <script>
+        // Extract session details from URL
+        function getSessionDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('session_id');
+            
+            return {
+                sessionId: sessionId,
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        // Update transaction details from session metadata
+        function updateTransactionDetails(sessionData) {
+            // Default values for $1.40 total
+            const tokenQuantity = 1;
+            const tokenPrice = 1.00;
+            const subtotal = tokenPrice * tokenQuantity;
+            const processingFees = 0.40 * tokenQuantity;
+            const totalPaid = 1.40 * tokenQuantity;
+            
+            // Update display
+            document.getElementById('tokenQuantity').textContent = tokenQuantity;
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('processingFees').textContent = `$${processingFees.toFixed(2)}`;
+            document.getElementById('totalPaid').textContent = `$${totalPaid.toFixed(2)}`;
+            
+            // Update session info
+            if (sessionData.sessionId) {
+                document.getElementById('sessionId').textContent = sessionData.sessionId.substring(0, 24) + '...';
+            } else {
+                document.getElementById('sessionId').textContent = 'Session ID not available';
+            }
+            
+            console.log('✅ Transaction details updated:', {
+                tokenQuantity: tokenQuantity,
+                subtotal: subtotal,
+                processingFees: processingFees,
+                totalPaid: totalPaid,
+                sessionId: sessionData.sessionId
+            });
+        }
+
+        // Initialize success page
+        document.addEventListener('DOMContentLoaded', function() {
+            const sessionData = getSessionDetails();
+            updateTransactionDetails(sessionData);
+            
+            console.log('🎉 MountainShares purchase completed successfully');
+            console.log('💰 Accurate pricing: $1.40 total ($1.00 + $0.40 processing)');
+            console.log('🏔️ Community: Mount Hope, WV');
+            console.log('🏛️ Platform: MountainShares Darwin Gödel Machine');
+        });
+    </script>
+</body>
+</html>

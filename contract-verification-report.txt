@@ -1,0 +1,42 @@
+COMPROMISED CONTRACT VERIFICATION REPORT
+========================================
+
+Business Registry (0x67E344a548C67cD2BC709166E018e94F3c336798):
+[ ] Verified on Arbiscan
+[ ] Contains compromised address 0xdE75F5168E33db23FA5601b5fc88545be7b287a4
+[ ] Notes: 
+
+Heritage NFT (0x390f08352023De0829e279d3FEBf8B9afaf2Ccc3):
+[ ] Verified on Arbiscan  
+[ ] Contains compromised address
+[ ] Notes:
+
+Volunteer Hours (0xc900dE9d1BB1Fb94055bbeEe93D248bDD21f1C4F):
+[ ] Verified on Arbiscan
+[ ] Contains compromised address  
+[ ] Notes:
+
+Subscription (0x664D1FD1A882E3cc961314667211149e2557bea3):
+[ ] Verified on Arbiscan
+[ ] Contains compromised address
+[ ] Notes:
+
+StableCoin (0x57fC62371582F9Ba976887658fd44AE86fa0298a):
+[ ] Verified on Arbiscan
+[ ] Contains compromised address
+[ ] Notes:
+
+USDC Management (0x5574A3EcCFd6e9Af35F0B204f148D021be5b9C95):
+[ ] Verified on Arbiscan
+[ ] Contains compromised address
+[ ] Notes:
+
+USDC Settlement (0x1F0c8a4c920E1094f85b18F681dcfB2e2b7DE076):  
+[ ] Verified on Arbiscan
+[ ] Contains compromised address
+[ ] Notes:
+
+SUMMARY:
+- Verified contracts: ___/7
+- Contracts with hardcoded compromised address: ___/7
+- Safe to use: ___/7

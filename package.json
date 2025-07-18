@@ -8,9 +8,22 @@
     "deploy": "vercel --prod"
   },
   "dependencies": {
-    "stripe": "^18.3.0"
+    "@arbitrum/sdk": "^2.0.0",
+    "stripe": "^18.3.0",
+    "web3": "^4.16.0"
   },
-  "keywords": ["mountainshares", "api", "stripe"],
+  "keywords": [
+    "mountainshares",
+    "api",
+    "stripe"
+  ],
   "author": "MountainShares",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.0.9",
+    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.13",
+    "@nomicfoundation/hardhat-toolbox": "^6.0.0",
+    "ethers": "^6.15.0",
+    "hardhat": "^2.25.0"
+  }
 }
