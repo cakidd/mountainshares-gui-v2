@@ -70,7 +70,7 @@
         
         .fee-breakdown {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 15px;
             margin: 20px 0;
         }
@@ -78,18 +78,18 @@
         .fee-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px 15px;
+            padding: 15px 20px;
             background: white;
             border-radius: 8px;
             border: 1px solid #e9ecef;
+            font-size: 1.1em;
         }
         
         .fee-item.total {
-            grid-column: 1 / -1;
             background: #e8f5e8;
             border-color: #2c5530;
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 1.2em;
         }
         
         .purchase-form {
@@ -135,15 +135,16 @@
         .summary-row {
             display: flex;
             justify-content: space-between;
-            margin: 10px 0;
-            padding: 8px 0;
+            margin: 15px 0;
+            padding: 10px 0;
+            font-size: 1.1em;
         }
         
         .summary-row.total {
             border-top: 2px solid #2c5530;
             padding-top: 15px;
             font-weight: bold;
-            font-size: 1.2em;
+            font-size: 1.3em;
             color: #2c5530;
         }
         
@@ -288,20 +289,8 @@
                         <span id="tokenPrice">$1.00</span>
                     </div>
                     <div class="fee-item">
-                        <span>Platform Fee:</span>
-                        <span>$0.05</span>
-                    </div>
-                    <div class="fee-item">
                         <span>Processing Fee:</span>
-                        <span>$0.01</span>
-                    </div>
-                    <div class="fee-item">
-                        <span>Stripe Fee:</span>
-                        <span>$0.33</span>
-                    </div>
-                    <div class="fee-item">
-                        <span>SEC Fee:</span>
-                        <span>$0.01</span>
+                        <span>$0.40</span>
                     </div>
                     <div class="fee-item total">
                         <span>Total per Token:</span>
@@ -325,7 +314,7 @@
                         <span id="displaySubtotal">$1.00</span>
                     </div>
                     <div class="summary-row">
-                        <span>Processing Fees:</span>
+                        <span>Processing Fee:</span>
                         <span id="displayProcessingFees">$0.40</span>
                     </div>
                     <div class="summary-row total">
@@ -347,7 +336,7 @@
                 <div class="feature-card">
                     <div class="feature-icon">💎</div>
                     <h4>Transparent Pricing</h4>
-                    <p>Fixed $1.40 per token with clear fee breakdown</p>
+                    <p>Fixed $1.40 per token with clear fee structure</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🔒</div>
@@ -362,6 +351,7 @@
                 <p><strong>Mission:</strong> Bringing modern blockchain technology to Appalachian communities while preserving traditional values</p>
                 <p><strong>Governance:</strong> Community-controlled with democratic decision making</p>
                 <p><strong>Technology:</strong> Built on Arbitrum for fast, low-cost transactions</p>
+                <p><strong>Pricing:</strong> Transparent $1.40 per token ($1.00 + $0.40 processing fee)</p>
             </div>
         </div>
         
@@ -458,7 +448,7 @@
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             console.log('MountainShares platform loaded - Mount Hope, WV');
-            console.log('Fixed pricing: $1.40 per token ($1.00 + $0.40 fees)');
+            console.log('Fixed pricing: $1.40 per token ($1.00 + $0.40 processing fee)');
             
             // Add event listeners with error checking
             if (document.getElementById('quantity')) {
@@ -475,6 +465,6 @@
             calculateAndUpdate();
         });
     </script>
-    <!-- Cache clear: 1752870255 -->
+    <!-- Cache clear: 1752870855 -->
 </body>
 </html>
