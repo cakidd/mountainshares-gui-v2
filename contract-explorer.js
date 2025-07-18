@@ -47,7 +47,7 @@ async function exploreContract() {
         // Try to estimate gas (this will tell us if function exists)
         if (funcSig.includes('uint256 amount')) {
           // Function with amount parameter
-          const testAmount = ethers.parseUnits("1.37", 18); // Test with $1.37
+          const testAmount = ethers.parseUnits("1.40", 18); // Test with $1.40
           await contract[funcName].estimateGas(testAmount, { value: ethers.parseEther("0.001") });
           console.log(`   ✅ FOUND: ${funcName}(amount) - accepts amount parameter`);
         } else {

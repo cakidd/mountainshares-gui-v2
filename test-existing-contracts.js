@@ -56,12 +56,12 @@ async function testExistingContracts() {
       }
     }
 
-    // Test 4: Simulate a $1.37 payment processing
-    console.log('\n4️⃣ Simulating $1.37 Payment Processing:');
+    // Test 4: Simulate a $1.40 payment processing
+    console.log('\n4️⃣ Simulating $1.40 Payment Processing:');
     console.log('   💡 This will show what would happen with a real payment');
     
     const testResult = await converter.processStripePayment(
-      1.37, 
+      1.40, 
       'thecakidd@gmail.com', 
       null // No customer wallet address yet
     );

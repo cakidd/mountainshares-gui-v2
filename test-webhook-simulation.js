@@ -4,13 +4,13 @@ const { ethers } = require('ethers');
 async function simulateWebhookProcessing() {
   console.log('🎯 Simulating Real Webhook Processing');
   console.log('====================================');
-  console.log('📋 Processing Carrie\'s $1.37 Stripe Payment');
+  console.log('📋 Processing Carrie\'s $1.40 Stripe Payment');
 
   try {
     // Real Stripe event data from Carrie's transaction
     const stripeEvent = {
       id: 'ch_3Rj7v7Jwby4IAnqF19BMO2CY',
-      amount: 137, // $1.37 in cents
+      amount: 140, // $1.40 in cents
       currency: 'usd',
       customer: {
         email: 'thecakidd@gmail.com',
@@ -35,7 +35,7 @@ async function simulateWebhookProcessing() {
     console.log(`🌐 Network: Sepolia (testing)`);
 
     // Calculate treasury distributions
-    const totalUSD = stripeEvent.amount / 100; // $1.37
+    const totalUSD = stripeEvent.amount / 100; // $1.40
     const stripeFeeUSD = totalUSD * 0.25; // 25% to Stripe fees
     const netUSD = totalUSD - stripeFeeUSD; // 75% for distribution
     const feeUSD = netUSD * 0.0125; // 1.25% MountainShares fee

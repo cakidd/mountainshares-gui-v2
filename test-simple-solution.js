@@ -24,13 +24,13 @@ async function testSimpleSolution() {
     console.log(`   ⛽ ETH Balance: ${status.ethBalance} ETH`);
     console.log(`   💰 USDC Balance: ${status.usdcBalance} USDC`);
 
-    // Test 2: Simulate the $1.37 payment from Carrie
-    console.log('\n2️⃣ Simulating Real $1.37 Payment:');
+    // Test 2: Simulate the $1.40 payment from Carrie
+    console.log('\n2️⃣ Simulating Real $1.40 Payment:');
     console.log('   👤 Customer: Carrie A Kidd (thecakidd@gmail.com)');
-    console.log('   💰 Amount: $1.37 (from real Stripe transaction)');
+    console.log('   💰 Amount: $1.40 (from real Stripe transaction)');
     
     const paymentResult = await webhook.processStripePayment(
-      1.37,
+      1.40,
       'thecakidd@gmail.com',
       null // No customer wallet address yet
     );

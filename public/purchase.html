@@ -789,11 +789,11 @@
                             </div>
                             <div class="price-row">
                                 <span>Processing Fees:</span>
-                                <span class="price-value" id="processingFees">$0.37</span>
+                                <span class="price-value" id="processingFees">$0.40</span>
                             </div>
                             <div class="price-row total-row">
                                 <span>Total Amount:</span>
-                                <span class="price-value" id="totalAmount">$1.37</span>
+                                <span class="price-value" id="totalAmount">$1.40</span>
                             </div>
                         </div>
 
@@ -865,9 +865,9 @@
             const quantity = parseInt(document.getElementById('quantity').value) || 1;
             currentQuantity = quantity;
             
-            // MountainShares pricing: $1.00 base + $0.37 fees = $1.37 total per token
+            // MountainShares pricing: $1.00 base + $0.40 fees = $1.40 total per token
             const baseTokenPrice = 1.00;
-            const processingFeesPerToken = 0.37; // All fees combined
+            const processingFeesPerToken = 0.40; // All fees combined
             
             const tokenValue = baseTokenPrice * quantity;
             const processingFees = processingFeesPerToken * quantity;

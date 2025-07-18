@@ -40,8 +40,8 @@ async function testSepoliaPurchase() {
       console.log('📋 Fee reading failed (expected - different ABI)');
     }
 
-    // Test 1: Simulate webhook processing Carrie's $1.37 payment
-    const stripeAmount = 1.37;
+    // Test 1: Simulate webhook processing Carrie's $1.40 payment
+    const stripeAmount = 1.40;
     const usdcAmount = Math.floor(stripeAmount * 1000000); // Convert to 6 decimals
 
     console.log(`\n🎯 Simulating Stripe Payment Processing:`);

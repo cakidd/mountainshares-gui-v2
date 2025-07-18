@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
     }
 
     // Use frontend amount or fallback to original calculation
-    const unitAmount = total_amount_cents || (tokens * 137);
+    const unitAmount = total_amount_cents || (tokens * 140);
 
     const session = await stripe.checkout.create({
       payment_method_types: ['card'],
