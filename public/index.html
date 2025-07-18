@@ -14,7 +14,7 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏔️</text></svg>">
     
     <style>
-        /* ULTRA-MODERN MOBILE-FIRST DESIGN SYSTEM */
+        /* ULTRA-MODERN GOLD & BLUE DESIGN SYSTEM */
         * {
             margin: 0;
             padding: 0;
@@ -23,20 +23,20 @@
         
         :root {
             --wv-gold: #FFD700;
+            --wv-gold-dark: #FFA500;
+            --wv-gold-light: #FFFF99;
             --mountain-blue: #0066FF;
-            --sky-blue: #00BFFF;
+            --mountain-blue-dark: #003399;
+            --mountain-blue-light: #3399FF;
             --deep-black: #000000;
             --mountain-dark: #0A0A0A;
             --stone-gray: #1A1A1A;
             --mountain-white: #FFFFFF;
-            --crypto-green: #00FF88;
-            --trading-red: #FF4444;
-            --premium-purple: #8B00FF;
-            --mountain-gradient: linear-gradient(45deg, #000000, #001122, #0066FF);
-            --gold-gradient: linear-gradient(135deg, #FFD700, #FFA500, #FF6B35);
-            --crypto-gradient: linear-gradient(135deg, #00FF88, #0066FF, #8B00FF);
-            --premium-gradient: conic-gradient(from 0deg, #FFD700, #0066FF, #00FF88, #8B00FF, #FFD700);
+            --gold-gradient: linear-gradient(135deg, #FFD700, #FFA500);
+            --blue-gradient: linear-gradient(135deg, #0066FF, #003399);
+            --premium-gradient: linear-gradient(135deg, #FFD700, #0066FF);
             --trading-gradient: linear-gradient(135deg, #000000, #0A0A0A, #1A1A1A);
+            --gold-blue-gradient: linear-gradient(135deg, #FFD700 0%, #FFA500 25%, #0066FF 75%, #003399 100%);
         }
         
         /* MOBILE-FIRST BASE STYLES */
@@ -51,7 +51,7 @@
             line-height: 1.5;
         }
         
-        /* MOBILE-OPTIMIZED DYNAMIC BACKGROUND */
+        /* GOLD & BLUE DYNAMIC BACKGROUND */
         body::before {
             content: '';
             position: fixed;
@@ -60,14 +60,14 @@
             width: 100%;
             height: 100%;
             background: 
-                radial-gradient(circle at 20% 20%, rgba(0, 255, 136, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 80% 80%, rgba(255, 215, 0, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 50% 50%, rgba(0, 102, 255, 0.04) 0%, transparent 40%);
-            animation: cryptoPulse 10s ease-in-out infinite;
+                radial-gradient(circle at 20% 20%, rgba(255, 215, 0, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(0, 102, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 165, 0, 0.04) 0%, transparent 40%);
+            animation: goldBluePulse 10s ease-in-out infinite;
             z-index: -1;
         }
         
-        @keyframes cryptoPulse {
+        @keyframes goldBluePulse {
             0%, 100% { 
                 opacity: 0.3; 
                 transform: scale(1) rotate(0deg); 
@@ -86,9 +86,9 @@
             backdrop-filter: blur(15px);
             min-height: 100vh;
             position: relative;
-            border-left: 2px solid var(--crypto-green);
+            border-left: 2px solid var(--wv-gold);
             border-right: 2px solid var(--mountain-blue);
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
         }
         
         /* MOBILE-FIRST HEADER */
@@ -138,7 +138,7 @@
             box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
             position: relative;
             overflow: hidden;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.3);
             flex-shrink: 0;
         }
         
@@ -152,7 +152,9 @@
             background: conic-gradient(
                 from 0deg, 
                 transparent, 
-                rgba(255, 255, 255, 0.3), 
+                rgba(255, 215, 0, 0.3), 
+                transparent,
+                rgba(0, 102, 255, 0.3),
                 transparent
             );
             animation: logoScanUltra 3s linear infinite;
@@ -177,19 +179,19 @@
             font-family: 'Orbitron', monospace;
             font-size: 28px;
             font-weight: 900;
-            background: var(--crypto-gradient);
+            background: var(--gold-blue-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
-            animation: textCryptoGlow 4s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            animation: textGoldBlueGlow 4s ease-in-out infinite;
             position: relative;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         
-        @keyframes textCryptoGlow {
+        @keyframes textGoldBlueGlow {
             0%, 100% { 
                 filter: brightness(1) saturate(1);
                 transform: scale(1);
@@ -201,25 +203,25 @@
         }
         
         .platform-tagline {
-            color: var(--crypto-green);
+            color: var(--mountain-blue);
             font-size: 12px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
-            animation: taglineCrypto 2s ease-in-out infinite;
-            text-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+            animation: taglineBlue 2s ease-in-out infinite;
+            text-shadow: 0 0 15px rgba(0, 102, 255, 0.4);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         
-        @keyframes taglineCrypto {
+        @keyframes taglineBlue {
             0%, 100% { opacity: 0.8; }
             50% { opacity: 1; }
         }
         
         .trading-badge {
-            background: var(--crypto-gradient);
+            background: var(--gold-gradient);
             color: var(--mountain-dark);
             padding: 12px 16px;
             border-radius: 20px;
@@ -227,20 +229,20 @@
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
-            animation: badgeCrypto 3s ease-in-out infinite;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+            animation: badgeGold 3s ease-in-out infinite;
+            border: 2px solid rgba(255, 215, 0, 0.3);
             white-space: nowrap;
         }
         
-        @keyframes badgeCrypto {
+        @keyframes badgeGold {
             0%, 100% { 
                 transform: scale(1);
-                box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
+                box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
             }
             50% { 
                 transform: scale(1.02);
-                box-shadow: 0 15px 40px rgba(0, 255, 136, 0.6);
+                box-shadow: 0 15px 40px rgba(255, 215, 0, 0.6);
             }
         }
         
@@ -263,9 +265,9 @@
             position: relative;
             overflow: hidden;
             box-shadow: 
-                0 0 40px rgba(0, 255, 136, 0.3),
-                0 15px 50px rgba(255, 215, 0, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+                0 0 40px rgba(255, 215, 0, 0.3),
+                0 15px 50px rgba(0, 102, 255, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.2);
         }
         
         @keyframes heroTradingShift {
@@ -283,9 +285,9 @@
             background: conic-gradient(
                 from 0deg, 
                 transparent, 
-                rgba(0, 255, 136, 0.08), 
-                transparent, 
                 rgba(255, 215, 0, 0.08), 
+                transparent, 
+                rgba(0, 102, 255, 0.08), 
                 transparent
             );
             animation: heroMegaSpin 15s linear infinite;
@@ -307,11 +309,11 @@
             font-weight: 900;
             margin-bottom: 25px;
             line-height: 1.2;
-            background: var(--premium-gradient);
+            background: var(--gold-blue-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: 0 0 40px rgba(0, 255, 136, 0.6);
+            text-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
             animation: heroTextHyper 6s ease-in-out infinite;
         }
         
@@ -383,7 +385,7 @@
             display: block;
             margin-bottom: 10px;
             font-weight: 700;
-            color: var(--crypto-green);
+            color: var(--mountain-blue);
             font-size: 16px;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -392,7 +394,7 @@
         .form-group-ultra input {
             width: 100%;
             padding: 16px;
-            border: 2px solid rgba(0, 255, 136, 0.3);
+            border: 2px solid rgba(0, 102, 255, 0.3);
             border-radius: 12px;
             font-size: 18px;
             background: rgba(0, 0, 0, 0.7);
@@ -403,8 +405,8 @@
         
         .form-group-ultra input:focus {
             outline: none;
-            border-color: var(--crypto-green);
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+            border-color: var(--mountain-blue);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.4);
             transform: scale(1.01);
         }
         
@@ -455,12 +457,12 @@
         }
         
         .summary-row-ultra.total {
-            border-top: 2px solid var(--crypto-green);
+            border-top: 2px solid var(--wv-gold);
             padding-top: 20px;
             font-weight: 900;
             font-size: 20px;
-            color: var(--crypto-green);
-            text-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
+            color: var(--wv-gold);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
         }
         
         /* MOBILE-FIRST BUTTONS */
@@ -509,22 +511,22 @@
         
         .btn-ultra:hover {
             transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
         }
         
         .btn-primary-ultra {
-            background: var(--crypto-gradient);
+            background: var(--gold-gradient);
             color: var(--mountain-dark);
-            border-color: var(--crypto-green);
+            border-color: var(--wv-gold);
             box-shadow: 
-                0 10px 30px rgba(0, 255, 136, 0.3),
+                0 10px 30px rgba(255, 215, 0, 0.3),
                 0 0 50px rgba(255, 215, 0, 0.2);
         }
         
         .btn-secondary-ultra {
             background: linear-gradient(135deg, 
                 rgba(0, 102, 255, 0.2), 
-                rgba(139, 0, 255, 0.2));
+                rgba(0, 51, 153, 0.2));
             color: var(--mountain-white);
             border-color: var(--mountain-blue);
             backdrop-filter: blur(15px);
@@ -532,7 +534,7 @@
         
         .btn-secondary-ultra:hover {
             background: var(--mountain-blue);
-            color: var(--mountain-dark);
+            color: var(--mountain-white);
         }
         
         /* LOADING STATES */
@@ -581,14 +583,6 @@
             50% { transform: translateX(100%); }
         }
         
-        .alert-info-ultra {
-            background: linear-gradient(135deg, 
-                rgba(0, 191, 255, 0.1), 
-                rgba(0, 102, 255, 0.05));
-            border-color: var(--sky-blue);
-            color: var(--sky-blue);
-        }
-        
         .alert-warning-ultra {
             background: linear-gradient(135deg, 
                 rgba(255, 215, 0, 0.1), 
@@ -599,18 +593,18 @@
         
         .alert-success-ultra {
             background: linear-gradient(135deg, 
-                rgba(0, 255, 136, 0.1), 
-                rgba(0, 255, 0, 0.05));
-            border-color: var(--crypto-green);
-            color: var(--crypto-green);
+                rgba(0, 102, 255, 0.1), 
+                rgba(0, 51, 153, 0.05));
+            border-color: var(--mountain-blue);
+            color: var(--mountain-blue);
         }
         
         .alert-error-ultra {
             background: linear-gradient(135deg, 
                 rgba(255, 68, 68, 0.1), 
                 rgba(255, 0, 0, 0.05));
-            border-color: var(--trading-red);
-            color: var(--trading-red);
+            border-color: #ff4444;
+            color: #ff4444;
         }
         
         /* TABLET STYLES */
@@ -618,7 +612,7 @@
             .trading-platform {
                 max-width: 1200px;
                 margin: 0 auto;
-                border-left: 3px solid var(--crypto-green);
+                border-left: 3px solid var(--wv-gold);
                 border-right: 3px solid var(--mountain-blue);
             }
             
@@ -684,7 +678,7 @@
         @media (min-width: 1024px) {
             .trading-platform {
                 max-width: 1800px;
-                box-shadow: 0 0 60px rgba(0, 255, 136, 0.3);
+                box-shadow: 0 0 60px rgba(255, 215, 0, 0.3);
             }
             
             .platform-header {
@@ -741,7 +735,7 @@
         @media (hover: none) and (pointer: coarse) {
             .btn-ultra:hover {
                 transform: none;
-                box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
             }
             
             .btn-ultra:active {
@@ -773,12 +767,8 @@
                 </div>
             </div>
             
-            <div class="alert-ultra alert-info-ultra">
-                <strong>🚀 Ultra-Modern Platform:</strong> Advanced transaction-based fee calculations with professional trading interface and real-time blockchain integration for West Virginia communities.
-            </div>
-            
             <div class="purchase-ultra">
-                <h3 style="font-family: 'Orbitron', monospace; font-size: 24px; color: var(--crypto-green); text-align: center; margin-bottom: 30px;">🔥 Purchase MountainShares</h3>
+                <h3 style="font-family: 'Orbitron', monospace; font-size: 24px; color: var(--wv-gold); text-align: center; margin-bottom: 30px;">🔥 Purchase MountainShares</h3>
                 
                 <div class="form-group-ultra">
                     <label for="quantity">Number of Tokens:</label>
@@ -805,8 +795,12 @@
                 <button id="purchaseButton" class="btn-ultra btn-primary-ultra">⚡ Purchase Tokens</button>
             </div>
             
-            <div style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, rgba(139, 0, 255, 0.1), rgba(0, 102, 255, 0.1)); border-radius: 20px; margin: 40px 0;">
-                <h3 style="font-family: 'Orbitron', monospace; font-size: 24px; color: var(--premium-purple); margin-bottom: 20px;">🌟 Community-Controlled Technology</h3>
+            <div class="alert-ultra alert-warning-ultra">
+                <strong>⚡ Smart Fee System:</strong> Revolutionary transaction-based fees calculated per purchase, not per token. Bulk purchases are significantly more economical.
+            </div>
+            
+            <div style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, rgba(0, 102, 255, 0.1), rgba(255, 215, 0, 0.1)); border-radius: 20px; margin: 40px 0;">
+                <h3 style="font-family: 'Orbitron', monospace; font-size: 24px; color: var(--mountain-blue); margin-bottom: 20px;">🌟 Community-Controlled Technology</h3>
                 <p style="color: var(--mountain-white); font-size: 16px; line-height: 1.6; max-width: 600px; margin: 0 auto;">Revolutionary blockchain platform bringing Fortune 500 technology to West Virginia. Democratic governance, transparent pricing, and cutting-edge financial tools designed for our communities.</p>
             </div>
         </main>
@@ -987,7 +981,7 @@
             // Initial display update
             calculateAndUpdate();
             
-            // Add ultra-modern floating particles (performance optimized for mobile)
+            // Add gold and blue floating particles (performance optimized for mobile)
             var particleCount = window.innerWidth < 768 ? 15 : 30;
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
@@ -995,7 +989,7 @@
                     position: fixed;
                     width: ${1 + Math.random() * 3}px;
                     height: ${1 + Math.random() * 3}px;
-                    background: ${Math.random() > 0.5 ? 'var(--crypto-green)' : 'var(--wv-gold)'};
+                    background: ${Math.random() > 0.5 ? 'var(--wv-gold)' : 'var(--mountain-blue)'};
                     border-radius: 50%;
                     pointer-events: none;
                     z-index: -1;
@@ -1032,6 +1026,6 @@
         `;
         document.head.appendChild(ultraStyle);
     </script>
-    <!-- Ultra-modern cache clear: 1752873855 -->
+    <!-- Ultra-modern cache clear: 1752873955 -->
 </body>
 </html>
