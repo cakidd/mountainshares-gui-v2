@@ -1,10 +1,28 @@
 [build]
-  publish = "public"
-  command = "echo 'Static site - no build required'"
+  publish = "."
+  command = "echo 'MountainShares platform build'"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "22"
 
+# Homepage routing (www.mountainshares.us)
+[[redirects]]
+  from = "https://www.mountainshares.us/*"
+  to = "/index.html"
+  status = 200
+
+# Buy page routing (buy.mountainshares.us) 
+[[redirects]]
+  from = "https://buy.mountainshares.us"
+  to = "/public/index.html"
+  status = 200
+
+[[redirects]]
+  from = "https://buy.mountainshares.us/*"
+  to = "/public/:splat"
+  status = 200
+
+# Fallback for root domain
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -17,4 +35,4 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-
+    X-Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com"
