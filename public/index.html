@@ -328,20 +328,8 @@
                         <span id="displaySubtotal">$1.00</span>
                     </div>
                     <div class="summary-row">
-                        <span>Platform Fee (2% + $0.03):</span>
-                        <span id="displayPlatformFee">$0.05</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Processing Fee (0.5%):</span>
-                        <span id="displayProcessingFee">$0.01</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Stripe Fee (2.9% + $0.30):</span>
-                        <span id="displayStripeFee">$0.33</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>SEC Hidden Fee (~0.5%):</span>
-                        <span id="displaySecFee">$0.01</span>
+                        <span>Processing Fee:</span>
+                        <span id="displayProcessingFees">$0.40</span>
                     </div>
                     <div class="summary-row total">
                         <span>Total Amount:</span>
@@ -446,17 +434,8 @@
             if (document.getElementById('displaySubtotal')) {
                 document.getElementById('displaySubtotal').textContent = '$' + calculations.subtotal.toFixed(2);
             }
-            if (document.getElementById('displayPlatformFee')) {
-                document.getElementById('displayPlatformFee').textContent = '$' + calculations.platformFee.toFixed(2);
-            }
-            if (document.getElementById('displayProcessingFee')) {
-                document.getElementById('displayProcessingFee').textContent = '$' + calculations.processingFee.toFixed(2);
-            }
-            if (document.getElementById('displayStripeFee')) {
-                document.getElementById('displayStripeFee').textContent = '$' + calculations.stripeFee.toFixed(2);
-            }
-            if (document.getElementById('displaySecFee')) {
-                document.getElementById('displaySecFee').textContent = '$' + calculations.secFee.toFixed(2);
+            if (document.getElementById('displayProcessingFees')) {
+                document.getElementById('displayProcessingFees').textContent = '$' + calculations.totalFees.toFixed(2);
             }
             if (document.getElementById('displayTotal')) {
                 document.getElementById('displayTotal').textContent = '$' + calculations.total.toFixed(2);
@@ -481,10 +460,6 @@
             console.log('MountainShares Purchase:', {
                 quantity: quantity,
                 subtotal: calculations.subtotal,
-                platformFee: calculations.platformFee,
-                processingFee: calculations.processingFee,
-                stripeFee: calculations.stripeFee,
-                secFee: calculations.secFee,
                 totalFees: calculations.totalFees,
                 total: calculations.total,
                 community: 'Mount Hope, WV'
@@ -528,6 +503,6 @@
             calculateAndUpdate();
         });
     </script>
-    <!-- Cache clear: 1752871255 -->
+    <!-- Cache clear: 1752871855 -->
 </body>
 </html>
