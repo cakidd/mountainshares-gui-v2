@@ -1,29 +1,24 @@
 {
   "name": "mountainshares-gui-v2",
   "version": "1.0.0",
-  "description": "MountainShares API Backend",
-  "main": "api/create-checkout-session.js",
+  "description": "MountainShares Frontend with Blockchain Integration",
+  "main": "index.html",
   "scripts": {
-    "dev": "vercel dev",
-    "deploy": "vercel --prod"
+    "build": "echo 'Static site - no build required'",
+    "start": "echo 'Static site - no start required'"
   },
   "dependencies": {
-    "@arbitrum/sdk": "^2.0.0",
-    "stripe": "^18.3.0",
-    "web3": "^4.16.0"
+    "ethers": "^6.8.0",
+    "stripe": "^14.0.0"
   },
+  "devDependencies": {},
   "keywords": [
     "mountainshares",
-    "api",
-    "stripe"
+    "blockchain",
+    "community",
+    "mount-hope",
+    "west-virginia"
   ],
-  "author": "MountainShares",
-  "license": "MIT",
-  "devDependencies": {
-    "@nomicfoundation/hardhat-ethers": "^3.0.9",
-    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.13",
-    "@nomicfoundation/hardhat-toolbox": "^6.0.0",
-    "ethers": "^6.15.0",
-    "hardhat": "^2.25.0"
-  }
+  "author": "MountainShares Community",
+  "license": "MIT"
 }
