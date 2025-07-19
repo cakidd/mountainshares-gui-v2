@@ -6,24 +6,22 @@ exports.handler = async (event, context) => {
         'Content-Type': 'application/json'
     };
 
+    // Handle CORS preflight
     if (event.httpMethod === 'OPTIONS') {
-        return {
-            statusCode: 200,
-            headers,
-            body: ''
-        };
+        return { statusCode: 200, headers, body: '' };
     }
 
+    // Return success response  
     return {
         statusCode: 200,
         headers,
         body: JSON.stringify({
             success: true,
-            message: 'MountainShares API is working',
+            message: 'MountainShares API connection successful',
+            platform: 'Community-Controlled AI Token Purchase',
             method: event.httpMethod,
-            path: event.path,
             timestamp: new Date().toISOString(),
-            function_version: '1.0.0'
+            functions_status: 'operational'
         })
     };
 };
