@@ -3,791 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MountainShares Token Platform | Community-Controlled AI</title>
+    <title>MountainShares - Buy Tokens | Community-Controlled AI Platform</title>
     <meta name="description" content="Revolutionary community-controlled AI platform for West Virginia. Purchase MountainShares tokens at $1.00 + fees.">
     
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="MountainShares - Community-Controlled AI Platform">
-    <meta property="og:description" content="West Virginia's revolutionary blockchain platform with transaction-based token pricing and democratic AI governance.">
-    <meta property="og:image" content="https://i.imgur.com/mountainshares.jpg">
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏔️</text></svg>">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
     <style>
-        /* MOUNTAINSHARES ULTRA MODERN DESIGN SYSTEM */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        :root {
-            --wv-gold: #FFD700;
-            --mountain-blue: #0066FF;
-            --sky-blue: #00BFFF;
-            --deep-black: #000000;
-            --mountain-dark: #0A0A0A;
-            --stone-gray: #1A1A1A;
-            --mountain-white: #FFFFFF;
-            --wv-mountain-green: #228B22;
-            --appalachian-brown: #8B4513;
-            --holographic: linear-gradient(45deg, #FFD700, #0066FF, #00BFFF, #FFD700);
-            --wv-gradient: linear-gradient(135deg, #FFD700, #0066FF, #00BFFF);
-            --mountain-gradient: linear-gradient(45deg, #000000, #001122, #0066FF);
-            --gold-gradient: linear-gradient(135deg, #FFD700, #FFA500, #FF6B35);
-            --glass-gradient: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(0, 102, 255, 0.05));
-            --shadow-glow: 0 0 50px rgba(255, 215, 0, 0.6), 0 0 100px rgba(0, 102, 255, 0.4);
-            --text-glow: 0 0 20px rgba(255, 215, 0, 0.8);
-        }
-        
         body {
-            font-family: 'JetBrains Mono', 'Courier New', monospace;
-            background: var(--mountain-dark);
-            color: var(--mountain-white);
-            overflow-x: hidden;
-            position: relative;
-            min-height: 100vh;
-        }
-        
-        /* DYNAMIC HOLOGRAPHIC BACKGROUND WITH WV COLORS */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(255, 215, 0, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 102, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(0, 191, 255, 0.1) 0%, transparent 50%),
-                conic-gradient(from 0deg at 50% 50%, transparent, rgba(255, 215, 0, 0.1), transparent);
-            animation: holographicPulse 15s ease-in-out infinite;
-            z-index: -2;
-        }
-        
-        /* ANIMATED MESH GRADIENT */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                linear-gradient(45deg, transparent 30%, rgba(255, 215, 0, 0.05) 50%, transparent 70%),
-                linear-gradient(-45deg, transparent 30%, rgba(0, 102, 255, 0.05) 50%, transparent 70%);
-            animation: meshMove 20s linear infinite;
-            z-index: -1;
-        }
-        
-        @keyframes holographicPulse {
-            0%, 100% { opacity: 0.8; transform: scale(1) rotate(0deg); }
-            25% { opacity: 1; transform: scale(1.05) rotate(2deg); }
-            50% { opacity: 0.9; transform: scale(1.1) rotate(-1deg); }
-            75% { opacity: 1; transform: scale(1.02) rotate(1deg); }
-        }
-        
-        @keyframes meshMove {
-            0% { transform: translateX(-100%) translateY(-100%); }
-            100% { transform: translateX(100%) translateY(100%); }
-        }
-        
-        .platform-app {
-            max-width: 1800px;
-            margin: 0 auto;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(30px);
-            min-height: 100vh;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--shadow-glow);
-        }
-        
-        .platform-header {
-            background: var(--glass-gradient);
-            backdrop-filter: blur(40px);
-            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+            font-family: system-ui, sans-serif;
+            margin: 0;
             padding: 40px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-        
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-        
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-        }
-        
-        /* REVOLUTIONARY 3D HOLOGRAPHIC LOGO */
-        .premium-logo {
-            width: 100px;
-            height: 100px;
-            background: var(--wv-gradient);
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: logoFloat 8s ease-in-out infinite;
-            box-shadow: 
-                0 0 60px rgba(255, 215, 0, 0.8),
-                inset 0 0 60px rgba(255, 255, 255, 0.2);
-            overflow: hidden;
-        }
-        
-        .premium-logo::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.4), transparent, rgba(0, 102, 255, 0.4), transparent);
-            animation: logoScan 3s linear infinite;
-        }
-        
-        .premium-logo::after {
-            content: '';
-            position: absolute;
-            inset: 2px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 23px;
-            backdrop-filter: blur(10px);
-        }
-        
-        .premium-logo span {
-            position: relative;
-            z-index: 2;
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
-        }
-        
-        @keyframes logoFloat {
-            0%, 100% { transform: translateY(0) rotateY(0deg) rotateX(0deg) scale(1); }
-            25% { transform: translateY(-10px) rotateY(15deg) rotateX(5deg) scale(1.05); }
-            50% { transform: translateY(-5px) rotateY(0deg) rotateX(-5deg) scale(1.02); }
-            75% { transform: translateY(-15px) rotateY(-15deg) rotateX(5deg) scale(1.05); }
-        }
-        
-        @keyframes logoScan {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .brand-section h1 {
-            font-family: 'Orbitron', monospace;
-            font-size: 56px;
-            font-weight: 900;
-            background: var(--wv-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: var(--text-glow);
-            animation: titlePulse 6s ease-in-out infinite;
-            position: relative;
-        }
-        
-        .brand-section h1::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--wv-gradient);
-            animation: underlineGlow 4s ease-in-out infinite;
-        }
-        
-        @keyframes titlePulse {
-            0%, 100% { filter: brightness(1) saturate(1); transform: scale(1); }
-            50% { filter: brightness(1.3) saturate(1.5); transform: scale(1.02); }
-        }
-        
-        @keyframes underlineGlow {
-            0%, 100% { opacity: 0.7; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
-            50% { opacity: 1; box-shadow: 0 0 40px rgba(0, 102, 255, 0.8); }
-        }
-        
-        .platform-tagline {
-            color: var(--sky-blue);
-            font-size: 18px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            animation: taglineGlow 3s ease-in-out infinite;
-            text-shadow: 0 0 15px rgba(0, 191, 255, 0.8);
-        }
-        
-        @keyframes taglineGlow {
-            0%, 100% { opacity: 0.8; text-shadow: 0 0 15px rgba(0, 191, 255, 0.8); }
-            50% { opacity: 1; text-shadow: 0 0 30px rgba(0, 191, 255, 1); }
-        }
-        
-        /* PREMIUM STATUS BADGE */
-        .status-badge {
-            background: var(--wv-gradient);
-            color: var(--mountain-dark);
-            padding: 20px 40px;
-            border-radius: 40px;
-            font-size: 18px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 
-                0 15px 50px rgba(255, 215, 0, 0.6),
-                inset 0 0 30px rgba(255, 255, 255, 0.3);
-            animation: badgeFloat 4s ease-in-out infinite;
-        }
-        
-        .status-badge::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-            animation: badgeShine 3s linear infinite;
-        }
-        
-        @keyframes badgeFloat {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-8px) scale(1.05); }
-        }
-        
-        @keyframes badgeShine {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-        
-        .main-content {
-            padding: 80px 40px;
-            max-width: 1600px;
-            margin: 0 auto;
-            position: relative;
-        }
-        
-        /* ULTRA IMMERSIVE HERO SECTION */
-        .hero-section {
-            background: var(--glass-gradient);
-            backdrop-filter: blur(30px);
-            padding: 150px 80px;
-            border-radius: 40px;
-            margin-bottom: 100px;
+            background: linear-gradient(135deg, #1E3A8A 0%, #1F2937 100%);
+            color: white;
+            min-height: 100vh;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 
-                var(--shadow-glow),
-                inset 0 0 80px rgba(255, 255, 255, 0.1);
         }
         
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: var(--holographic);
-            opacity: 0.1;
-            animation: heroRotate 20s linear infinite;
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
         }
         
-        .hero-section::after {
-            content: '';
-            position: absolute;
-            inset: 20px;
-            border: 2px solid rgba(255, 215, 0, 0.3);
-            border-radius: 35px;
-            pointer-events: none;
-            animation: heroBorder 8s ease-in-out infinite;
-        }
-        
-        @keyframes heroRotate {
-            0% { transform: rotate(0deg) scale(1); }
-            100% { transform: rotate(360deg) scale(1.1); }
-        }
-        
-        @keyframes heroBorder {
-            0%, 100% { border-color: rgba(255, 215, 0, 0.3); box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); }
-            50% { border-color: rgba(0, 255, 255, 0.5); box-shadow: 0 0 40px rgba(0, 255, 255, 0.4); }
-        }
-        
-        .hero-content {
-            position: relative;
-            z-index: 3;
-        }
-        
-        .hero-section h2 {
-            font-family: 'Orbitron', monospace;
-            font-size: 72px;
-            font-weight: 900;
-            margin-bottom: 40px;
-            line-height: 1.1;
-            background: var(--wv-gradient);
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #FFD700 0%, #ffffff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: heroTextFloat 8s ease-in-out infinite;
         }
         
-        @keyframes heroTextFloat {
-            0%, 100% { transform: translateY(0) scale(1) rotateX(0deg); }
-            25% { transform: translateY(-15px) scale(1.02) rotateX(5deg); }
-            75% { transform: translateY(-8px) scale(1.01) rotateX(-3deg); }
+        .status {
+            padding: 20px;
+            margin: 20px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
         }
         
-        .hero-section p {
-            font-size: 28px;
-            margin-bottom: 60px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-            opacity: 0.95;
-            line-height: 1.7;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-            color: var(--mountain-white);
+        .price-test {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255,215,0,0.1);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 8px;
         }
         
-        /* REVOLUTIONARY BUTTON DESIGN */
-        .btn-premium {
-            padding: 28px 56px;
-            border: 2px solid transparent;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 800;
-            font-size: 20px;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            min-width: 300px;
-            position: relative;
-            overflow: hidden;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            font-family: 'Orbitron', monospace;
-            transform-style: preserve-3d;
-        }
-        
-        .btn-premium::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: all 0.5s ease;
-        }
-        
-        .btn-premium:hover::before {
-            left: 100%;
-        }
-        
-        .btn-premium:hover {
-            transform: translateY(-10px) scale(1.05) rotateX(15deg);
-            box-shadow: 
-                0 25px 80px rgba(255, 215, 0, 0.6),
-                0 0 60px rgba(0, 255, 255, 0.4),
-                inset 0 0 40px rgba(255, 255, 255, 0.2);
-        }
-        
-        .btn-primary {
-            background: var(--gold-gradient);
-            color: var(--mountain-dark);
-            border-color: var(--wv-gold);
-            box-shadow: 0 15px 50px rgba(255, 215, 0, 0.4);
-        }
-        
-        .btn-secondary {
-            background: var(--glass-gradient);
-            color: var(--mountain-white);
-            border-color: var(--sky-blue);
-            backdrop-filter: blur(20px);
-        }
-        
-        .btn-secondary:hover {
-            background: var(--sky-blue);
-            color: var(--mountain-dark);
-        }
-        
-        /* PRICE CALCULATOR SECTION */
-        .price-calculator {
-            background: var(--glass-gradient);
-            backdrop-filter: blur(30px);
-            padding: 60px 50px;
-            border-radius: 25px;
-            margin-bottom: 60px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .price-calculator::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.1), transparent, rgba(0, 102, 255, 0.1), transparent);
-            animation: calculatorSpin 15s linear infinite;
-            z-index: -1;
-        }
-        
-        @keyframes calculatorSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .price-calculator h3 {
-            font-size: 48px;
-            background: var(--wv-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-align: center;
-            margin-bottom: 50px;
-            font-family: 'Orbitron', monospace;
-        }
-        
-        .calculator-content {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .input-group {
-            margin-bottom: 25px;
-        }
-        
-        .input-group label {
-            color: var(--mountain-white);
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        
-        .input-group input {
-            width: 100%;
-            padding: 18px;
-            border: 2px solid var(--sky-blue);
-            border-radius: 15px;
-            font-size: 20px;
-            background: var(--mountain-dark);
-            color: var(--mountain-white);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-        
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--wv-gold);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 30px;
-        }
-        
-        .token-btn {
-            background: var(--glass-gradient);
-            color: var(--mountain-white);
-            border: 2px solid var(--sky-blue);
+        button {
+            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            color: #1F2937;
+            border: none;
             padding: 12px 24px;
-            border-radius: 12px;
-            cursor: pointer;
+            border-radius: 8px;
             font-weight: bold;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s ease;
         }
         
-        .token-btn:hover {
-            background: var(--sky-blue);
-            color: var(--mountain-dark);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 191, 255, 0.4);
+        button:hover {
+            transform: translateY(-2px);
         }
         
         #result {
-            background: var(--glass-gradient);
-            backdrop-filter: blur(20px);
-            padding: 25px;
-            border-radius: 15px;
-            border: 1px solid var(--wv-gold);
-            font-family: 'JetBrains Mono', monospace;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            font-family: monospace;
             text-align: left;
-            margin-top: 30px;
-            position: relative;
+            border: 1px solid rgba(255,215,0,0.2);
         }
         
-        #result::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: var(--wv-gradient);
-            border-radius: 17px;
-            z-index: -1;
-            opacity: 0.3;
+        .fee-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 4px 0;
         }
         
-        /* FLOATING PARTICLES */
-        .particle {
-            position: fixed;
-            width: 4px;
-            height: 4px;
-            background: var(--wv-gold);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0;
-            animation: particleFloat 12s linear infinite;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        .total-line {
+            border-top: 2px solid #FFD700;
+            margin-top: 15px;
+            padding-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFD700;
         }
         
-        @keyframes particleFloat {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
-        /* RESPONSIVE DESIGN */
-        @media (max-width: 768px) {
-            .platform-header, .main-content {
-                padding-left: 20px;
-                padding-right: 20px;
-            }
-            
-            .hero-section {
-                padding: 80px 40px;
-            }
-            
-            .hero-section h2 {
-                font-size: 42px;
-            }
-            
-            .brand-section h1 {
-                font-size: 36px;
-            }
-            
-            .btn-premium {
-                min-width: auto;
-                width: 100%;
-                max-width: 350px;
-            }
+        .pricing-info {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255,215,0,0.1);
+            border-radius: 8px;
+            font-size: 14px;
+            color: #CCCCCC;
         }
     </style>
 </head>
 <body>
-    <div class="platform-app">
-        <header class="platform-header">
-            <div class="header-content">
-                <div class="logo-section">
-                    <div class="premium-logo">
-                        <span>🏔️</span>
-                    </div>
-                    <div class="brand-section">
-                        <h1>MountainShares</h1>
-                        <div class="platform-tagline">Community-Controlled AI Platform</div>
-                    </div>
-                </div>
-                <div class="status-badge">Mount Hope, West Virginia</div>
-            </div>
-        </header>
-
-        <main class="main-content">
-            <div class="hero-section">
-                <div class="hero-content">
-                    <h2>Revolutionary Token Purchase Platform</h2>
-                    <p>World's first community-controlled AI platform with transparent USD transaction-based pricing. Democratic governance for West Virginia communities.</p>
-                    <div class="button-group">
-                        <button class="btn-premium btn-primary" onclick="scrollToCalculator()">💎 Calculate Token Price</button>
-                        <button class="btn-premium btn-secondary" onclick="window.open('https://mountainshares.us', '_blank')">🏔️ Learn More</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="price-calculator" id="calculator">
-                <h3>💰 MountainShares Token Calculator</h3>
-                <div class="calculator-content">
-                    <div class="input-group">
-                        <label for="ms-quantity">Number of MountainShares Tokens:</label>
-                        <input type="number" id="ms-quantity" min="1" value="10" oninput="calculatePrice()">
-                    </div>
-                    
-                    <div class="button-group">
-                        <button class="token-btn" onclick="setQuantity(1)">1 Token</button>
-                        <button class="token-btn" onclick="setQuantity(5)">5 Tokens</button>
-                        <button class="token-btn" onclick="setQuantity(10)">10 Tokens</button>
-                        <button class="token-btn" onclick="setQuantity(100)">100 Tokens</button>
-                        <button class="token-btn" onclick="setQuantity(645)">645 Tokens</button>
-                    </div>
-
-                    <div id="result">
-                        <strong>Calculating pricing...</strong>
-                    </div>
-                </div>
-            </div>
-        </main>
+    <div class="container">
+        <div style="font-size: 3rem;">🏔️</div>
+        <h1>MountainShares Token Platform</h1>
+        
+        <div class="status">
+            <h2>Community-Controlled AI Platform</h2>
+            <p>Transaction-Based Pricing: $1.00 per token + processing fees</p>
+            <p><strong>Mount Hope, West Virginia</strong></p>
+        </div>
+        
+        <div class="price-test">
+            <h3>Test Price Calculator</h3>
+            <p>Test the transaction-based pricing function:</p>
+            <button onclick="testPricing(1)">1 Token</button>
+            <button onclick="testPricing(5)">5 Tokens</button>
+            <button onclick="testPricing(10)">10 Tokens</button>
+            <button onclick="testPricing(100)">100 Tokens</button>
+            <button onclick="testPricing(645)">645 Tokens</button>
+        </div>
+        
+        <div id="result"></div>
     </div>
 
     <script>
-        console.log('🏔️ MOUNTAINSHARES REVOLUTIONARY PLATFORM ACTIVATED 🏔️');
-        
-        // Your working transaction-based pricing calculation
-        function calculatePrice() {
-            const quantity = parseInt(document.getElementById('ms-quantity').value) || 1;
+        async function testPricing(quantity) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing pricing for ' + quantity + ' tokens...';
             
             try {
-                // CORRECT USD TRANSACTION-BASED PRICING - YOUR WORKING CODE
-                const baseTokenPrice = 1.00;  // $1.00 USD per token
-                const subtotal = quantity * baseTokenPrice;
+                const response = await fetch('/api/calculate-price', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ tokenQuantity: quantity })
+                });
                 
-                // Your exact fee structure
-                const fees = {
-                    // Platform fee: 2% + $0.03
-                    platformBaseFee: subtotal * 0.02 + 0.03,
-                    
-                    // Processing adjustment: 0.5% rounded to nearest penny
-                    processingAdjustment: Math.round((subtotal * 0.005) * 100) / 100,
-                    
-                    // Stripe processing: 2.9% + $0.30 rounded to nearest penny  
-                    stripeProcessing: Math.round((subtotal * 0.029 + 0.30) * 100) / 100,
-                    
-                    // SEC regulatory: 0.5% rounded to nearest penny (VARIABLE)
-                    regulatoryFee: Math.round((subtotal * 0.005) * 100) / 100,
-                    
-                    totalFees: 0
-                };
-
-                fees.totalFees = fees.platformBaseFee + fees.processingAdjustment + 
-                                fees.stripeProcessing + fees.regulatoryFee;
-
-                const total = subtotal + fees.totalFees;
-                const totalCents = Math.round(total * 100);
-
-                // Safe display with null checks
-                const resultDiv = document.getElementById('result');
+                const data = await response.json();
+                
+                if (data.error) {
+                    resultDiv.innerHTML = `<strong>Error:</strong> ${data.error}`;
+                    return;
+                }
+                
+                // Safe null checks before using toFixed()
+                const basePrice = data.baseTokenPrice || 0;
+                const subtotal = data.subtotal || 0;
+                const total = data.total || 0;
+                const fees = data.fees || {};
+                
+                // Calculate combined processing fees
+                const platformFee = fees.platformBase || 0;
+                const processingAdjustment = fees.processingAdjustment || 0;
+                const stripeFee = fees.stripe || 0;
+                const regulatoryFee = fees.regulatory || 0;
+                const totalProcessingFees = platformFee + processingAdjustment + stripeFee + regulatoryFee;
+                
+                // Display with consolidated processing fees
                 resultDiv.innerHTML = `
                     <strong>Results for ${quantity} MountainShares tokens:</strong><br><br>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    
+                    <div class="fee-line">
                         <span>Base Price ($1.00 per token):</span>
-                        <span style="color: var(--wv-gold); font-weight: bold;">$${subtotal.toFixed(2)}</span>
+                        <span style="color: #FFD700; font-weight: bold;">$${subtotal.toFixed ? subtotal.toFixed(2) : '0.00'}</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span>Platform Fee (2% + $0.03):</span>
-                        <span style="color: var(--mountain-white);">$${fees.platformBaseFee.toFixed(2)}</span>
+                    
+                    <div class="fee-line">
+                        <span>Processing Fees:</span>
+                        <span style="color: #FFFFFF;">$${totalProcessingFees.toFixed ? totalProcessingFees.toFixed(2) : '0.00'}</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span>Processing Adjustment (0.5%):</span>
-                        <span style="color: var(--mountain-white);">$${fees.processingAdjustment.toFixed(2)}</span>
+                    
+                    <div class="fee-line total-line">
+                        <span>Total Cost:</span>
+                        <span style="color: #FFD700;">$${total.toFixed ? total.toFixed(2) : '0.00'}</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span>Stripe Processing (2.9% + $0.30):</span>
-                        <span style="color: var(--mountain-white);">$${fees.stripeProcessing.toFixed(2)}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span>SEC Regulatory Fee (0.5%):</span>
-                        <span style="color: var(--mountain-white);">$${fees.regulatoryFee.toFixed(2)}</span>
-                    </div>
-                    <hr style="border: 1px solid var(--wv-gold); margin: 15px 0;">
-                    <div style="display: flex; justify-content: space-between; font-size: 20px; font-weight: bold;">
-                        <span style="color: var(--wv-gold);">Total Cost:</span>
-                        <span style="color: var(--wv-gold);">$${total.toFixed(2)}</span>
-                    </div>
-                    <div style="margin-top: 10px; font-size: 14px; color: var(--sky-blue);">
-                        Amount for Stripe: ${totalCents} cents
-                    </div>
-                    <div style="margin-top: 15px; padding: 10px; background: rgba(255, 215, 0, 0.1); border-radius: 8px; font-size: 14px; color: var(--mountain-white);">
-                        <strong>Pricing Model:</strong> USD Transaction-Based<br>
+                    
+                    <div class="pricing-info">
+                        <strong>Pricing Model:</strong> ${data.pricingModel || 'USD Transaction-Based'}<br>
                         <strong>Community:</strong> Mount Hope, West Virginia<br>
-                        <strong>Platform:</strong> Community-Controlled AI Governance
+                        <strong>Platform:</strong> Community-Controlled AI Governance<br>
+                        <strong>Amount for Payment:</strong> ${data.totalCents || 0} cents
                     </div>
                 `;
                 
             } catch (error) {
-                console.error('Price calculation error:', error);
-                document.getElementById('result').innerHTML = `
-                    <strong style="color: #ff4444;">Calculation Error:</strong><br>
-                    ${error.message}
-                `;
+                resultDiv.innerHTML = `<strong>Connection Error:</strong> ${error.message}`;
+                console.error('API Error:', error);
             }
         }
         
-        // Set specific token quantities
-        function setQuantity(amount) {
-            document.getElementById('ms-quantity').value = amount;
-            calculatePrice();
-        }
-        
-        // Scroll to calculator
-        function scrollToCalculator() {
-            document.getElementById('calculator').scrollIntoView({
-                behavior: 'smooth',
-                block: 'center'
-            });
-        }
-        
-        // Initialize on page load
+        // Test connection on page load with error handling
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 MOUNTAINSHARES REVOLUTIONARY TOKEN PLATFORM READY 🚀');
-            console.log('💎 Transaction-based pricing: $1.00 base + fees');
-            
-            // Initial price calculation
-            calculatePrice();
-            
-            // Add floating particles for visual effect
-            for (let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 12 + 's';
-                particle.style.animationDuration = (12 + Math.random() * 15) + 's';
-                document.body.appendChild(particle);
-            }
-            
-            console.log('🏔️ West Virginia Community-Controlled AI Platform Activated! 🏔️');
+            console.log('🏔️ MountainShares Platform Loading...');
+            testPricing(10);
         });
     </script>
 </body>
