@@ -61,7 +61,7 @@
         
         <div class="status">
             <h2>Community-Controlled AI Platform</h2>
-            <p>Transaction-Based Pricing: $1.40 per token + fees</p>
+            <p>Transaction-Based Pricing: $1.00 per token + fees</p>
             <p><strong>Mount Hope, West Virginia</strong></p>
         </div>
         
@@ -102,17 +102,55 @@
                         Subtotal: $${data.subtotal.toFixed(2)}<br>
                         Processing Fee: $${data.fees.processing.toFixed(2)}<br>
                         Platform Fee: $${data.fees.platform.toFixed(2)}<br>
-                        <strong>Total: $${data.total.toFixed(2)}</strong><br>
-                        <em>${data.calculation}</em>
-                    `;
-                }
-            } catch (error) {
-                resultDiv.innerHTML = `<strong>Connection Error:</strong> ${error.message}`;
+                       <script>
+  <script>
+    async function testPricing(quantity) {
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = 'Testing pricing for ' + quantity + ' tokens...';
+        
+        try {
+            const response = await fetch('/api/calculate-price', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ tokenQuantity: quantity })
+            });
+            
+            const data = await response.json();
+            
+            if (data.error) {
+                resultDiv.innerHTML = `<strong>Error:</strong> ${data.error}`;
+                return;
             }
+            
+            // ADD NULL CHECKS BEFORE USING toFixed()
+            const basePrice = data.baseTokenPrice || 0;
+            const subtotal = data.subtotal || 0;
+            const total = data.total || 0;
+            const fees = data.fees || {};
+            
+            // Safe toFixed() calls with fallback values
+            resultDiv.innerHTML = `
+                <strong>Results for ${quantity} tokens:</strong><br>
+                Base Price: $${basePrice.toFixed ? basePrice.toFixed(2) : '0.00'} per token<br>
+                Subtotal: $${subtotal.toFixed ? subtotal.toFixed(2) : '0.00'}<br>
+                Processing Fee: $${(fees.stripe || 0).toFixed ? (fees.stripe || 0).toFixed(2) : '0.00'}<br>
+                Platform Fee: $${(fees.platformBase || 0).toFixed ? (fees.platformBase || 0).toFixed(2) : '0.00'}<br>
+                <strong>Total: $${total.toFixed ? total.toFixed(2) : '0.00'}</strong><br>
+                <em>Pricing Model: ${data.pricingModel || 'USD Transaction-Based'}</em>
+            `;
+            
+        } catch (error) {
+            resultDiv.innerHTML = `<strong>Connection Error:</strong> ${error.message}`;
+            console.error('API Error:', error);
         }
+    }
 
-        // Test connection on page load
+    // Test connection on page load with error handling
+    document.addEventListener('DOMContentLoaded', function() {
         testPricing(10);
-    </script>
-</body>
+    });
+</script>
+  </body>
 </html>
