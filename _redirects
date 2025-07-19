@@ -1,6 +1,0 @@
-# Buy page routing
-https://buy.mountainshares.us/* /public/:splat 200
-https://buy.mountainshares.us /public/index.html 200
-
-# Homepage routing (default)
-/* /index.html 200
