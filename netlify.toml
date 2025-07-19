@@ -1,29 +1,57 @@
 [build]
-  publish = "."
-  command = "echo 'MountainShares platform build'"
+  base = "/"
+  publish = "public"
+  command = "npm run build"
+  functions = "netlify/functions"
 
 [build.environment]
   NODE_VERSION = "22"
+  NPM_VERSION = "10"
 
+# API function routing
 [[redirects]]
-  from = "https://buy.mountainshares.us/*"
-  to = "/public/:splat"
+  from = "/api/process-payment"
+  to = "/.netlify/functions/process-payment"
   status = 200
 
 [[redirects]]
-  from = "https://buy.mountainshares.us"
-  to = "/public/index.html"
+  from = "/api/calculate-price"
+  to = "/.netlify/functions/calculate-price"
   status = 200
 
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Buy page SPA routing
+[[redirects]]
+  from = "/buy/*"
+  to = "/index.html"
+  status = 200
+
+# Root routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
+# Security headers for functions
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "https://buy.mountainshares.us"
+    Access-Control-Allow-Methods = "POST, GET, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization, X-Requested-With"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+
+# Security headers for all pages
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

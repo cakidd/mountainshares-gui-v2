@@ -1,24 +1,32 @@
 {
-  "name": "mountainshares-gui-v2",
-  "version": "1.0.0",
-  "description": "MountainShares Frontend with Blockchain Integration",
-  "main": "index.html",
+  "name": "mountainshares-buy-platform",
+  "version": "2.1.0",
+  "description": "MountainShares Community-Controlled AI - Token Purchase Platform",
+  "main": "index.js",
   "scripts": {
-    "build": "echo 'Static site - no build required'",
-    "start": "echo 'Static site - no start required'"
+    "build": "npm run build:assets && npm run build:functions",
+    "build:assets": "echo 'Building static assets...' && mkdir -p public",
+    "build:functions": "echo 'Functions directory ready'",
+    "dev": "netlify dev",
+    "start": "netlify dev",
+    "test": "echo 'Running tests...' && exit 0"
   },
   "dependencies": {
-    "ethers": "^6.8.0",
-    "stripe": "^14.0.0"
+    "stripe": "^14.25.0",
+    "web3": "^4.3.0",
+    "ethers": "^6.9.2"
   },
-  "devDependencies": {},
-  "keywords": [
-    "mountainshares",
-    "blockchain",
-    "community",
-    "mount-hope",
-    "west-virginia"
-  ],
-  "author": "MountainShares Community",
+  "devDependencies": {
+    "netlify-cli": "^17.13.1"
+  },
+  "engines": {
+    "node": "22.x",
+    "npm": "10.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cakidd/mountainshares-gui-v2.git"
+  },
+  "author": "MountainShares Platform",
   "license": "MIT"
 }

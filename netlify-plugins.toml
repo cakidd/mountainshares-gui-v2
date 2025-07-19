@@ -1,0 +1,30 @@
+# Essential plugins for MountainShares buy platform
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+  
+  [plugins.inputs]
+    audits = ["accessibility", "best-practices", "performance", "seo"]
+    output_path = "reports/lighthouse.html"
+    fail_build_on = "none"
+
+[[plugins]]
+  package = "netlify-plugin-sitemap"
+  
+  [plugins.inputs]
+    build_dir = "public"
+    exclude = [
+      "/admin/**",
+      "/preview/**"
+    ]
+
+[[plugins]]
+  package = "netlify-plugin-minify-html"
+  
+  [plugins.inputs]
+    contexts = ["production", "branch-deploy"]
+
+[[plugins]]
+  package = "netlify-plugin-inline-critical-css"
+  
+  [plugins.inputs]
+    minify = true
