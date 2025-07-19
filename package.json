@@ -1,12 +1,12 @@
 {
   "name": "mountainshares-buy-platform",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "MountainShares Community-Controlled AI - Token Purchase Platform",
   "main": "index.js",
   "scripts": {
-    "build": "npm run build:assets && npm run build:functions",
-    "build:assets": "echo 'Building static assets...' && mkdir -p public",
-    "build:functions": "echo 'Functions directory ready'",
+    "build": "npm run build:setup && npm run build:functions",
+    "build:setup": "mkdir -p public && echo 'Build setup complete'",
+    "build:functions": "echo 'Functions ready for deployment'",
     "dev": "netlify dev",
     "start": "netlify dev",
     "test": "echo 'Running tests...' && exit 0"
