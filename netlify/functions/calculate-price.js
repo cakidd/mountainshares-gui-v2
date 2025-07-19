@@ -1,3 +1,5 @@
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 exports.handler = async (event, context) => {
     const headers = {
         'Access-Control-Allow-Origin': 'https://buy.mountainshares.us',
@@ -24,18 +26,31 @@ exports.handler = async (event, context) => {
             };
         }
 
-        // CORRECT TRANSACTION-BASED PRICING - MATCHING YOUR JAVA CODE
-        const baseTokenPrice = 1.40;
-        const subtotal = tokenQuantity * baseTokenPrice;
+        // VARIABLE PRICING FROM YOUR CONTRACT ANALYSIS
+        // Base calculation using your ETH Price Calculator formula
+        const ethPriceUSD = await getETHPrice(); // From oracle
+        const baseTokenValue = (100000000 * Math.pow(10, 18)) / ethPriceUSD;
+        const variableTokenPrice = baseTokenValue / Math.pow(10, 18); // Convert to readable USD
         
-        // Transaction-based fee structure
+        const subtotal = tokenQuantity * variableTokenPrice;
+        
+        // YOUR EXACT FEE STRUCTURE FROM CONTRACTS
         const fees = {
-            processingFee: Math.max(0.30, subtotal * 0.029), // Stripe: 2.9% + $0.30
-            platformFee: subtotal * 0.025, // 2.5% platform fee
+            // 2% + $0.03 (as you specified)
+            platformBaseFee: subtotal * 0.02 + 0.03,
+            // 0.5% rounded to nearest penny
+            processingAdjustment: Math.round((subtotal * 0.005) * 100) / 100,
+            // 2.9% + $0.30 (Stripe standard)
+            stripeProcessing: Math.round((subtotal * 0.029 + 0.30) * 100) / 100,
+            // SEC regulatory fee $0.01
+            regulatoryFee: 0.01,
             totalFees: 0
         };
         
-        fees.totalFees = fees.processingFee + fees.platformFee;
+        // Calculate total fees matching your formula
+        fees.totalFees = fees.platformBaseFee + fees.processingAdjustment + 
+                        fees.stripeProcessing + fees.regulatoryFee;
+        
         const total = subtotal + fees.totalFees;
         const totalCents = Math.round(total * 100);
 
@@ -44,18 +59,21 @@ exports.handler = async (event, context) => {
             headers,
             body: JSON.stringify({
                 tokenQuantity: tokenQuantity,
-                baseTokenPrice: baseTokenPrice,
+                variableTokenPrice: variableTokenPrice,
+                ethPriceUSD: ethPriceUSD,
                 subtotal: subtotal,
                 fees: {
-                    processing: fees.processingFee,
-                    platform: fees.platformFee,
+                    platformBase: fees.platformBaseFee,
+                    processingAdjustment: fees.processingAdjustment,
+                    stripe: fees.stripeProcessing,
+                    regulatory: fees.regulatoryFee,
                     total: fees.totalFees
                 },
                 total: total,
                 totalCents: totalCents,
                 currency: 'USD',
-                pricingModel: 'transaction-based',
-                calculation: `${tokenQuantity} × $${baseTokenPrice} = $${subtotal.toFixed(2)} + $${fees.totalFees.toFixed(2)} fees = $${total.toFixed(2)}`
+                pricingModel: 'variable-eth-based',
+                calculation: `${tokenQuantity} tokens × $${variableTokenPrice.toFixed(4)} (ETH-based) = $${total.toFixed(2)}`
             })
         };
 
@@ -70,3 +88,11 @@ exports.handler = async (event, context) => {
         };
     }
 };
+
+// Get ETH price from your oracle system (placeholder)
+async function getETHPrice() {
+    // This would connect to your ETH Price Calculator contract
+    // at 0x4153c9b915AAb6Bf1a11Dd6F37BA9E6051a3f1f8
+    // For now, return a placeholder value
+    return 3000; // $3000 ETH price placeholder
+}

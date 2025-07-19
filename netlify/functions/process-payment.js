@@ -14,28 +14,41 @@ const corsHeaders = {
   'Cache-Control': 'no-cache, no-store, must-revalidate'
 };
 
-// CORRECT TRANSACTION-BASED PRICING - RESTORED FROM YOUR JAVA CODE
-function calculateCorrectTotal(quantity) {
-    // Base token price and transaction fees calculation
-    const baseTokenPrice = 1.40;
-    const subtotal = quantity * baseTokenPrice;
+// VARIABLE PRICING FROM YOUR CONTRACT ANALYSIS
+async function calculateVariableTotal(quantity) {
+    // Base calculation using your ETH Price Calculator formula
+    const ethPriceUSD = await getETHPrice();
+    const baseTokenValue = (100000000 * Math.pow(10, 18)) / ethPriceUSD;
+    const variableTokenPrice = baseTokenValue / Math.pow(10, 18); // Convert to readable USD
     
-    // Transaction-based fee structure (matching your Java implementation)
+    const subtotal = quantity * variableTokenPrice;
+    
+    // YOUR EXACT FEE STRUCTURE FROM CONTRACTS
     const fees = {
-        processingFee: Math.max(0.30, subtotal * 0.029), // Stripe standard: 2.9% + $0.30
-        platformFee: subtotal * 0.025, // 2.5% platform fee
+        // 2% + $0.03 (as you specified)
+        platformBaseFee: subtotal * 0.02 + 0.03,
+        // 0.5% rounded to nearest penny
+        processingAdjustment: Math.round((subtotal * 0.005) * 100) / 100,
+        // 2.9% + $0.30 (Stripe standard)
+        stripeProcessing: Math.round((subtotal * 0.029 + 0.30) * 100) / 100,
+        // SEC regulatory fee $0.01
+        regulatoryFee: 0.01,
         totalFees: 0
     };
     
-    fees.totalFees = fees.processingFee + fees.platformFee;
+    fees.totalFees = fees.platformBaseFee + fees.processingAdjustment + 
+                    fees.stripeProcessing + fees.regulatoryFee;
+    
     const total = subtotal + fees.totalFees;
     
     return {
-        baseTokenPrice,
+        variableTokenPrice,
+        ethPriceUSD,
         quantity,
         subtotal,
         totalFees: fees.totalFees,
-        total
+        total,
+        fees: fees
     };
 }
 
@@ -70,7 +83,7 @@ exports.handler = async (event, context) => {
 
   try {
     const startTime = Date.now();
-    console.log('Processing MountainShares transaction-based token purchase...');
+    console.log('Processing MountainShares variable token purchase...');
 
     // Parse and validate request
     const requestBody = JSON.parse(event.body);
@@ -89,21 +102,23 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Calculate correct total using YOUR transaction-based pricing
+    // Calculate variable pricing using YOUR contract logic
     const quantity = tokenQuantity || 1;
-    const calculations = calculateCorrectTotal(quantity);
+    const calculations = await calculateVariableTotal(quantity);
 
-    // Validate that frontend and backend calculations match (EXACTLY AS IN YOUR CODE)
-    if (amount && Math.abs(amount - Math.round(calculations.total * 100)) > 1) {
+    // Validate that frontend and backend calculations match
+    const expectedAmountCents = Math.round(calculations.total * 100);
+    if (amount && Math.abs(amount - expectedAmountCents) > 5) { // 5 cent tolerance for variable pricing
       return {
         statusCode: 400,
         headers: corsHeaders,
         body: JSON.stringify({
-          error: `Amount mismatch. Expected ${Math.round(calculations.total * 100)} cents, received ${amount} cents`,
-          expected: Math.round(calculations.total * 100),
+          error: `Amount mismatch. Expected ${expectedAmountCents} cents, received ${amount} cents`,
+          expected: expectedAmountCents,
           received: amount,
           breakdown: {
-            basePrice: calculations.baseTokenPrice,
+            variableTokenPrice: calculations.variableTokenPrice,
+            ethPrice: calculations.ethPriceUSD,
             quantity: calculations.quantity,
             subtotal: calculations.subtotal,
             fees: calculations.totalFees,
@@ -113,13 +128,13 @@ exports.handler = async (event, context) => {
       };
     }
 
-    console.log('✅ Transaction-based pricing validation passed');
+    console.log('✅ Variable pricing validation passed');
     console.log(`💰 Processing ${quantity} tokens for $${calculations.total.toFixed(2)}`);
-    console.log(`📊 Breakdown: $${calculations.subtotal.toFixed(2)} + $${calculations.totalFees.toFixed(2)} fees`);
+    console.log(`📊 ETH Price: $${calculations.ethPriceUSD}, Token Price: $${calculations.variableTokenPrice.toFixed(4)}`);
 
-    // Create Stripe Payment Intent with CORRECT transaction-based pricing
+    // Create Stripe Payment Intent with VARIABLE pricing
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(calculations.total * 100), // CORRECT total in cents
+      amount: expectedAmountCents,
       currency: 'usd',
       payment_method: paymentMethodId,
       confirm: true,
@@ -128,18 +143,19 @@ exports.handler = async (event, context) => {
         platform: 'MountainShares',
         community: 'Mount Hope, WV',
         tokenQuantity: quantity.toString(),
-        baseTokenPrice: calculations.baseTokenPrice.toString(),
+        variableTokenPrice: calculations.variableTokenPrice.toString(),
+        ethPriceUSD: calculations.ethPriceUSD.toString(),
         subtotal: calculations.subtotal.toString(),
         totalFees: calculations.totalFees.toString(),
         total: calculations.total.toString(),
-        pricingModel: 'transaction-based',
+        pricingModel: 'variable-eth-based',
         customerEmail,
         customerName: customerName || 'Unknown',
         purchaseTimestamp: new Date().toISOString(),
         blockchain: 'Arbitrum',
         contractAddress: process.env.MOUNTAINSHARES_TOKEN || 'pending'
       },
-      description: `MountainShares Tokens (${quantity}) - Community-controlled blockchain tokens for Mount Hope, WV`,
+      description: `MountainShares Variable Tokens (${quantity}) - ETH-based pricing at $${calculations.variableTokenPrice.toFixed(4)} each`,
       receipt_email: customerEmail
     });
 
@@ -160,7 +176,7 @@ exports.handler = async (event, context) => {
     }
 
     if (paymentIntent.status === 'succeeded') {
-      console.log(`✅ Payment succeeded: ${paymentIntent.id} for ${quantity} tokens`);
+      console.log(`✅ Payment succeeded: ${paymentIntent.id} for ${quantity} variable tokens`);
 
       // Trigger blockchain token minting
       const mintResult = await initiateTokenMinting(paymentIntent, quantity, customerEmail);
@@ -174,13 +190,14 @@ exports.handler = async (event, context) => {
           success: true,
           payment: {
             id: paymentIntent.id,
-            amount: Math.round(calculations.total * 100),
+            amount: expectedAmountCents,
             tokens_purchased: quantity,
-            base_token_price: calculations.baseTokenPrice,
+            variable_token_price: calculations.variableTokenPrice,
+            eth_price_usd: calculations.ethPriceUSD,
             subtotal: calculations.subtotal,
             total_fees: calculations.totalFees,
             total_paid: calculations.total,
-            pricing_model: 'transaction-based',
+            pricing_model: 'variable-eth-based',
             customer_email: customerEmail
           },
           blockchain: {
@@ -230,6 +247,24 @@ exports.handler = async (event, context) => {
   }
 };
 
+// Get ETH price from your oracle system
+async function getETHPrice() {
+    // This would connect to your ETH Price Calculator contract
+    // at 0x4153c9b915AAb6Bf1a11Dd6F37BA9E6051a3f1f8
+    try {
+        // Placeholder - replace with actual oracle call to your contract
+        return 3000; // $3000 ETH price placeholder
+        
+        // Future implementation would use web3 to call:
+        // const web3 = new Web3(process.env.ARBITRUM_RPC_URL);
+        // const priceContract = new web3.eth.Contract(ETH_PRICE_CALCULATOR_ABI, '0x4153c9b915AAb6Bf1a11Dd6F37BA9E6051a3f1f8');
+        // return await priceContract.methods.getETHPriceUSD().call();
+    } catch (error) {
+        console.error('Error getting ETH price:', error);
+        return 3000; // Fallback price
+    }
+}
+
 // Input validation function
 function validatePurchaseRequest(amount, tokenQuantity, customerEmail, paymentMethodId) {
   const errors = [];
@@ -270,7 +305,7 @@ async function initiateTokenMinting(paymentIntent, tokenQuantity, customerEmail)
     return {
       status: 'initiated',
       transactionHash: `pending_blockchain_integration_${Date.now()}`,
-      message: 'Token minting initiated on Arbitrum network'
+      message: 'Variable token minting initiated on Arbitrum network'
     };
     
   } catch (error) {
