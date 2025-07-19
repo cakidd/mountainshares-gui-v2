@@ -7,7 +7,13 @@
   NODE_VERSION = "22"
   NPM_VERSION = "10"
 
-# Function routing - Critical for API endpoints
+# Function routing - MUST come before SPA routing
+[[redirects]]
+  from = "/api/calculate-price"
+  to = "/.netlify/functions/calculate-price"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/api/process-payment"
   to = "/.netlify/functions/process-payment"
@@ -15,8 +21,8 @@
   force = true
 
 [[redirects]]
-  from = "/api/calculate-price"
-  to = "/.netlify/functions/calculate-price"
+  from = "/api/test-connection"
+  to = "/.netlify/functions/test-connection"
   status = 200
   force = true
 
@@ -26,29 +32,20 @@
   status = 200
   force = true
 
-# Buy page routing (must come after API routes)
-[[redirects]]
-  from = "/buy/*"
-  to = "/index.html"
-  status = 200
-
-# Catch-all for SPA routing (last priority)
+# SPA routing (MUST come after API routes)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# Security headers for functions
+# Headers for functions
 [[headers]]
   for = "/.netlify/functions/*"
   [headers.values]
     Access-Control-Allow-Origin = "https://buy.mountainshares.us"
     Access-Control-Allow-Methods = "POST, GET, OPTIONS"
     Access-Control-Allow-Headers = "Content-Type, Authorization, X-Requested-With"
-    X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
 
-# Security headers for all pages
 [[headers]]
   for = "/*"
   [headers.values]
