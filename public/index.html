@@ -265,29 +265,22 @@
             margin: 30px 0;
         }
 
-        .wallet-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
-
         .connect-wallet-btn {
             background: var(--gold-gradient);
             color: var(--mountain-dark);
-            padding: 15px 25px;
+            padding: 15px 35px;
             border: none;
             border-radius: 15px;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin: 5px;
         }
 
         .connect-wallet-btn:hover {
@@ -295,38 +288,13 @@
             box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
         }
 
-        .disconnect-wallet-btn {
+        .disconnect-btn {
             background: var(--error-red);
             color: var(--mountain-white);
         }
 
-        .disconnect-wallet-btn:hover {
+        .disconnect-btn:hover {
             box-shadow: 0 10px 30px rgba(255, 68, 68, 0.5);
-        }
-
-        .wallet-info {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border: 1px solid var(--sky-blue);
-        }
-
-        .wallet-address-display {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            color: var(--wv-gold);
-            word-break: break-all;
-        }
-
-        .wallet-instructions {
-            background: rgba(255, 170, 0, 0.1);
-            border: 1px solid var(--warning-orange);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            font-size: 13px;
-            color: var(--warning-orange);
         }
 
         .price-breakdown {
@@ -511,11 +479,6 @@
                 display: block;
                 margin: 10px 0;
             }
-
-            .wallet-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
         }
     </style>
 </head>
@@ -566,30 +529,13 @@
                 <div class="input-group">
                     <label class="input-label">Your Ethereum Wallet:</label>
                     <input type="text" id="wallet-address" class="input-field" placeholder="Connect wallet to see address..." readonly>
-                    
-                    <!-- Wallet Info Display -->
-                    <div id="wallet-info" class="wallet-info" style="display: none;">
-                        <div style="color: var(--mountain-white); margin-bottom: 5px;">Connected Wallet:</div>
-                        <div id="wallet-display" class="wallet-address-display"></div>
-                    </div>
-
-                    <!-- Wallet Instructions -->
-                    <div id="wallet-instructions" class="wallet-instructions" style="display: none;">
-                        <strong>💡 Need to switch wallets?</strong><br>
-                        1. Click "Disconnect Wallet" below<br>
-                        2. In MetaMask, switch to your desired account<br>
-                        3. Click "Connect MetaMask" again
-                    </div>
-
                     <div class="wallet-section">
-                        <div class="wallet-buttons">
-                            <button id="connect-btn" class="connect-wallet-btn" onclick="requestWalletConnection()">
-                                🦊 Connect MetaMask
-                            </button>
-                            <button id="disconnect-btn" class="connect-wallet-btn disconnect-wallet-btn" onclick="disconnectWallet()" style="display: none;">
-                                🔌 Disconnect Wallet
-                            </button>
-                        </div>
+                        <button class="connect-wallet-btn" onclick="connectWallet()">
+                            🦊 Connect MetaMask
+                        </button>
+                        <button class="connect-wallet-btn disconnect-btn" onclick="changeWallet()" style="display: none;">
+                            🔄 Change Wallet
+                        </button>
                     </div>
                 </div>
 
@@ -664,20 +610,6 @@
                     </div>
                 </div>
 
-                <!-- Wallet Switching Instructions -->
-                <div style="background: rgba(255, 170, 0, 0.1); border: 1px solid var(--warning-orange); border-radius: 15px; padding: 20px; margin-bottom: 20px;">
-                    <h4 style="color: var(--warning-orange); margin-bottom: 10px;">🔄 Multiple Wallets?</h4>
-                    <p style="color: var(--mountain-white); font-size: 14px; line-height: 1.5;">
-                        To use a different MetaMask account:
-                    </p>
-                    <ol style="color: var(--mountain-white); font-size: 13px; margin: 10px 0 0 20px; line-height: 1.5;">
-                        <li>Open MetaMask extension</li>
-                        <li>Click your account avatar (top right)</li>
-                        <li>Select the wallet you want to use</li>
-                        <li>Disconnect and reconnect here</li>
-                    </ol>
-                </div>
-
                 <!-- Security Notice -->
                 <div class="security-notice">
                     <div class="security-title">
@@ -718,11 +650,6 @@
         let retryCount = 0;
         let maxRetries = 3;
         let offlineMode = false;
-        let walletState = {
-            connected: false,
-            address: null,
-            connectionRequested: false
-        };
 
         // System status check
         async function checkSystemStatus() {
@@ -836,136 +763,48 @@
             calculatePrice();
         }
 
-        // Update wallet UI based on connection state
-        function updateWalletUI() {
-            const connectBtn = document.getElementById('connect-btn');
-            const disconnectBtn = document.getElementById('disconnect-btn');
-            const walletInfo = document.getElementById('wallet-info');
-            const walletDisplay = document.getElementById('wallet-display');
-            const walletAddressInput = document.getElementById('wallet-address');
-            const walletInstructions = document.getElementById('wallet-instructions');
+        // Simple wallet connection with automatic account detection
+        async function connectWallet() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    const address = accounts[0];
+                    document.getElementById('wallet-address').value = address;
 
-            if (walletState.connected && walletState.address) {
-                // Connected state
-                connectBtn.style.display = 'none';
-                disconnectBtn.style.display = 'inline-flex';
-                walletInfo.style.display = 'block';
-                walletInstructions.style.display = 'block';
-                
-                walletAddressInput.value = walletState.address;
-                walletDisplay.textContent = `${walletState.address.substring(0, 6)}...${walletState.address.substring(38)}`;
-                
-                document.getElementById('wallet-status').textContent = 'MetaMask Connected';
-                document.getElementById('wallet-status').className = 'status-online';
-            } else {
-                // Disconnected state
-                connectBtn.style.display = 'inline-flex';
-                disconnectBtn.style.display = 'none';
-                walletInfo.style.display = 'none';
-                walletInstructions.style.display = 'none';
-                
-                walletAddressInput.value = '';
-                walletDisplay.textContent = '';
-                
-                document.getElementById('wallet-status').textContent = 'MetaMask Detected';
-                document.getElementById('wallet-status').className = 'status-checking';
-            }
-        }
-
-        // Request fresh wallet connection (forces MetaMask permission dialog)
-        async function requestWalletConnection() {
-            if (typeof window.ethereum === 'undefined') {
-                showStatus('🦊 MetaMask not detected. Please install MetaMask first.', 'error');
-                window.open('https://metamask.io/download/', '_blank');
-                return;
-            }
-
-            try {
-                showStatus('🔄 Requesting MetaMask connection...', 'success');
-                
-                // Clear any existing state
-                walletState.connected = false;
-                walletState.address = null;
-                walletState.connectionRequested = true;
-                
-                // Force a fresh connection request - this will show MetaMask's account selector
-                const accounts = await window.ethereum.request({
-                    method: 'eth_requestAccounts'
-                });
-
-                if (accounts && accounts.length > 0) {
-                    walletState.connected = true;
-                    walletState.address = accounts[0];
-                    updateWalletUI();
                     showStatus('✅ MetaMask wallet connected successfully!', 'success');
-                } else {
-                    throw new Error('No accounts returned from MetaMask');
-                }
 
-            } catch (error) {
-                console.error('Failed to connect wallet:', error);
-                
-                walletState.connected = false;
-                walletState.address = null;
-                walletState.connectionRequested = false;
-                updateWalletUI();
-                
-                if (error.code === 4001) {
-                    showStatus('❌ Connection cancelled. Please try again if you want to connect.', 'error');
-                } else if (error.code === -32002) {
-                    showStatus('⏳ MetaMask connection already pending. Please check MetaMask.', 'error');
-                } else {
+                    // Show change wallet button
+                    document.querySelector('.connect-wallet-btn').style.display = 'none';
+                    document.querySelector('.disconnect-btn').style.display = 'inline-flex';
+
+                    // Update wallet status
+                    document.getElementById('wallet-status').textContent = 'MetaMask Connected';
+                    document.getElementById('wallet-status').className = 'status-online';
+
+                } catch (error) {
+                    console.error('Failed to connect wallet:', error);
                     showStatus('❌ Failed to connect MetaMask. Please try again.', 'error');
                 }
+            } else {
+                showStatus('🦊 MetaMask not detected. Please install MetaMask first.', 'error');
+                window.open('https://metamask.io/download/', '_blank');
             }
         }
 
-        // Disconnect wallet completely
-        function disconnectWallet() {
-            walletState.connected = false;
-            walletState.address = null;
-            walletState.connectionRequested = false;
+        // Simple wallet change function that clears and reconnects
+        async function changeWallet() {
+            // Clear current wallet
+            document.getElementById('wallet-address').value = '';
             
-            updateWalletUI();
-            showStatus('🔌 Wallet disconnected. You can now connect a different wallet.', 'success');
-        }
-
-        // Monitor MetaMask account changes (but don't auto-connect)
-        function setupMetaMaskMonitoring() {
-            if (typeof window.ethereum !== 'undefined') {
-                // Only listen for account changes if we have an active connection
-                window.ethereum.on('accountsChanged', function (accounts) {
-                    console.log('MetaMask accounts changed:', accounts);
-                    
-                    if (walletState.connected) {
-                        if (accounts && accounts.length > 0) {
-                            const newAccount = accounts[0];
-                            if (newAccount !== walletState.address) {
-                                walletState.address = newAccount;
-                                updateWalletUI();
-                                showStatus('🔄 MetaMask account changed.', 'success');
-                            }
-                        } else {
-                            // User disconnected all accounts from MetaMask
-                            walletState.connected = false;
-                            walletState.address = null;
-                            updateWalletUI();
-                            showStatus('🔌 Disconnected from MetaMask.', 'success');
-                        }
-                    }
-                });
-
-                // Listen for disconnection events
-                window.ethereum.on('disconnect', function (error) {
-                    console.log('MetaMask disconnected:', error);
-                    if (walletState.connected) {
-                        walletState.connected = false;
-                        walletState.address = null;
-                        updateWalletUI();
-                        showStatus('🔌 MetaMask disconnected.', 'success');
-                    }
-                });
-            }
+            // Reset buttons
+            document.querySelector('.connect-wallet-btn').style.display = 'inline-flex';
+            document.querySelector('.disconnect-btn').style.display = 'none';
+            
+            // Reset status
+            document.getElementById('wallet-status').textContent = 'MetaMask Detected';
+            document.getElementById('wallet-status').className = 'status-checking';
+            
+            showStatus('🔄 Wallet cleared. Click Connect to choose a different wallet.', 'success');
         }
 
         // Initiate purchase with live Stripe integration
@@ -1048,12 +887,6 @@
             if (quantityInput) {
                 quantityInput.addEventListener('input', calculatePrice);
             }
-
-            // Setup MetaMask monitoring (but don't auto-connect)
-            setupMetaMaskMonitoring();
-
-            // Initialize wallet UI
-            updateWalletUI();
 
             // Check MetaMask availability
             if (typeof window.ethereum !== 'undefined') {
