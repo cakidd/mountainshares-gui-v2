@@ -11,9 +11,9 @@ exports.handler = async (event, context) => {
     }
 
     try {
-        const { tokenQuantity } = JSON.parse(event.body || '{}');
+        const { msTokens } = JSON.parse(event.body || '{}');
         
-        if (!tokenQuantity || tokenQuantity <= 0) {
+        if (!msTokens || msTokens <= 0) {
             return {
                 statusCode: 400,
                 headers,
@@ -26,7 +26,7 @@ exports.handler = async (event, context) => {
 
         // CORRECT USD TRANSACTION-BASED PRICING - NO ETH CALCULATION
         const baseTokenPrice = 1.00;  // Fixed $1.00 USD per token
-        const subtotal = tokenQuantity * baseTokenPrice;
+        const subtotal = msTokens * baseTokenPrice;
         
         // Your exact USD fee structure
         const fees = {
@@ -55,7 +55,7 @@ exports.handler = async (event, context) => {
             statusCode: 200,
             headers,
             body: JSON.stringify({
-                tokenQuantity: tokenQuantity,
+                msTokens: msTokens,
                 baseTokenPrice: 1.00,
                 subtotal: parseFloat(subtotal.toFixed(2)),
                 fees: {
@@ -69,7 +69,7 @@ exports.handler = async (event, context) => {
                 totalCents: totalCents,
                 currency: 'USD',
                 pricingModel: 'usd-transaction-based',
-                calculation: `${tokenQuantity} tokens × $1.00 USD = $${subtotal.toFixed(2)} + $${fees.totalFees.toFixed(2)} fees = $${total.toFixed(2)} USD`
+                calculation: `${msTokens} tokens × $1.00 USD = $${subtotal.toFixed(2)} + $${fees.totalFees.toFixed(2)} fees = $${total.toFixed(2)} USD`
             })
         };
 
