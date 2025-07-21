@@ -12,12 +12,12 @@ exports.handler = async (event, context) => {
 
     try {
         const { msTokens } = JSON.parse(event.body || '{}');
-        
+
         if (!msTokens || msTokens <= 0) {
             return {
                 statusCode: 400,
                 headers,
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     error: 'Invalid token quantity',
                     message: 'Token quantity must be a positive number'
                 })
@@ -27,30 +27,26 @@ exports.handler = async (event, context) => {
         // CORRECT USD TRANSACTION-BASED PRICING - NO ETH CALCULATION
         const baseTokenPrice = 1.00;  // Fixed $1.00 USD per token
         const subtotal = msTokens * baseTokenPrice;
-        
+
         // Your exact USD fee structure
         const fees = {
             // Platform fee: 2% + $0.03
             platformBaseFee: subtotal * 0.02 + 0.03,
-        "mountainSharesFee": fees.platformBase,
-            
+
             // Processing adjustment: 0.5% rounded to nearest penny
             processingAdjustment: Math.round((subtotal * 0.005) * 100) / 100,
-            
-            // Stripe processing: 2.9% + $0.30 rounded to nearest penny  
+
+            // Stripe processing: 2.9% + $0.30 rounded to nearest penny
             stripeProcessing: Math.round((subtotal * 0.029 + 0.30) * 100) / 100,
-        "stripeFee": fees.stripe,
-            
+
             // SEC regulatory: 0.5% rounded to nearest penny (VARIABLE)
             regulatoryFee: Math.round((subtotal * 0.005) * 100) / 100,
-            
+
             totalFees: 0
         };
 
-        fees.totalFees = fees.platformBaseFee + fees.processingAdjustment + 
-        "mountainSharesFee": fees.platformBase,
+        fees.totalFees = fees.platformBaseFee + fees.processingAdjustment +
                         fees.stripeProcessing + fees.regulatoryFee;
-        "stripeFee": fees.stripe,
 
         const total = subtotal + fees.totalFees;
         const totalCents = Math.round(total * 100);
@@ -64,10 +60,8 @@ exports.handler = async (event, context) => {
                 subtotal: parseFloat(subtotal.toFixed(2)),
                 fees: {
                     platformBase: parseFloat(fees.platformBaseFee.toFixed(2)),
-        "mountainSharesFee": fees.platformBase,
                     processingAdjustment: parseFloat(fees.processingAdjustment.toFixed(2)),
                     stripe: parseFloat(fees.stripeProcessing.toFixed(2)),
-        "stripeFee": fees.stripe,
                     regulatory: parseFloat(fees.regulatoryFee.toFixed(2)),
                     total: parseFloat(fees.totalFees.toFixed(2))
                 },
@@ -75,7 +69,11 @@ exports.handler = async (event, context) => {
                 totalCents: totalCents,
                 currency: 'USD',
                 pricingModel: 'usd-transaction-based',
-                calculation: `${msTokens} tokens × $1.00 USD = $${subtotal.toFixed(2)} + $${fees.totalFees.toFixed(2)} fees = $${total.toFixed(2)} USD`
+                calculation: `${msTokens} tokens × $1.00 USD = $${subtotal.toFixed(2)} + $${fees.totalFees.toFixed(2)} fees = $${total.toFixed(2)} USD`,
+                // Frontend-compatible properties
+                stripeFee: parseFloat(fees.stripeProcessing.toFixed(2)),
+                mountainSharesFee: parseFloat(fees.platformBaseFee.toFixed(2)),
+                totalCharge: parseFloat(total.toFixed(2))
             })
         };
 
