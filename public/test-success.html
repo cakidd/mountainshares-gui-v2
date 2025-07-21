@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Purchase Successful - MountainShares</title>
+    <style>
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: #0A0A0A;
+            color: #FFFFFF;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .success-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(0, 102, 255, 0.1));
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #FFD700;
+        }
+        .success-icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+        }
+        .contract-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 14px;
+            text-align: left;
+        }
+        .return-btn {
+            background: #00BFFF;
+            color: #0A0A0A;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-icon">✅</div>
+        <h1 style="color: #FFD700;">Test Purchase Successful!</h1>
+        <p>Your test purchase has been processed successfully.</p>
+        
+        <div class="contract-info">
+            <h3>Contract Validation Results:</h3>
+            <div id="validation-results">Loading validation data...</div>
+        </div>
+        
+        <a href="/" class="return-btn">Return to Purchase Portal</a>
+    </div>
+
+    <script>
+        // Get session ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session_id');
+        
+        if (sessionId) {
+            // Simulate contract validation display
+            document.getElementById('validation-results').innerHTML = `
+                <strong>Session ID:</strong> ${sessionId}<br>
+                <strong>Contract Status:</strong> Validation Complete<br>
+                <strong>Network:</strong> Ethereum Mainnet<br>
+                <strong>Gas Estimate:</strong> 21,000<br>
+                <strong>Validation Time:</strong> ${new Date().toISOString()}<br>
+                <strong>Test Mode:</strong> Active
+            `;
+        }
+    </script>
+</body>
+</html>

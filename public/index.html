@@ -66,6 +66,16 @@
             padding: 40px 20px;
         }
 
+        .test-mode-banner {
+            background: var(--warning-orange);
+            color: var(--mountain-dark);
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
         .header-nav {
             background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(26, 26, 26, 0.8));
             backdrop-filter: blur(20px);
@@ -293,8 +303,17 @@
             color: var(--mountain-white);
         }
 
+        .test-btn {
+            background: var(--warning-orange);
+            color: var(--mountain-dark);
+        }
+
         .disconnect-btn:hover {
             box-shadow: 0 10px 30px rgba(255, 68, 68, 0.5);
+        }
+
+        .test-btn:hover {
+            box-shadow: 0 10px 30px rgba(255, 170, 0, 0.5);
         }
 
         .price-breakdown {
@@ -365,6 +384,11 @@
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
+        }
+
+        .test-purchase-btn {
+            background: var(--warning-orange);
+            margin-bottom: 15px;
         }
 
         .status-message {
@@ -484,6 +508,11 @@
 </head>
 
 <body>
+    <!-- Test Mode Banner -->
+    <div class="test-mode-banner" id="test-banner" style="display: none;">
+        🧪 TEST MODE ACTIVE - Using Stripe Test Environment & Contract Validation
+    </div>
+
     <div class="buy-container">
         <header class="header-nav">
             <a href="https://mountainshares.us" class="home-link">
@@ -564,8 +593,14 @@
                     </div>
                 </div>
 
+                <!-- Test Purchase Button -->
+                <button class="purchase-btn test-purchase-btn" onclick="initiateTestPurchase()">
+                    🧪 Test Purchase (Safe)
+                </button>
+
+                <!-- Live Purchase Button -->
                 <button id="purchase-btn" class="purchase-btn" onclick="initiatePurchase()">
-                    💎 Purchase MountainShares Now
+                    💎 Live Purchase MountainShares
                 </button>
 
                 <div id="payment-status" class="status-message">
@@ -610,6 +645,17 @@
                     </div>
                 </div>
 
+                <!-- Test Mode Instructions -->
+                <div style="background: rgba(255, 170, 0, 0.1); border: 2px solid var(--warning-orange); border-radius: 15px; padding: 20px; margin-bottom: 20px;">
+                    <h4 style="color: var(--warning-orange); margin-bottom: 10px;">🧪 Test Mode Available</h4>
+                    <p style="color: var(--mountain-white); font-size: 14px; line-height: 1.5;">
+                        <strong>Test Purchase:</strong> Uses Stripe test mode and validates smart contract calls without spending real money or tokens.
+                    </p>
+                    <p style="color: var(--mountain-white); font-size: 14px; line-height: 1.5; margin-top: 10px;">
+                        <strong>Live Purchase:</strong> Real transactions with actual payment processing and token delivery.
+                    </p>
+                </div>
+
                 <!-- Security Notice -->
                 <div class="security-notice">
                     <div class="security-title">
@@ -651,6 +697,14 @@
         let maxRetries = 3;
         let offlineMode = false;
         let connectedAccount = null;
+        let testMode = false;
+
+        // Check URL for test mode
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('test') === 'true') {
+            testMode = true;
+            document.getElementById('test-banner').style.display = 'block';
+        }
 
         // System status check
         async function checkSystemStatus() {
@@ -773,7 +827,6 @@
             }
 
             try {
-                // Use the proper MetaMask method to request accounts
                 const accounts = await window.ethereum.request({
                     method: 'eth_requestAccounts'
                 });
@@ -813,13 +866,11 @@
             }
 
             try {
-                // First, request new permissions to force account selection
                 await window.ethereum.request({
                     method: 'wallet_requestPermissions',
                     params: [{ eth_accounts: {} }]
                 });
 
-                // Then get the newly selected accounts
                 const accounts = await window.ethereum.request({
                     method: 'eth_accounts'
                 });
@@ -849,30 +900,84 @@
             }
         }
 
-        // Listen for account changes in MetaMask
-        if (typeof window.ethereum !== 'undefined') {
-            window.ethereum.on('accountsChanged', function (accounts) {
-                if (accounts.length > 0 && connectedAccount) {
-                    const newAccount = accounts[0];
-                    if (newAccount !== connectedAccount) {
-                        connectedAccount = newAccount;
-                        document.getElementById('wallet-address').value = newAccount;
-                        showStatus('🔄 MetaMask account changed automatically.', 'success');
-                    }
-                } else if (accounts.length === 0 && connectedAccount) {
-                    // User disconnected all accounts
-                    connectedAccount = null;
-                    document.getElementById('wallet-address').value = '';
-                    document.getElementById('connect-btn').style.display = 'inline-flex';
-                    document.getElementById('change-btn').style.display = 'none';
-                    document.getElementById('wallet-status').textContent = 'MetaMask Detected';
-                    document.getElementById('wallet-status').className = 'status-checking';
-                    showStatus('🔌 MetaMask disconnected.', 'success');
-                }
-            });
+        // Contract validation function
+        async function validateContract(walletAddress, msTokens, sessionId) {
+            try {
+                const response = await fetch(`${MOUNTAINSHARES_API}/validate-contract-call`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        walletAddress,
+                        msTokens,
+                        sessionId
+                    })
+                });
+
+                const result = await response.json();
+                console.log('Contract validation result:', result);
+                
+                return result.success;
+            } catch (error) {
+                console.error('Contract validation failed:', error);
+                return false;
+            }
         }
 
-        // Initiate purchase with live Stripe integration
+        // Test purchase with contract validation
+        async function initiateTestPurchase() {
+            const quantity = parseInt(document.getElementById('ms-quantity').value);
+            const walletAddress = document.getElementById('wallet-address').value;
+
+            if (!quantity || quantity < 1) {
+                showStatus('⚠️ Please enter a valid quantity (minimum 1 MountainShare)', 'error');
+                return;
+            }
+
+            if (!walletAddress || !walletAddress.startsWith('0x')) {
+                showStatus('⚠️ Please connect your MetaMask wallet first', 'error');
+                return;
+            }
+
+            showStatus('🧪 Creating test checkout session...', 'success');
+
+            try {
+                // Validate contract first
+                const contractValid = await validateContract(walletAddress, quantity, 'test-session');
+                
+                if (!contractValid) {
+                    showStatus('❌ Contract validation failed. Check wallet address.', 'error');
+                    return;
+                }
+
+                const response = await fetch(`${MOUNTAINSHARES_API}/create-test-checkout`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        msTokens: quantity,
+                        walletAddress: walletAddress 
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const { url } = await response.json();
+                
+                if (url) {
+                    showStatus('🚀 Redirecting to test Stripe checkout...', 'success');
+                    window.location.href = url;
+                } else {
+                    throw new Error('Invalid test checkout session response');
+                }
+
+            } catch (error) {
+                console.error('Test purchase failed:', error);
+                showStatus('❌ Failed to create test checkout session. Please try again.', 'error');
+            }
+        }
+
+        // Live purchase with live Stripe integration
         async function initiatePurchase() {
             const quantity = parseInt(document.getElementById('ms-quantity').value);
             const walletAddress = document.getElementById('wallet-address').value;
@@ -887,7 +992,7 @@
                 return;
             }
 
-            showStatus('🔄 Creating secure checkout session...', 'success');
+            showStatus('🔄 Creating live checkout session...', 'success');
 
             try {
                 const response = await fetch(`${MOUNTAINSHARES_API}/create-checkout-session`, {
@@ -918,6 +1023,28 @@
             }
         }
 
+        // Listen for account changes in MetaMask
+        if (typeof window.ethereum !== 'undefined') {
+            window.ethereum.on('accountsChanged', function (accounts) {
+                if (accounts.length > 0 && connectedAccount) {
+                    const newAccount = accounts[0];
+                    if (newAccount !== connectedAccount) {
+                        connectedAccount = newAccount;
+                        document.getElementById('wallet-address').value = newAccount;
+                        showStatus('🔄 MetaMask account changed automatically.', 'success');
+                    }
+                } else if (accounts.length === 0 && connectedAccount) {
+                    connectedAccount = null;
+                    document.getElementById('wallet-address').value = '';
+                    document.getElementById('connect-btn').style.display = 'inline-flex';
+                    document.getElementById('change-btn').style.display = 'none';
+                    document.getElementById('wallet-status').textContent = 'MetaMask Detected';
+                    document.getElementById('wallet-status').className = 'status-checking';
+                    showStatus('🔌 MetaMask disconnected.', 'success');
+                }
+            });
+        }
+
         // Show status messages
         function showStatus(message, type) {
             const statusDiv = document.getElementById('payment-status');
@@ -941,19 +1068,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🏔️ MountainShares Buy Page Ready');
 
-            // Check system status
             checkSystemStatus();
-
-            // Initialize price calculator
             calculatePrice();
 
-            // Set up real-time price updates
             const quantityInput = document.getElementById('ms-quantity');
             if (quantityInput) {
                 quantityInput.addEventListener('input', calculatePrice);
             }
 
-            // Check MetaMask availability
             if (typeof window.ethereum !== 'undefined') {
                 document.getElementById('wallet-status').textContent = 'MetaMask Detected';
                 document.getElementById('wallet-status').className = 'status-online';

@@ -15,7 +15,7 @@
     "cors": "^2.8.5",
     "ethers": "^6.9.2",
     "stripe": "^14.25.0",
-    "web3": "^4.3.0"
+    "web3": "^4.16.0"
   },
   "devDependencies": {
     "netlify-cli": "^17.13.1"
