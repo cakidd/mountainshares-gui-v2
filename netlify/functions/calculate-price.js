@@ -1,6 +1,6 @@
 exports.handler = async (event, context) => {
     const headers = {
-        'Access-Control-Allow-Origin': 'https://buy.mountainshares.us',
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type',
         'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
         'Content-Type': 'application/json'
