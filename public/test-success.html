@@ -33,6 +33,16 @@
             font-size: 14px;
             text-align: left;
         }
+        .arbitrum-badge {
+            background: #12AAFF;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 0;
+        }
         .return-btn {
             background: #00BFFF;
             color: #0A0A0A;
@@ -52,9 +62,11 @@
         <h1 style="color: #FFD700;">Test Purchase Successful!</h1>
         <p>Your test purchase has been processed successfully.</p>
         
+        <div class="arbitrum-badge">🔗 Arbitrum One Network</div>
+        
         <div class="contract-info">
             <h3>Contract Validation Results:</h3>
-            <div id="validation-results">Loading validation data...</div>
+            <div id="validation-results">Loading real-time validation data...</div>
         </div>
         
         <a href="/" class="return-btn">Return to Purchase Portal</a>
@@ -65,17 +77,52 @@
         const urlParams = new URLSearchParams(window.location.search);
         const sessionId = urlParams.get('session_id');
         
-        if (sessionId) {
-            // Simulate contract validation display
-            document.getElementById('validation-results').innerHTML = `
-                <strong>Session ID:</strong> ${sessionId}<br>
-                <strong>Contract Status:</strong> Validation Complete<br>
-                <strong>Network:</strong> Ethereum Mainnet<br>
-                <strong>Gas Estimate:</strong> 21,000<br>
-                <strong>Validation Time:</strong> ${new Date().toISOString()}<br>
-                <strong>Test Mode:</strong> Active
-            `;
+        // Call the actual contract validation function
+        async function validateRealContracts() {
+            try {
+                const response = await fetch('https://buy.mountainshares.us/.netlify/functions/validate-contract-call', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        walletAddress: '0x1234567890abcdef1234567890abcdef12345678',
+                        msTokens: 10,
+                        sessionId: sessionId || 'test-session'
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success && result.validation) {
+                    const v = result.validation;
+                    document.getElementById('validation-results').innerHTML = `
+                        <strong>Session ID:</strong> ${sessionId || 'N/A'}<br>
+                        <strong>Contract Status:</strong> Validation Complete<br>
+                        <strong>Network:</strong> <span style="color: #12AAFF;">${v.network || 'Arbitrum One'}</span><br>
+                        <strong>Chain ID:</strong> ${v.chainId || v.networkId}<br>
+                        <strong>Settlement Currency:</strong> <span style="color: #2E7D32;">${v.settlementCurrency || 'USDC'}</span><br>
+                        <strong>Gas Estimate:</strong> ${v.gasEstimate} (${v.chainId === 42161 ? 'L2 optimized' : 'Standard'})<br>
+                        <strong>USDC Settlement:</strong> ${v.usdcSettlementAddress || 'N/A'}<br>
+                        <strong>MountainShares Token:</strong> ${v.contractAddress}<br>
+                        <strong>Validation Time:</strong> ${v.validationTimestamp}<br>
+                        <strong>Test Mode:</strong> Active<br>
+                        <strong>Network Correct:</strong> <span style="color: ${v.chainId === 42161 ? '#4CAF50' : '#FF4444'};">${v.chainId === 42161 ? '✅ YES' : '❌ WRONG NETWORK'}</span>
+                    `;
+                } else {
+                    throw new Error('Validation failed');
+                }
+            } catch (error) {
+                console.error('Contract validation error:', error);
+                document.getElementById('validation-results').innerHTML = `
+                    <span style="color: #FF4444;">❌ Unable to load real-time validation</span><br>
+                    <strong>Session ID:</strong> ${sessionId || 'N/A'}<br>
+                    <strong>Error:</strong> ${error.message}<br>
+                    <strong>Expected Network:</strong> <span style="color: #12AAFF;">Arbitrum One (42161)</span>
+                `;
+            }
         }
+        
+        // Load real contract validation on page load
+        validateRealContracts();
     </script>
 </body>
 </html>
