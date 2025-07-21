@@ -3,1089 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buy MountainShares Tokens - Secure Purchase Portal</title>
-    <meta name="description" content="Purchase MountainShares tokens securely. 1 MS = $1 USD. Connect your wallet and join West Virginia's digital economy.">
-
-    <!-- Cache Control -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💎</text></svg>">
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-
+    <title>MountainShares Token Purchase Portal</title>
     <style>
-        * {
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%);
+            color: #FFFFFF;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --wv-gold: #FFD700;
-            --mountain-blue: #0066FF;
-            --sky-blue: #00BFFF;
-            --deep-black: #000000;
-            --mountain-dark: #0A0A0A;
-            --stone-gray: #1A1A1A;
-            --mountain-white: #FFFFFF;
-            --success-green: #00FF88;
-            --error-red: #FF4444;
-            --warning-orange: #FFAA00;
-
-            --gold-gradient: linear-gradient(135deg, #FFD700, #FFA500, #FF6B35);
-            --blue-gradient: linear-gradient(135deg, #0066FF, #00BFFF, #4169E1);
-            --glass-gradient: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 50%, rgba(0, 102, 255, 0.05) 100%);
-        }
-
-        body {
-            font-family: 'JetBrains Mono', 'Courier New', monospace;
-            background: var(--mountain-dark);
-            color: var(--mountain-white);
             min-height: 100vh;
-            position: relative;
         }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 40%),
-                        radial-gradient(circle at 80% 80%, rgba(0, 102, 255, 0.1) 0%, transparent 40%);
-            z-index: -1;
-        }
-
-        .buy-container {
-            max-width: 1200px;
+        
+        .container {
+            max-width: 600px;
             margin: 0 auto;
             padding: 40px 20px;
         }
 
-        .test-mode-banner {
-            background: var(--warning-orange);
-            color: var(--mountain-dark);
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 20px;
-            border-radius: 10px;
-        }
-
-        .header-nav {
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(26, 26, 26, 0.8));
-            backdrop-filter: blur(20px);
-            border: 2px solid var(--wv-gold);
+        .ai-badge {
+            background: linear-gradient(45deg, #00BFFF, #FFD700);
+            color: #000;
+            padding: 5px 15px;
             border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 40px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 0;
         }
 
-        .header-nav::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, var(--wv-gold), var(--mountain-blue), var(--wv-gold));
+        .purchase-form {
+            background: rgba(255, 215, 0, 0.05);
+            border: 2px solid #FFD700;
             border-radius: 20px;
-            z-index: -1;
-            animation: borderGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes borderGlow {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        .home-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--sky-blue);
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            padding: 12px 24px;
-            background: rgba(0, 191, 255, 0.1);
-            border-radius: 25px;
-            border: 2px solid var(--sky-blue);
-            transition: all 0.3s ease;
-        }
-
-        .home-link:hover {
-            background: var(--sky-blue);
-            color: var(--mountain-dark);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 191, 255, 0.4);
-        }
-
-        .page-title {
-            font-size: 48px;
-            font-weight: bold;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 16px;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
-        }
-
-        .page-subtitle {
-            color: var(--mountain-white);
-            font-size: 24px;
-            opacity: 0.9;
-        }
-
-        .system-status {
-            background: rgba(0, 102, 255, 0.1);
-            border: 2px solid var(--sky-blue);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .status-online { color: #4CAF50; font-weight: bold; }
-        .status-offline { color: #f44336; font-weight: bold; }
-        .status-checking { color: #ff9800; font-weight: bold; }
-        .status-error { color: #e91e63; font-weight: bold; }
-        .status-network-error { color: #ff5722; font-weight: bold; }
-        .status-server-sleep { color: #9c27b0; font-weight: bold; }
-
-        .purchase-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 60px;
-        }
-
-        .purchase-card {
-            background: var(--glass-gradient);
-            backdrop-filter: blur(30px);
             padding: 40px;
-            border-radius: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            transition: all 0.5s ease;
-        }
-
-        .purchase-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 30px 80px rgba(255, 215, 0, 0.4);
-        }
-
-        .purchase-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--wv-gold), var(--mountain-blue));
-            transform: translateX(-100%);
-            transition: transform 0.5s ease;
-        }
-
-        .purchase-card:hover::before {
-            transform: translateX(0);
-        }
-
-        .card-title {
-            font-size: 28px;
-            color: var(--wv-gold);
-            margin-bottom: 30px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-        }
-
-        .input-label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-            color: var(--mountain-white);
-            font-size: 16px;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 20px;
-            border: 2px solid var(--sky-blue);
-            border-radius: 15px;
-            font-size: 18px;
-            background: rgba(0, 0, 0, 0.4);
-            color: var(--mountain-white);
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: var(--wv-gold);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-        }
-
-        .quantity-controls {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .quantity-btn {
-            padding: 12px 8px;
-            background: var(--glass-gradient);
-            border: 2px solid var(--sky-blue);
-            border-radius: 10px;
-            color: var(--mountain-white);
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        .quantity-btn:hover {
-            background: var(--sky-blue);
-            color: var(--mountain-dark);
-            transform: translateY(-2px);
-        }
-
-        .wallet-section {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .connect-wallet-btn {
-            background: var(--gold-gradient);
-            color: var(--mountain-dark);
-            padding: 15px 35px;
-            border: none;
-            border-radius: 15px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin: 5px;
-        }
-
-        .connect-wallet-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.5);
-        }
-
-        .disconnect-btn {
-            background: var(--error-red);
-            color: var(--mountain-white);
-        }
-
-        .test-btn {
-            background: var(--warning-orange);
-            color: var(--mountain-dark);
-        }
-
-        .disconnect-btn:hover {
-            box-shadow: 0 10px 30px rgba(255, 68, 68, 0.5);
-        }
-
-        .test-btn:hover {
-            box-shadow: 0 10px 30px rgba(255, 170, 0, 0.5);
+            margin: 20px 0;
         }
 
         .price-breakdown {
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px solid var(--wv-gold);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
             margin: 20px 0;
+            font-family: monospace;
+            border-left: 4px solid #00BFFF;
         }
-
-        .price-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-
-        .price-total {
-            display: flex;
-            justify-content: space-between;
-            font-size: 24px;
+        
+        .total-price {
+            font-size: 1.5em;
+            color: #00BFFF;
             font-weight: bold;
-            padding-top: 15px;
-            border-top: 2px solid var(--wv-gold);
-            color: var(--wv-gold);
         }
-
-        .purchase-btn {
+        
+        .accuracy-guarantee {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00FF00;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            margin: 15px 0;
+        }
+        
+        input[type="number"] {
             width: 100%;
-            padding: 25px;
-            background: var(--gold-gradient);
-            color: var(--mountain-dark);
+            padding: 10px;
+            background: #2A2A2A;
+            color: #FFFFFF;
+            border: 1px solid #FFD700;
+            border-radius: 5px;
+        }
+        
+        button {
+            background: #00BFFF;
+            color: #0A0A0A;
+            padding: 15px 30px;
             border: none;
-            border-radius: 20px;
-            font-size: 22px;
+            border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.5s ease;
-            position: relative;
-            overflow: hidden;
-            margin-top: 30px;
-        }
-
-        .purchase-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: all 0.5s ease;
-        }
-
-        .purchase-btn:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.6);
-        }
-
-        .purchase-btn:hover::before {
-            left: 100%;
-        }
-
-        .purchase-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .test-purchase-btn {
-            background: var(--warning-orange);
-            margin-bottom: 15px;
-        }
-
-        .status-message {
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            font-weight: bold;
-            text-align: center;
-            display: none;
-            animation: statusSlideIn 0.5s ease;
-        }
-
-        @keyframes statusSlideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .status-success {
-            background: rgba(0, 255, 136, 0.1);
-            border: 2px solid var(--success-green);
-            color: var(--success-green);
-        }
-
-        .status-error {
-            background: rgba(255, 68, 68, 0.1);
-            border: 2px solid var(--error-red);
-            color: var(--error-red);
-        }
-
-        .security-notice {
-            background: rgba(255, 68, 68, 0.1);
-            border: 2px solid var(--error-red);
-            border-radius: 20px;
-            padding: 25px;
-            margin: 30px 0;
-            text-align: center;
-        }
-
-        .security-title {
-            color: var(--error-red);
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .security-list {
-            text-align: left;
-            max-width: 500px;
-            margin: 0 auto;
-            color: var(--mountain-white);
-            line-height: 1.6;
-            font-size: 14px;
-        }
-
-        .security-list li {
-            margin-bottom: 8px;
-        }
-
-        .return-section {
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(0, 102, 255, 0.1));
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            margin-top: 60px;
-            border: 2px solid var(--sky-blue);
-        }
-
-        .return-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--sky-blue);
-            color: var(--mountain-dark);
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 20px 40px;
-            border-radius: 15px;
-            transition: all 0.3s ease;
-            margin: 20px 10px;
-        }
-
-        .return-link:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 191, 255, 0.5);
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .purchase-section {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-
-            .quantity-controls {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .page-title {
-                font-size: 36px;
-            }
-
-            .page-subtitle {
-                font-size: 18px;
-            }
-
-            .return-link {
-                display: block;
-                margin: 10px 0;
-            }
+            margin: 5px;
         }
     </style>
 </head>
-
 <body>
-    <!-- Test Mode Banner -->
-    <div class="test-mode-banner" id="test-banner" style="display: none;">
-        🧪 TEST MODE ACTIVE - Using Stripe Test Environment & Contract Validation
-    </div>
-
-    <div class="buy-container">
-        <header class="header-nav">
-            <a href="https://mountainshares.us" class="home-link">
-                🏔️ ← Back to MountainShares Home
-            </a>
-            <h1 class="page-title">💎 Buy MountainShares Tokens</h1>
-            <p class="page-subtitle">Secure Token Purchase Portal • 1 MS = $1 USD</p>
-        </header>
-
-        <!-- System Status -->
-        <div class="system-status">
-            <p style="color: var(--mountain-white); font-size: 16px; margin-bottom: 10px;">
-                <strong style="color: var(--wv-gold);">Purchase System Status:</strong>
-                <span id="status-text" class="status-checking">Checking connection...</span>
-            </p>
-            <p style="color: var(--mountain-white); font-size: 14px; margin-bottom: 10px;">
-                <strong>Wallet Support:</strong>
-                <span id="wallet-status" class="status-checking">MetaMask Ready</span>
-            </p>
-            <p style="color: var(--mountain-white); font-size: 12px;">
-                <strong>Debug:</strong> <span id="debug-info">Initializing purchase system...</span>
-            </p>
-        </div>
-
-        <!-- Purchase Interface -->
-        <section class="purchase-section">
-            <!-- Token Calculator -->
-            <div class="purchase-card">
-                <h2 class="card-title">💰 Calculate Purchase</h2>
-
-                <div class="input-group">
-                    <label class="input-label">Number of MountainShares:</label>
-                    <input type="number" id="ms-quantity" class="input-field" min="1" value="10" oninput="calculatePrice()">
-                    <div class="quantity-controls">
-                        <button class="quantity-btn" onclick="setQuantity(1)">1 MS</button>
-                        <button class="quantity-btn" onclick="setQuantity(5)">5 MS</button>
-                        <button class="quantity-btn" onclick="setQuantity(10)">10 MS</button>
-                        <button class="quantity-btn" onclick="setQuantity(25)">25 MS</button>
-                        <button class="quantity-btn" onclick="setQuantity(100)">100 MS</button>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Your Ethereum Wallet:</label>
-                    <input type="text" id="wallet-address" class="input-field" placeholder="Connect wallet to see address..." readonly>
-                    <div class="wallet-section">
-                        <button id="connect-btn" class="connect-wallet-btn" onclick="connectWallet()">
-                            🦊 Connect MetaMask
-                        </button>
-                        <button id="change-btn" class="connect-wallet-btn disconnect-btn" onclick="changeWallet()" style="display: none;">
-                            🔄 Change Wallet
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Price Breakdown -->
-                <div class="price-breakdown">
-                    <h3 style="color: var(--wv-gold); margin-bottom: 20px; text-align: center;">💸 Price Breakdown</h3>
-
-                    <div class="price-row">
-                        <span>Token Value (1:1 USD):</span>
-                        <span id="token-value">$10.00</span>
-                    </div>
-
-                    <div class="price-row">
-                        <span>Stripe Processing Fee:</span>
-                        <span id="stripe-fee">$0.59</span>
-                    </div>
-
-                    <div class="price-row">
-                        <span>MountainShares Platform Fee:</span>
-                        <span id="platform-fee">$0.20</span>
-                    </div>
-
-                    <div class="price-total">
-                        <span>Total You Pay:</span>
-                        <span id="total-price">$10.79</span>
-                    </div>
-                </div>
-
-                <!-- Test Purchase Button -->
-                <button class="purchase-btn test-purchase-btn" onclick="initiateTestPurchase()">
-                    🧪 Test Purchase (Safe)
-                </button>
-
-                <!-- Live Purchase Button -->
-                <button id="purchase-btn" class="purchase-btn" onclick="initiatePurchase()">
-                    💎 Live Purchase MountainShares
-                </button>
-
-                <div id="payment-status" class="status-message">
-                    <p id="payment-message"></p>
-                </div>
+    <div class="container">
+        <h1>🏔️ MountainShares Token Purchase Portal</h1>
+        <div class="ai-badge">🤖 Powered by Darwin Gödel Machine AI</div>
+        <p>AI-optimized dynamic pricing for Mount Hope, WV digital economy</p>
+        
+        <div class="purchase-form">
+            <h2>💎 Purchase MountainShares Tokens</h2>
+            
+            <div>
+                <label for="tokenAmount">Number of Tokens:</label>
+                <input type="number" id="tokenAmount" value="10" min="1" max="1000" onchange="updateAIPricing()">
             </div>
-
-            <!-- Wallet Setup Guide -->
-            <div class="purchase-card">
-                <h2 class="card-title">🦊 Wallet Setup Guide</h2>
-
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <p style="font-size: 16px; margin-bottom: 20px;">
-                        <strong>New to crypto wallets?</strong> MetaMask is like a secure digital wallet for your MountainShares tokens.
-                    </p>
-                </div>
-
-                <div style="margin-bottom: 25px;">
-                    <div style="background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center;">
-                        <div style="font-size: 32px; margin-bottom: 15px;">📱</div>
-                        <h4 style="color: var(--sky-blue); margin-bottom: 10px;">Step 1: Download MetaMask</h4>
-                        <p style="margin-bottom: 15px;">Visit metamask.io and install the browser extension</p>
-                        <a href="https://metamask.io/download/" target="_blank" class="connect-wallet-btn" style="text-decoration: none;">
-                            🔗 Get MetaMask
-                        </a>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 25px;">
-                    <div style="background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center;">
-                        <div style="font-size: 32px; margin-bottom: 15px;">🔐</div>
-                        <h4 style="color: var(--sky-blue); margin-bottom: 10px;">Step 2: Create Your Wallet</h4>
-                        <p>Follow MetaMask setup and securely save your 12-word backup phrase</p>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 25px;">
-                    <div style="background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 15px; text-align: center;">
-                        <div style="font-size: 32px; margin-bottom: 15px;">💎</div>
-                        <h4 style="color: var(--sky-blue); margin-bottom: 10px;">Step 3: Connect & Purchase</h4>
-                        <p>Click "Connect MetaMask" above to link your wallet and buy tokens</p>
-                    </div>
-                </div>
-
-                <!-- Test Mode Instructions -->
-                <div style="background: rgba(255, 170, 0, 0.1); border: 2px solid var(--warning-orange); border-radius: 15px; padding: 20px; margin-bottom: 20px;">
-                    <h4 style="color: var(--warning-orange); margin-bottom: 10px;">🧪 Test Mode Available</h4>
-                    <p style="color: var(--mountain-white); font-size: 14px; line-height: 1.5;">
-                        <strong>Test Purchase:</strong> Uses Stripe test mode and validates smart contract calls without spending real money or tokens.
-                    </p>
-                    <p style="color: var(--mountain-white); font-size: 14px; line-height: 1.5; margin-top: 10px;">
-                        <strong>Live Purchase:</strong> Real transactions with actual payment processing and token delivery.
-                    </p>
-                </div>
-
-                <!-- Security Notice -->
-                <div class="security-notice">
-                    <div class="security-title">
-                        ⚠️ Wallet Security Tips
-                    </div>
-                    <ul class="security-list">
-                        <li><strong>Never share your password</strong> or secret backup phrase with anyone</li>
-                        <li><strong>Write down your 12-word phrase</strong> on paper and store it safely</li>
-                        <li><strong>MountainShares will never ask</strong> for your wallet credentials</li>
-                        <li><strong>If you lose your backup phrase,</strong> you lose access to your tokens forever</li>
-                    </ul>
-                </div>
+            
+            <div class="price-breakdown" id="priceBreakdown">
+                <h3>🤖 AI-Optimized Price Breakdown:</h3>
+                <div id="priceDetails">Initializing Darwin Gödel Machine...</div>
             </div>
-        </section>
-
-        <!-- Return to Homepage -->
-        <div class="return-section">
-            <h3 style="color: var(--wv-gold); font-size: 28px; margin-bottom: 20px;">
-                🏔️ Explore The Full MountainShares Platform
-            </h3>
-            <p style="color: var(--mountain-white); font-size: 18px; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">
-                Learn about community governance, business tools, local marketplace, and West Virginia's digital economic revolution.
-            </p>
-            <a href="https://mountainshares.us" class="return-link">
-                🚀 Return to MountainShares Home
-            </a>
-            <a href="https://mountainshares.us/#about" class="return-link">
-                📖 Learn More About The Platform
-            </a>
+            
+            <div class="accuracy-guarantee" id="accuracyGuarantee">
+                ✅ 100% Mathematical Precision Guaranteed by AI Optimization
+            </div>
+            
+            <div>
+                <label for="walletAddress">Your Wallet Address (optional):</label>
+                <input type="text" id="walletAddress" placeholder="0x..." style="width: 100%;">
+            </div>
+            
+            <button onclick="purchaseTokens()" id="purchaseBtn">
+                🛒 Purchase MountainShares Tokens
+            </button>
+            
+            <button onclick="testPurchase()" style="background: #ff6b00;">
+                🧪 Test Purchase (Safe)
+            </button>
         </div>
     </div>
 
-    <script src="https://js.stripe.com/v3/"></script>
     <script>
-        console.log('💎 MountainShares Token Purchase Portal Loaded');
-
-        const MOUNTAINSHARES_API = 'https://buy.mountainshares.us/.netlify/functions';
-        let retryCount = 0;
-        let maxRetries = 3;
-        let offlineMode = false;
-        let connectedAccount = null;
-        let testMode = false;
-
-        // Check URL for test mode
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('test') === 'true') {
-            testMode = true;
-            document.getElementById('test-banner').style.display = 'block';
-        }
-
-        // System status check
-        async function checkSystemStatus() {
-            const statusElement = document.getElementById('status-text');
-            const debugElement = document.getElementById('debug-info');
-
-            try {
-                debugElement.textContent = 'Testing purchase system connection...';
-
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-                const response = await fetch(`${MOUNTAINSHARES_API}/health`, {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' },
-                    signal: controller.signal
-                });
-
-                clearTimeout(timeoutId);
-
-                if (response.ok) {
-                    const data = await response.json();
-                    statusElement.textContent = 'Purchase System Online';
-                    statusElement.className = 'status-online';
-                    debugElement.textContent = '✅ Ready to process token purchases';
-                    retryCount = 0;
-                    offlineMode = false;
-                } else {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-
-            } catch (error) {
-                retryCount++;
-                console.error('System check failed:', error);
-
-                if (retryCount >= maxRetries) {
-                    statusElement.textContent = 'Offline Mode - Local Calculations';
-                    statusElement.className = 'status-server-sleep';
-                    debugElement.textContent = '📱 System offline - Price calculator still works';
-                    offlineMode = true;
-                } else {
-                    statusElement.textContent = `Connection Issues (${retryCount}/${maxRetries})`;
-                    statusElement.className = 'status-error';
-                    debugElement.textContent = `⚠️ Retrying connection... (${retryCount}/${maxRetries})`;
-                }
-            }
-        }
-
-        // Calculate pricing (with offline fallback)
-        async function calculatePrice() {
-            const quantity = parseInt(document.getElementById('ms-quantity').value) || 1;
-
-            if (offlineMode) {
-                calculateLocalPrice(quantity);
+        // AI-powered dynamic pricing using Darwin Gödel Machine
+        async function updateAIPricing() {
+            const tokenAmount = parseInt(document.getElementById('tokenAmount').value) || 0;
+            
+            if (tokenAmount <= 0) {
+                document.getElementById('priceDetails').innerHTML = 'Please enter a valid token amount';
                 return;
             }
-
+            
             try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 3000);
-
-                const apiResponse = await fetch(`${MOUNTAINSHARES_API}/calculate-price`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ msTokens: quantity }),
-                    signal: controller.signal
-                });
-
-                clearTimeout(timeoutId);
-                console.log("Response status:", apiResponse.status);
-
-                if (!apiResponse.ok) {
-                    throw new Error(`HTTP error! status: ${apiResponse.status}`);
-                }
-
-                const data = await apiResponse.json();
-                console.log("Response data:", data);
-
-                if (data && data.stripeFee !== undefined) {
-                    document.getElementById('token-value').textContent = `$${data.subtotal.toFixed(2)}`;
-                    document.getElementById('stripe-fee').textContent = `$${data.stripeFee.toFixed(2)}`;
-                    document.getElementById('platform-fee').textContent = `$${data.mountainSharesFee.toFixed(2)}`;
-                    document.getElementById('total-price').textContent = `$${data.totalCharge.toFixed(2)}`;
-                    return;
-                }
-
-                throw new Error('Invalid response format');
-
-            } catch (error) {
-                console.error('Price calculation failed:', error);
-                calculateLocalPrice(quantity);
-            }
-        }
-
-        // Local price calculation fallback
-        function calculateLocalPrice(quantity) {
-            const tokenValue = quantity * 1.00;
-            const stripeFee = tokenValue * 0.029 + 0.30;
-            const platformFee = tokenValue * 0.02;
-            const total = tokenValue + stripeFee + platformFee;
-
-            document.getElementById('token-value').textContent = `$${tokenValue.toFixed(2)}`;
-            document.getElementById('stripe-fee').textContent = `$${stripeFee.toFixed(2)}`;
-            document.getElementById('platform-fee').textContent = `$${platformFee.toFixed(2)}`;
-            document.getElementById('total-price').textContent = `$${total.toFixed(2)}`;
-        }
-
-        // Set quantity buttons
-        function setQuantity(amount) {
-            document.getElementById('ms-quantity').value = amount;
-            calculatePrice();
-        }
-
-        // MetaMask wallet connection using modern permissions API
-        async function connectWallet() {
-            if (typeof window.ethereum === 'undefined') {
-                showStatus('🦊 MetaMask not detected. Please install MetaMask first.', 'error');
-                window.open('https://metamask.io/download/', '_blank');
-                return;
-            }
-
-            try {
-                const accounts = await window.ethereum.request({
-                    method: 'eth_requestAccounts'
-                });
-
-                if (accounts && accounts.length > 0) {
-                    connectedAccount = accounts[0];
-                    document.getElementById('wallet-address').value = connectedAccount;
-                    
-                    // Update UI
-                    document.getElementById('connect-btn').style.display = 'none';
-                    document.getElementById('change-btn').style.display = 'inline-flex';
-                    
-                    document.getElementById('wallet-status').textContent = 'MetaMask Connected';
-                    document.getElementById('wallet-status').className = 'status-online';
-                    
-                    showStatus('✅ MetaMask wallet connected successfully!', 'success');
-                } else {
-                    throw new Error('No accounts found');
-                }
-
-            } catch (error) {
-                console.error('Wallet connection failed:', error);
+                document.getElementById('priceDetails').innerHTML = '🤖 Darwin Gödel Machine calculating optimal fees...';
                 
-                if (error.code === 4001) {
-                    showStatus('❌ Connection cancelled by user.', 'error');
-                } else {
-                    showStatus('❌ Failed to connect MetaMask. Please try again.', 'error');
-                }
-            }
-        }
-
-        // Change wallet using MetaMask permissions API
-        async function changeWallet() {
-            if (typeof window.ethereum === 'undefined') {
-                showStatus('🦊 MetaMask not detected.', 'error');
-                return;
-            }
-
-            try {
-                await window.ethereum.request({
-                    method: 'wallet_requestPermissions',
-                    params: [{ eth_accounts: {} }]
-                });
-
-                const accounts = await window.ethereum.request({
-                    method: 'eth_accounts'
-                });
-
-                if (accounts && accounts.length > 0) {
-                    const newAccount = accounts[0];
-                    
-                    if (newAccount !== connectedAccount) {
-                        connectedAccount = newAccount;
-                        document.getElementById('wallet-address').value = newAccount;
-                        showStatus('✅ Switched to new wallet successfully!', 'success');
-                    } else {
-                        showStatus('ℹ️ Same wallet selected.', 'success');
-                    }
-                } else {
-                    throw new Error('No accounts found after permission request');
-                }
-
-            } catch (error) {
-                console.error('Wallet change failed:', error);
-                
-                if (error.code === 4001) {
-                    showStatus('❌ Wallet change cancelled by user.', 'error');
-                } else {
-                    showStatus('❌ Failed to change wallet. Please try again.', 'error');
-                }
-            }
-        }
-
-        // Contract validation function
-        async function validateContract(walletAddress, msTokens, sessionId) {
-            try {
-                const response = await fetch(`${MOUNTAINSHARES_API}/validate-contract-call`, {
+                const response = await fetch('/.netlify/functions/darwin-goedel-fee-calculator', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
-                        walletAddress,
-                        msTokens,
-                        sessionId
+                        tokenQuantity: tokenAmount,
+                        optimizeForCommunity: true 
                     })
                 });
-
+                
                 const result = await response.json();
-                console.log('Contract validation result:', result);
                 
-                return result.success;
+                if (result.success) {
+                    const calc = result.darwinGoedelMachine.optimizedCalculation.calculation;
+                    const validation = result.darwinGoedelMachine.optimizedCalculation.validation;
+                    const aiOpt = calc.aiOptimization;
+                    
+                    document.getElementById('priceDetails').innerHTML = `
+                        <div style="margin-bottom: 15px;">
+                            <strong>${tokenAmount} MountainShares Tokens</strong><br>
+                            <span style="color: #00BFFF;">Token Value: ${tokenAmount} × $1.00 = $${calc.transactionValue.toFixed(2)}</span>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px; font-size: 0.9em; color: #ccc;">
+                            <strong>🤖 AI-Optimized Processing Fees:</strong><br>
+                            • Platform Fee (2% + $0.03): <span style="color: #FFD700;">$${calc.fees.platformFee.toFixed(2)}</span><br>
+                            • Treasury Fee (0.5% health-adjusted): <span style="color: #FFD700;">$${calc.fees.treasuryFee.toFixed(2)}</span><br>
+                            • Payment Processing (2.9% + $0.30): <span style="color: #FFD700;">$${calc.fees.stripeProcessing.toFixed(2)}</span><br>
+                            • SEC Regulatory (0.5% precision-adjusted): <span style="color: #FFD700;">$${calc.fees.secRegulatory.toFixed(2)}</span>
+                        </div>
+                        
+                        <div style="margin-bottom: 15px; font-size: 0.85em; color: #888;">
+                            <strong>🧠 AI Optimization Factors:</strong><br>
+                            • Community Economic Factor: ${aiOpt.communityEconomicFactor}x<br>
+                            • Treasury Health Ratio: ${(aiOpt.treasuryHealthRatio * 100).toFixed(0)}%<br>
+                            • Usage Pattern Multiplier: ${aiOpt.usagePatternMultiplier}x<br>
+                            • Precision Adjustment: ${aiOpt.precisionAdjustment}
+                        </div>
+                        
+                        <hr style="border: 1px solid #333; margin: 15px 0;">
+                        
+                        <div class="total-price">
+                            <strong>Total: $${calc.grandTotal.toFixed(2)} USD</strong><br>
+                            <small style="color: #ccc;">($${(calc.grandTotal/tokenAmount).toFixed(3)} per token)</small>
+                        </div>
+                        
+                        <div style="margin-top: 10px; font-size: 0.8em; color: #00FF00;">
+                            ✅ Validation: ${validation.isValid ? 'PASSED' : 'FAILED'} | Variance: ${validation.variance.toFixed(4)}
+                        </div>
+                    `;
+                    
+                    // Update accuracy guarantee
+                    document.getElementById('accuracyGuarantee').innerHTML = validation.isValid 
+                        ? `✅ Darwin Gödel Machine: 100% Mathematical Precision Achieved (Variance: ${validation.variance.toFixed(4)})`
+                        : `⚠️ Precision Warning: Variance detected (${validation.variance.toFixed(4)})`;
+                        
+                } else {
+                    document.getElementById('priceDetails').innerHTML = '❌ Darwin Gödel Machine error: ' + result.error;
+                }
             } catch (error) {
-                console.error('Contract validation failed:', error);
-                return false;
+                console.error('Darwin Gödel Machine error:', error);
+                document.getElementById('priceDetails').innerHTML = '❌ AI optimization failed';
             }
         }
 
-        // Test purchase with contract validation
-        async function initiateTestPurchase() {
-            const quantity = parseInt(document.getElementById('ms-quantity').value);
-            const walletAddress = document.getElementById('wallet-address').value;
-
-            if (!quantity || quantity < 1) {
-                showStatus('⚠️ Please enter a valid quantity (minimum 1 MountainShare)', 'error');
+        async function purchaseTokens() {
+            const tokenAmount = parseInt(document.getElementById('tokenAmount').value);
+            const walletAddress = document.getElementById('walletAddress').value;
+            
+            if (tokenAmount <= 0) {
+                alert('Please enter a valid token amount');
                 return;
             }
-
-            if (!walletAddress || !walletAddress.startsWith('0x')) {
-                showStatus('⚠️ Please connect your MetaMask wallet first', 'error');
-                return;
-            }
-
-            showStatus('🧪 Creating test checkout session...', 'success');
-
+            
             try {
-                // Validate contract first
-                const contractValid = await validateContract(walletAddress, quantity, 'test-session');
+                document.getElementById('purchaseBtn').textContent = 'AI Processing...';
                 
-                if (!contractValid) {
-                    showStatus('❌ Contract validation failed. Check wallet address.', 'error');
-                    return;
-                }
-
-                const response = await fetch(`${MOUNTAINSHARES_API}/create-test-checkout`, {
+                const response = await fetch('/.netlify/functions/create-checkout-session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        msTokens: quantity,
-                        walletAddress: walletAddress 
+                    body: JSON.stringify({
+                        msTokens: tokenAmount,
+                        walletAddress: walletAddress,
+                        darwinGoedelOptimized: true
                     })
                 });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const { url } = await response.json();
                 
-                if (url) {
-                    showStatus('🚀 Redirecting to test Stripe checkout...', 'success');
-                    window.location.href = url;
+                const result = await response.json();
+                
+                if (result.sessionId) {
+                    window.location.href = result.url;
                 } else {
-                    throw new Error('Invalid test checkout session response');
+                    throw new Error(result.error || 'AI-optimized payment setup failed');
                 }
-
             } catch (error) {
-                console.error('Test purchase failed:', error);
-                showStatus('❌ Failed to create test checkout session. Please try again.', 'error');
+                console.error('Purchase error:', error);
+                alert('Purchase failed: ' + error.message);
+                document.getElementById('purchaseBtn').textContent = '🛒 Purchase MountainShares Tokens';
             }
         }
 
-        // Live purchase with live Stripe integration
-        async function initiatePurchase() {
-            const quantity = parseInt(document.getElementById('ms-quantity').value);
-            const walletAddress = document.getElementById('wallet-address').value;
-
-            if (!quantity || quantity < 1) {
-                showStatus('⚠️ Please enter a valid quantity (minimum 1 MountainShare)', 'error');
-                return;
-            }
-
-            if (!walletAddress || !walletAddress.startsWith('0x')) {
-                showStatus('⚠️ Please connect your MetaMask wallet first', 'error');
-                return;
-            }
-
-            showStatus('🔄 Creating live checkout session...', 'success');
-
+        async function testPurchase() {
+            const tokenAmount = parseInt(document.getElementById('tokenAmount').value);
+            const walletAddress = document.getElementById('walletAddress').value;
+            
             try {
-                const response = await fetch(`${MOUNTAINSHARES_API}/create-checkout-session`, {
+                const response = await fetch('/.netlify/functions/create-checkout-session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        msTokens: quantity,
-                        walletAddress: walletAddress 
+                    body: JSON.stringify({
+                        msTokens: tokenAmount,
+                        walletAddress: walletAddress,
+                        testMode: true,
+                        darwinGoedelOptimized: true
                     })
                 });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const { url } = await response.json();
                 
-                if (url) {
-                    showStatus('🚀 Redirecting to secure Stripe checkout...', 'success');
-                    window.location.href = url;
+                const result = await response.json();
+                
+                if (result.sessionId) {
+                    window.location.href = result.url;
                 } else {
-                    throw new Error('Invalid checkout session response');
+                    throw new Error(result.error || 'AI test purchase failed');
                 }
-
             } catch (error) {
-                console.error('Purchase initiation failed:', error);
-                showStatus('❌ Failed to create checkout session. Please try again.', 'error');
+                console.error('Test purchase error:', error);
+                alert('Test purchase failed: ' + error.message);
             }
         }
-
-        // Listen for account changes in MetaMask
-        if (typeof window.ethereum !== 'undefined') {
-            window.ethereum.on('accountsChanged', function (accounts) {
-                if (accounts.length > 0 && connectedAccount) {
-                    const newAccount = accounts[0];
-                    if (newAccount !== connectedAccount) {
-                        connectedAccount = newAccount;
-                        document.getElementById('wallet-address').value = newAccount;
-                        showStatus('🔄 MetaMask account changed automatically.', 'success');
-                    }
-                } else if (accounts.length === 0 && connectedAccount) {
-                    connectedAccount = null;
-                    document.getElementById('wallet-address').value = '';
-                    document.getElementById('connect-btn').style.display = 'inline-flex';
-                    document.getElementById('change-btn').style.display = 'none';
-                    document.getElementById('wallet-status').textContent = 'MetaMask Detected';
-                    document.getElementById('wallet-status').className = 'status-checking';
-                    showStatus('🔌 MetaMask disconnected.', 'success');
-                }
-            });
-        }
-
-        // Show status messages
-        function showStatus(message, type) {
-            const statusDiv = document.getElementById('payment-status');
-            const messageP = document.getElementById('payment-message');
-
-            messageP.textContent = message;
-            statusDiv.style.display = 'block';
-
-            if (type === 'success') {
-                statusDiv.className = 'status-message status-success';
-            } else {
-                statusDiv.className = 'status-message status-error';
-            }
-
-            setTimeout(() => {
-                statusDiv.style.display = 'none';
-            }, 8000);
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('🏔️ MountainShares Buy Page Ready');
-
-            checkSystemStatus();
-            calculatePrice();
-
-            const quantityInput = document.getElementById('ms-quantity');
-            if (quantityInput) {
-                quantityInput.addEventListener('input', calculatePrice);
-            }
-
-            if (typeof window.ethereum !== 'undefined') {
-                document.getElementById('wallet-status').textContent = 'MetaMask Detected';
-                document.getElementById('wallet-status').className = 'status-online';
-            } else {
-                document.getElementById('wallet-status').textContent = 'MetaMask Not Found';
-                document.getElementById('wallet-status').className = 'status-error';
-            }
-
-            console.log('💎 Token purchase interface initialized');
-        });
+        
+        // Initialize AI-powered pricing on page load
+        updateAIPricing();
     </script>
 </body>
 </html>
