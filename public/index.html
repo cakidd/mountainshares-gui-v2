@@ -698,16 +698,21 @@
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-                const response = await fetch(`${MOUNTAINSHARES_API}/calculate-price`, {
+		const response = await fetch(`${MOUNTAINSHARES_API}/calculate-price`, {
 		    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+    		    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ msTokens: quantity }),
                     signal: controller.signal
-                });
+          });
 
 		console.log("Response status:", response.status);
-		const responseText = await response.text();
-		console.log("Response body:", responseText);
+
+	    if (!response.ok) {
+    		throw new Error(`HTTP error! status: ${response.status}`);
+	}
+
+		const data = await response.json();
+		console.log("Response data:", data);
 
 
                 clearTimeout(timeoutId);
