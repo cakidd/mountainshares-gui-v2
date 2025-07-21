@@ -1,7 +1,7 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const headers = {
-  'Access-Control-Allow-Origin': 'https://buy.mountainshares.us',
+  'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'Content-Type',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Content-Type': 'application/json'
@@ -14,7 +14,7 @@ exports.handler = async (event) => {
 
   try {
     const { msTokens, walletAddress } = JSON.parse(event.body || '{}');
-    
+
     if (!msTokens || msTokens <= 0) {
       return {
         statusCode: 400,
@@ -32,7 +32,7 @@ exports.handler = async (event) => {
       stripeProcessing: Math.round((subtotal * 0.029 + 0.30) * 100) / 100,
       regulatoryFee: Math.round((subtotal * 0.005) * 100) / 100
     };
-    
+
     const totalFees = fees.platformBaseFee + fees.processingAdjustment + fees.stripeProcessing + fees.regulatoryFee;
     const total = subtotal + totalFees;
     const totalCents = Math.round(total * 100);
@@ -65,9 +65,9 @@ exports.handler = async (event) => {
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         sessionId: session.id,
-        url: session.url 
+        url: session.url
       })
     };
 
@@ -76,9 +76,9 @@ exports.handler = async (event) => {
     return {
       statusCode: 500,
       headers,
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         error: 'Payment processing failed',
-        details: error.message 
+        details: error.message
       })
     };
   }
