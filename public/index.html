@@ -699,7 +699,10 @@
                 const timeoutId = setTimeout(() => controller.abort(), 3000);
 
                 const response = await fetch(`${MOUNTAINSHARES_API}/calculate-price`, {
-                    method: 'POST',
+                console.log("Response status:", response.status);
+		const responseText = await response.text();
+		console.log("Response body:", responseText);
+		    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ msTokens: quantity }),
                     signal: controller.signal
