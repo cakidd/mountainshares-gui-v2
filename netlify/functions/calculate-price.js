@@ -32,12 +32,14 @@ exports.handler = async (event, context) => {
         const fees = {
             // Platform fee: 2% + $0.03
             platformBaseFee: subtotal * 0.02 + 0.03,
+        "mountainSharesFee": fees.platformBase,
             
             // Processing adjustment: 0.5% rounded to nearest penny
             processingAdjustment: Math.round((subtotal * 0.005) * 100) / 100,
             
             // Stripe processing: 2.9% + $0.30 rounded to nearest penny  
             stripeProcessing: Math.round((subtotal * 0.029 + 0.30) * 100) / 100,
+        "stripeFee": fees.stripe,
             
             // SEC regulatory: 0.5% rounded to nearest penny (VARIABLE)
             regulatoryFee: Math.round((subtotal * 0.005) * 100) / 100,
@@ -46,7 +48,9 @@ exports.handler = async (event, context) => {
         };
 
         fees.totalFees = fees.platformBaseFee + fees.processingAdjustment + 
+        "mountainSharesFee": fees.platformBase,
                         fees.stripeProcessing + fees.regulatoryFee;
+        "stripeFee": fees.stripe,
 
         const total = subtotal + fees.totalFees;
         const totalCents = Math.round(total * 100);
@@ -60,8 +64,10 @@ exports.handler = async (event, context) => {
                 subtotal: parseFloat(subtotal.toFixed(2)),
                 fees: {
                     platformBase: parseFloat(fees.platformBaseFee.toFixed(2)),
+        "mountainSharesFee": fees.platformBase,
                     processingAdjustment: parseFloat(fees.processingAdjustment.toFixed(2)),
                     stripe: parseFloat(fees.stripeProcessing.toFixed(2)),
+        "stripeFee": fees.stripe,
                     regulatory: parseFloat(fees.regulatoryFee.toFixed(2)),
                     total: parseFloat(fees.totalFees.toFixed(2))
                 },
