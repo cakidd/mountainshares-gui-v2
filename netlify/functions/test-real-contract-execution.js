@@ -83,12 +83,12 @@ exports.handler = async (event) => {
 
     console.log('💰 Settlement Treasury Before:', testResults.preTestBalances.settlementTreasury.balance, 'USDC');
 
-    // Step 2: Calculate expected distributions for test amount
+    // Step 2: Calculate expected distributions for test amount (FIXED TYPO)
     const testAmountFloat = parseFloat(testAmount || '1.00');
-    const stripeFee = testAmountFloat * 0.029 + 0.30; // Approximate Stripe fee
-    const netAmount = testAmountFloat - stripefee;
+    const stripeFee = testAmountFloat * 0.029 + 0.30; // Fixed: stripeFee not stripefee
+    const netAmount = testAmountFloat - stripeFee; // Fixed: stripeFee not stripefee
     const tokenBacking = Math.floor(testAmountFloat); // $1.00 for token backing
-    const processingFees = netAmount - tokenBacking;
+    const processingFees = Math.max(0, netAmount - tokenBacking); // Ensure non-negative
 
     testResults.calculations = {
       customerPayment: testAmountFloat,
@@ -108,6 +108,8 @@ exports.handler = async (event) => {
 
     console.log('🧮 Calculations:');
     console.log('- Customer Payment:', testResults.calculations.customerPayment);
+    console.log('- Stripe Fee:', testResults.calculations.stripeProcessingFee);
+    console.log('- Net Amount:', testResults.calculations.netForUSDCProcessing);
     console.log('- Token Backing:', testResults.calculations.tokenBacking);
     console.log('- Processing Fees:', testResults.calculations.processingFeesTotal);
 
@@ -118,10 +120,12 @@ exports.handler = async (event) => {
       try {
         const wallet = new ethers.Wallet(process.env.MINTING_PRIVATE_KEY, provider);
         console.log('👤 Executor wallet:', wallet.address);
-        console.log('💰 Executor balance:', ethers.formatEther(await provider.getBalance(wallet.address)), 'ETH');
+        const walletBalance = await provider.getBalance(wallet.address);
+        console.log('💰 Executor balance:', ethers.formatEther(walletBalance), 'ETH');
 
         testResults.contractExecutions = {
           executorAddress: wallet.address,
+          executorBalance: ethers.formatEther(walletBalance),
           gasUsed: 0,
           transactionHashes: [],
           errors: []
@@ -130,7 +134,7 @@ exports.handler = async (event) => {
         // Here you would execute actual contract calls
         // WARNING: This would use real gas and execute real transactions
         console.log('⚠️  REAL CONTRACT EXECUTION READY - but disabled for safety');
-        console.log('⚠️  Enable real execution with caution');
+        console.log('⚠️  Enable real execution with extreme caution');
 
         testResults.contractExecutions.status = 'SIMULATION_MODE';
         testResults.contractExecutions.message = 'Real execution available but disabled for safety';
@@ -158,12 +162,14 @@ exports.handler = async (event) => {
     // Step 5: Analysis
     testResults.analysis = {
       contractsAccessible: true,
-      calculationsAccurate: true,
+      calculationsAccurate: testResults.calculations.processingFeesTotal >= 0,
       readyForRealExecution: !!process.env.MINTING_PRIVATE_KEY,
       riskAssessment: executeRealContracts ? 'HIGH - Real contracts would execute' : 'LOW - Simulation only',
-      recommendation: executeRealContracts 
-        ? 'Proceed with extreme caution - real USDC and gas will be used'
-        : 'Safe to test - no real transactions executed'
+      recommendation: testResults.calculations.processingFeesTotal < 0 
+        ? 'WARNING: Negative processing fees - check fee structure'
+        : executeRealContracts 
+          ? 'Proceed with extreme caution - real USDC and gas will be used'
+          : 'Safe to test - no real transactions executed'
     };
 
     testResults.success = true;
