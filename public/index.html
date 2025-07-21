@@ -712,9 +712,9 @@
                     if (data.success) {
                         const p = data.pricing;
                         document.getElementById('token-value').textContent = `$${p.tokenValue.toFixed(2)}`;
-                        document.getElementById('stripe-fee').textContent = `$${p.stripeFee.toFixed(2)}`;
-                        document.getElementById('platform-fee').textContent = `$${p.mountainSharesFee.toFixed(2)}`;
-                        document.getElementById('total-price').textContent = `$${p.totalCharge.toFixed(2)}`;
+                        document.getElementById('stripe-fee').textContent = `$${p.fees.stripe.toFixed(2)}`;
+                        document.getElementById('platform-fee').textContent = `$${p.fees.platformBase.toFixed(2)}`;
+                        document.getElementById('total-price').textContent = `$${p.total.toFixed(2)}`;
                         return;
                     }
                 }
