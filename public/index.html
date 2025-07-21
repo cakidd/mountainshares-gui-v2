@@ -714,6 +714,40 @@
 		const data = await response.json();
 		console.log("Response data:", data);
 
+const response = await fetch(`${MOUNTAINSHARES_API}/calculate-price`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ msTokens: quantity }),
+    signal: controller.signal
+});
+
+console.log("Response status:", response.status);
+
+if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+}
+
+const data = await response.json();
+console.log("Response data:", data);
+
+// Use the 'data' variable for all subsequent operations
+if (data && data.stripeFee !== undefined) {
+    document.getElementById('stripe-fee').textContent = `$${data.stripeFee.toFixed(2)}`;
+    document.getElementById('platform-fee').textContent = `$${data.mountainSharesFee.toFixed(2)}`;
+    document.getElementById('total-price').textContent = `$${data.totalCharge.toFixed(2)}`;
+    return;
+}
+
+const data = await response.json();
+console.log("Response data:", data);
+
+// Use the 'data' variable for all subsequent operations
+if (data && data.stripeFee !== undefined) {
+    document.getElementById('stripe-fee').textContent = `$${data.stripeFee.toFixed(2)}`;
+    document.getElementById('platform-fee').textContent = `$${data.mountainSharesFee.toFixed(2)}`;
+    document.getElementById('total-price').textContent = `$${data.totalCharge.toFixed(2)}`;
+    return;
+}
 
                 clearTimeout(timeoutId);
                 
