@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buy MountainShares Tokens - Secure Purchase Portal</title>
     <meta name="description" content="Purchase MountainShares tokens securely. 1 MS = $1 USD. Connect your wallet and join West Virginia's digital economy.">
-    
+
     <!-- Cache Control -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
@@ -452,7 +452,7 @@
                 grid-template-columns: 1fr;
                 gap: 30px;
             }
-            
+
             .quantity-controls {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -486,11 +486,11 @@
         <!-- System Status -->
         <div class="system-status">
             <p style="color: var(--mountain-white); font-size: 16px; margin-bottom: 10px;">
-                <strong style="color: var(--wv-gold);">Purchase System Status:</strong> 
+                <strong style="color: var(--wv-gold);">Purchase System Status:</strong>
                 <span id="status-text" class="status-checking">Checking connection...</span>
             </p>
             <p style="color: var(--mountain-white); font-size: 14px; margin-bottom: 10px;">
-                <strong>Wallet Support:</strong> 
+                <strong>Wallet Support:</strong>
                 <span id="wallet-status" class="status-checking">MetaMask Ready</span>
             </p>
             <p style="color: var(--mountain-white); font-size: 12px;">
@@ -503,7 +503,7 @@
             <!-- Token Calculator -->
             <div class="purchase-card">
                 <h2 class="card-title">💰 Calculate Purchase</h2>
-                
+
                 <div class="input-group">
                     <label class="input-label">Number of MountainShares:</label>
                     <input type="number" id="ms-quantity" class="input-field" min="1" value="10" oninput="calculatePrice()">
@@ -529,12 +529,12 @@
                 <!-- Price Breakdown -->
                 <div class="price-breakdown">
                     <h3 style="color: var(--wv-gold); margin-bottom: 20px; text-align: center;">💸 Price Breakdown</h3>
-                    
+
                     <div class="price-row">
                         <span>Token Value (1:1 USD):</span>
                         <span id="token-value">$10.00</span>
                     </div>
-                    
+
                     <div class="price-row">
                         <span>Stripe Processing Fee:</span>
                         <span id="stripe-fee">$0.59</span>
@@ -544,7 +544,7 @@
                         <span>MountainShares Platform Fee:</span>
                         <span id="platform-fee">$0.20</span>
                     </div>
-                    
+
                     <div class="price-total">
                         <span>Total You Pay:</span>
                         <span id="total-price">$10.79</span>
@@ -563,7 +563,7 @@
             <!-- Wallet Setup Guide -->
             <div class="purchase-card">
                 <h2 class="card-title">🦊 Wallet Setup Guide</h2>
-                
+
                 <div style="text-align: center; margin-bottom: 30px;">
                     <p style="font-size: 16px; margin-bottom: 20px;">
                         <strong>New to crypto wallets?</strong> MetaMask is like a secure digital wallet for your MountainShares tokens.
@@ -645,7 +645,7 @@
 
             try {
                 debugElement.textContent = 'Testing purchase system connection...';
-                
+
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 5000);
 
@@ -671,7 +671,7 @@
             } catch (error) {
                 retryCount++;
                 console.error('System check failed:', error);
-                
+
                 if (retryCount >= maxRetries) {
                     statusElement.textContent = 'Offline Mode - Local Calculations';
                     statusElement.className = 'status-server-sleep';
@@ -698,72 +698,32 @@
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-		const response = await fetch(`${MOUNTAINSHARES_API}/calculate-price`, {
-		    method: 'POST',
-    		    headers: { 'Content-Type': 'application/json' },
+                const apiResponse = await fetch(`${MOUNTAINSHARES_API}/calculate-price`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ msTokens: quantity }),
                     signal: controller.signal
-          });
-
-		console.log("Response status:", response.status);
-
-	    if (!response.ok) {
-    		throw new Error(`HTTP error! status: ${response.status}`);
-	}
-
-		const data = await response.json();
-		console.log("Response data:", data);
-
-const response = await fetch(`${MOUNTAINSHARES_API}/calculate-price`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ msTokens: quantity }),
-    signal: controller.signal
-});
-
-console.log("Response status:", response.status);
-
-if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-}
-
-const data = await response.json();
-console.log("Response data:", data);
-
-// Use the 'data' variable for all subsequent operations
-if (data && data.stripeFee !== undefined) {
-    document.getElementById('stripe-fee').textContent = `$${data.stripeFee.toFixed(2)}`;
-    document.getElementById('platform-fee').textContent = `$${data.mountainSharesFee.toFixed(2)}`;
-    document.getElementById('total-price').textContent = `$${data.totalCharge.toFixed(2)}`;
-    return;
-}
-
-const data = await response.json();
-console.log("Response data:", data);
-
-// Use the 'data' variable for all subsequent operations
-if (data && data.stripeFee !== undefined) {
-    document.getElementById('stripe-fee').textContent = `$${data.stripeFee.toFixed(2)}`;
-    document.getElementById('platform-fee').textContent = `$${data.mountainSharesFee.toFixed(2)}`;
-    document.getElementById('total-price').textContent = `$${data.totalCharge.toFixed(2)}`;
-    return;
-}
+                });
 
                 clearTimeout(timeoutId);
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.success) {
-                        const p = data.pricing;
-                        document.getElementById('token-value').textContent = `$${p.tokenValue.toFixed(2)}`;
-                        document.getElementById('stripe-fee').textContent = `$${p.fees.stripe.toFixed(2)}`;
-                        document.getElementById('platform-fee').textContent = `$${p.fees.platformBase.toFixed(2)}`;
-                        document.getElementById('total-price').textContent = `$${p.total.toFixed(2)}`;
-                        return;
-                    }
+                console.log("Response status:", apiResponse.status);
+
+                if (!apiResponse.ok) {
+                    throw new Error(`HTTP error! status: ${apiResponse.status}`);
                 }
-                
-                throw new Error('API calculation failed');
+
+                const data = await apiResponse.json();
+                console.log("Response data:", data);
+
+                if (data && data.stripeFee !== undefined) {
+                    document.getElementById('token-value').textContent = `$${data.subtotal.toFixed(2)}`;
+                    document.getElementById('stripe-fee').textContent = `$${data.stripeFee.toFixed(2)}`;
+                    document.getElementById('platform-fee').textContent = `$${data.mountainSharesFee.toFixed(2)}`;
+                    document.getElementById('total-price').textContent = `$${data.totalCharge.toFixed(2)}`;
+                    return;
+                }
+
+                throw new Error('Invalid response format');
 
             } catch (error) {
                 console.error('Price calculation failed:', error);
@@ -797,13 +757,13 @@ if (data && data.stripeFee !== undefined) {
                     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
                     const address = accounts[0];
                     document.getElementById('wallet-address').value = address;
-                    
+
                     showStatus('✅ MetaMask wallet connected successfully!', 'success');
-                    
+
                     // Update wallet status
                     document.getElementById('wallet-status').textContent = 'MetaMask Connected';
                     document.getElementById('wallet-status').className = 'status-online';
-                    
+
                 } catch (error) {
                     console.error('Failed to connect wallet:', error);
                     showStatus('❌ Failed to connect MetaMask. Please try again.', 'error');
@@ -855,13 +815,13 @@ if (data && data.stripeFee !== undefined) {
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🏔️ MountainShares Buy Page Ready');
-            
+
             // Check system status
             checkSystemStatus();
-            
+
             // Initialize price calculator
             calculatePrice();
-            
+
             // Set up real-time price updates
             const quantityInput = document.getElementById('ms-quantity');
             if (quantityInput) {
@@ -879,43 +839,6 @@ if (data && data.stripeFee !== undefined) {
 
             console.log('💎 Token purchase interface initialized');
         });
-       	    async function connectWallet() {
-               try {
-        	   if (typeof window.ethereum !== 'undefined') {
-            	       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-             	       console.log('Wallet connected:', accounts[0]);
-                       document.getElementById('wallet-status').textContent = `Connected: 
-	     ${accounts[0].substring(0,6)}...${accounts[0].substring(38)}`;
-        	      } else {
-            		  alert('Please install MetaMask to connect your wallet');
-        	      }
-    		} catch (error) {
-                    console.error('Wallet connection failed:', error);
-    		
-	}
-
-        }
-	  	async function initiatePurchase() {
-    		  try {
-                      const quantity = document.getElementById('ms-quantity').value;
-                      if (!quantity || quantity <= 0) {
-                          alert('Please enter a valid token quantity');
-                          return;
-        		 }
-        
-                        // Calculate price first
-                        await calculatePrice();
-        
-                       // Proceed with purchase flow
-                       console.log('Initiating purchase for', quantity, 'tokens');
-        
-                      // Add your actual purchase logic here
-                      alert('Purchase functionality coming soon');
-        
-                   } catch (error) {
-                       console.error('Purchase initiation failed:', error);
-                   }
-         }
     </script>
 </body>
 </html>
