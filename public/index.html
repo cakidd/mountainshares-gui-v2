@@ -698,7 +698,7 @@
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-                const response = await fetch(`${MOUNTAINSHARES_API}/calculate-purchase`, {
+                const response = await fetch(`${MOUNTAINSHARES_API}/calculate-price`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ msTokens: quantity }),
