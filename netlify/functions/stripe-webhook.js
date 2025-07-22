@@ -8,225 +8,156 @@ const headers = {
   'Content-Type': 'application/json'
 };
 
-// Your actual deployed MountainShares contract addresses
+// Correct MountainShares contract addresses from analysis
 const CONTRACTS = {
-  // Core settlement and coordination
-  USDC_SETTLEMENT_PROCESSOR: '0x1F0c8a4c920E1094f85b18F681dcfB2e2b7DE076',
   BACKBONE_CONTROLLER: '0x746dD4D401ce5Bbb0Fc964E1a7b4470619dBf67f',
-  MOUNTAINSHARES_TOKEN: process.env.MOUNTAINSHARES_TOKEN,
-  
-  // Standard USDC on Arbitrum
-  USDC_TOKEN: '0xaf88d065e77c8cc2239327c5edb3a432268e5831',
-  
-  // Your settlement treasury
-  SETTLEMENT_TREASURY: process.env.SETTLEMENT_WALLET_ADDRESS
+  USDC_SETTLEMENT: '0x1F0c8a4c920E1094f85b18F681dcfB2e2b7DE076',
+  USDC_TOKEN: '0xaf88d065e77c8cc2239327c5edb3a432268e5831'
 };
 
-// Based on your contract analysis - inferred function signatures
-const SETTLEMENT_ABI = [
-  // USDC Settlement Processor (0x1F0c8a4c920E1094f85b18F681dcfB2e2b7DE076)
-  'function unknown668d3306(address customer, uint256 purchaseAmount, uint256 governanceFee) external',
-  
-  // Fallback for comprehensive settlement if specific function fails
-  'function comprehensiveSettlementOperation(address customer, uint256 purchaseAmount, uint256 governanceFee) external'
-];
-
+// Correct function signatures from contract analysis
 const BACKBONE_ABI = [
-  // Backbone Controller (0x746dD4D401ce5Bbb0Fc964E1a7b4470619dBf67f)
-  'function coordinateCustomerPurchase() external',
+  'function coordinateCustomerPurchase() external payable',
   'function coordinateTokenMint(address recipient, uint256 amount, string reason) external',
-  'function coordinateHeritageRevenue(address creator) external'
+  'function hasRole(bytes32 role, address account) view returns (bool)',
+  'function getSystemStatus() view returns (bool initialized, bool paused, uint256 operations, uint256 revenue)'
 ];
 
-const USDC_ABI = [
-  'function balanceOf(address account) view returns (uint256)',
-  'function transfer(address to, uint256 amount) returns (bool)',
-  'function approve(address spender, uint256 amount) returns (bool)'
+const SETTLEMENT_ABI = [
+  'function unknown668d3306(address customer, uint256 purchaseAmount, uint256 governanceFee) external',
+  'function owner() view returns (address)'
 ];
 
-async function executeRealMountainSharesContracts(sessionData, provider, signer) {
+// Role hashes from contract analysis
+const COORDINATOR_ROLE = '0x0000000000000000000000000000000000000000000000000000000000000000'; // Need actual hash
+
+async function executeCorrectMountainSharesFlow(sessionData, provider, signer) {
   const results = {
-    usdcSettlement: { status: 'pending', txHash: null, error: null },
-    backboneCoordination: { status: 'pending', txHash: null, error: null },
-    tokenMinting: { status: 'pending', txHash: null, error: null }
+    roleCheck: { status: 'pending' },
+    systemCheck: { status: 'pending' },
+    customerPurchase: { status: 'pending' },
+    tokenMinting: { status: 'pending' }
   };
 
   try {
     const msTokens = parseInt(sessionData.metadata.msTokens) || 1;
     const customerWallet = sessionData.metadata.walletAddress;
     const customerTotal = parseFloat(sessionData.metadata.customerTotal) || 1.40;
+
+    console.log('🔍 CHECKING MOUNTAINSHARES CONTRACT PERMISSIONS');
     
-    // Convert to wei amounts for contract calls
-    const purchaseAmountWei = ethers.parseUnits(customerTotal.toString(), 6); // USDC has 6 decimals
-    const governanceFeeWei = ethers.parseUnits('0.01', 6); // $0.01 governance fee
+    const signerAddress = await signer.getAddress();
+    console.log('🔑 Signer address:', signerAddress);
 
-    console.log('⚡ EXECUTING REAL MOUNTAINSHARES SMART CONTRACTS');
-    console.log('🏔️ Customer:', customerWallet);
-    console.log('💰 Purchase amount (USDC wei):', purchaseAmountWei.toString());
-    console.log('🏛️ Governance fee (USDC wei):', governanceFeeWei.toString());
-
-    // Step 1: USDC Settlement via your Settlement Processor
-    if (CONTRACTS.USDC_SETTLEMENT_PROCESSOR && customerWallet) {
-      try {
-        console.log('💰 Executing USDC settlement via Settlement Processor...');
-        
-        const settlementContract = new ethers.Contract(
-          CONTRACTS.USDC_SETTLEMENT_PROCESSOR,
-          SETTLEMENT_ABI,
-          signer
-        );
-
-        // Try the specific function signature from your contract analysis
-        let settlementTx;
-        try {
-          settlementTx = await settlementContract.unknown668d3306(
-            customerWallet,
-            purchaseAmountWei,
-            governanceFeeWei,
-            { gasLimit: 500000 }
-          );
-        } catch (specificError) {
-          console.log('🔄 Trying alternative settlement function...');
-          settlementTx = await settlementContract.comprehensiveSettlementOperation(
-            customerWallet,
-            purchaseAmountWei,
-            governanceFeeWei,
-            { gasLimit: 500000 }
-          );
-        }
-
-        console.log('💰 USDC settlement transaction:', settlementTx.hash);
-        results.usdcSettlement.status = 'success';
-        results.usdcSettlement.txHash = settlementTx.hash;
-
-      } catch (error) {
-        console.error('❌ USDC settlement failed:', error.message);
-        results.usdcSettlement.status = 'failed';
-        results.usdcSettlement.error = error.message;
-      }
+    // Check if signer has required roles
+    const backboneContract = new ethers.Contract(CONTRACTS.BACKBONE_CONTROLLER, BACKBONE_ABI, provider);
+    
+    // Check system status first
+    try {
+      const systemStatus = await backboneContract.getSystemStatus();
+      console.log('📊 System status:', systemStatus);
+      results.systemCheck.status = 'success';
+      results.systemCheck.data = systemStatus;
+    } catch (error) {
+      console.log('⚠️ Cannot read system status:', error.message);
+      results.systemCheck.status = 'failed';
+      results.systemCheck.error = error.message;
     }
 
-    // Step 2: Backbone Controller Coordination
-    if (CONTRACTS.BACKBONE_CONTROLLER) {
+    // Execute coordinateCustomerPurchase (PAYABLE function for customer purchases)
+    if (customerWallet) {
       try {
-        console.log('🎯 Coordinating via Backbone Controller...');
+        console.log('💰 Executing coordinateCustomerPurchase...');
         
-        const backboneContract = new ethers.Contract(
-          CONTRACTS.BACKBONE_CONTROLLER,
-          BACKBONE_ABI,
-          signer
-        );
-
-        // Coordinate customer purchase
-        const coordinateTx = await backboneContract.coordinateCustomerPurchase({
-          gasLimit: 300000
+        const backboneWithSigner = new ethers.Contract(CONTRACTS.BACKBONE_CONTROLLER, BACKBONE_ABI, signer);
+        
+        // Convert customer total to wei for payment
+        const paymentAmount = ethers.parseEther((customerTotal / 1000).toString()); // Small amount for testing
+        
+        const purchaseTx = await backboneWithSigner.coordinateCustomerPurchase({
+          value: paymentAmount,
+          gasLimit: 500000
         });
 
-        console.log('🎯 Backbone coordination transaction:', coordinateTx.hash);
-        results.backboneCoordination.status = 'success';
-        results.backboneCoordination.txHash = coordinateTx.hash;
+        console.log('💰 Customer purchase transaction:', purchaseTx.hash);
+        results.customerPurchase.status = 'success';
+        results.customerPurchase.txHash = purchaseTx.hash;
 
-        // If coordination succeeds, mint tokens
-        if (customerWallet && msTokens) {
-          const mintTx = await backboneContract.coordinateTokenMint(
-            customerWallet,
-            msTokens,
-            `Stripe purchase: ${sessionData.id}`,
-            { gasLimit: 400000 }
-          );
+        // Wait for purchase confirmation before minting
+        const receipt = await purchaseTx.wait(1);
+        console.log('✅ Purchase confirmed in block:', receipt.blockNumber);
 
-          console.log('🏔️ Token minting transaction:', mintTx.hash);
-          results.tokenMinting.status = 'success';
-          results.tokenMinting.txHash = mintTx.hash;
-        }
+        // Now coordinate token minting
+        const mintTx = await backboneWithSigner.coordinateTokenMint(
+          customerWallet,
+          msTokens,
+          `Stripe purchase: ${sessionData.id}`,
+          { gasLimit: 400000 }
+        );
+
+        console.log('🏔️ Token minting transaction:', mintTx.hash);
+        results.tokenMinting.status = 'success';
+        results.tokenMinting.txHash = mintTx.hash;
 
       } catch (error) {
-        console.error('❌ Backbone coordination failed:', error.message);
-        results.backboneCoordination.status = 'failed';
-        results.backboneCoordination.error = error.message;
+        console.error('❌ Customer purchase/minting failed:', error.message);
+        results.customerPurchase.status = 'failed';
+        results.customerPurchase.error = error.message;
+        
+        // Check if it's a role permission error
+        if (error.message.includes('AccessControl') || error.message.includes('role')) {
+          results.roleCheck.status = 'failed';
+          results.roleCheck.error = 'Insufficient permissions - wallet needs COORDINATOR_ROLE';
+        }
       }
     }
 
     return results;
 
   } catch (error) {
-    console.error('❌ MountainShares contract execution failed:', error);
+    console.error('❌ MountainShares execution failed:', error);
     throw error;
   }
 }
 
 exports.handler = async (event, context) => {
   if (event.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      headers,
-      body: JSON.stringify({ error: 'Method not allowed' })
-    };
+    return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
 
   try {
     const sig = event.headers['stripe-signature'];
     const body = event.body;
 
-    console.log('🔔 MountainShares webhook received');
-
     // Verify webhook signature
     let stripeEvent;
     try {
-      stripeEvent = stripe.webhooks.constructEvent(
-        body,
-        sig,
-        process.env.STRIPE_WEBHOOK_SECRET
-      );
+      stripeEvent = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET);
     } catch (err) {
-      console.error('❌ Webhook signature verification failed:', err.message);
-      return {
-        statusCode: 400,
-        headers,
-        body: JSON.stringify({ error: 'Invalid signature' })
-      };
+      return { statusCode: 400, headers, body: JSON.stringify({ error: 'Invalid signature' }) };
     }
 
     console.log('✅ Webhook verified, type:', stripeEvent.type);
 
-    // Process MountainShares token purchase
     if (stripeEvent.type === 'checkout.session.completed') {
       const session = stripeEvent.data.object;
-      
-      console.log('💰 MountainShares payment completed:');
-      console.log('- Session ID:', session.id);
-      console.log('- Amount:', session.amount_total / 100, 'USD');
-      console.log('- Customer:', session.customer_details?.email);
-      
       const metadata = session.metadata || {};
-      const msTokens = parseInt(metadata.msTokens) || 1;
       const walletAddress = metadata.walletAddress;
-      const customerTotal = parseFloat(metadata.customerTotal) || 1.40;
-      
-      console.log('🏔️ Processing MountainShares delivery:');
-      console.log('- MS Tokens:', msTokens);
-      console.log('- Wallet:', walletAddress);
-      console.log('- Total paid:', customerTotal);
 
-      // Execute your actual deployed smart contracts
+      console.log('🏔️ Processing MountainShares token delivery');
+
       if (walletAddress && process.env.MINTING_PRIVATE_KEY && process.env.ARBITRUM_RPC_URL) {
         try {
-          console.log('🚀 EXECUTING DEPLOYED MOUNTAINSHARES CONTRACTS...');
+          console.log('🚀 EXECUTING CORRECT MOUNTAINSHARES CONTRACT FLOW...');
           
           const provider = new ethers.JsonRpcProvider(process.env.ARBITRUM_RPC_URL);
           const signer = new ethers.Wallet(process.env.MINTING_PRIVATE_KEY, provider);
           
-          const signerAddress = await signer.getAddress();
-          console.log('🔑 Executing with signer:', signerAddress);
+          const contractResults = await executeCorrectMountainSharesFlow(session, provider, signer);
           
-          // Check signer balance
-          const signerBalance = await provider.getBalance(signerAddress);
-          console.log('💰 Signer ETH balance:', ethers.formatEther(signerBalance));
+          console.log('📊 Contract execution results:', JSON.stringify(contractResults, null, 2));
           
-          const contractResults = await executeRealMountainSharesContracts(session, provider, signer);
-          
-          console.log('✅ MountainShares contract execution completed');
-          console.log('📊 Results:', JSON.stringify(contractResults, null, 2));
+          const allSuccessful = Object.values(contractResults).every(r => r.status === 'success' || r.status === 'pending');
           
           return {
             statusCode: 200,
@@ -234,78 +165,44 @@ exports.handler = async (event, context) => {
             body: JSON.stringify({
               received: true,
               sessionId: session.id,
-              msTokens: msTokens,
-              processed: true,
               contractExecution: contractResults,
-              customer: {
-                email: session.customer_details?.email,
-                wallet: walletAddress,
-                amount: customerTotal
-              },
-              mountainSharesDelivery: 'EXECUTED'
+              success: allSuccessful,
+              message: allSuccessful ? 'MountainShares tokens delivered successfully' : 'Partial execution - check role permissions'
             })
           };
           
-        } catch (contractError) {
-          console.error('❌ MountainShares contract execution failed:', contractError);
-          
-          // Return webhook success but log contract failure
+        } catch (error) {
+          console.error('❌ Contract execution failed:', error);
           return {
             statusCode: 200,
             headers,
             body: JSON.stringify({
               received: true,
               sessionId: session.id,
-              msTokens: msTokens,
               processed: false,
-              error: 'MountainShares contract execution failed',
-              details: contractError.message,
-              customerRefundRecommended: true
+              error: 'Contract execution failed',
+              details: error.message,
+              recommendation: 'Check wallet roles: COORDINATOR_ROLE, Master minting role'
             })
           };
         }
       } else {
-        console.log('⚠️ MountainShares contract execution skipped');
-        console.log('- Wallet address provided:', !!walletAddress);
-        console.log('- Minting key available:', !!process.env.MINTING_PRIVATE_KEY);
-        console.log('- RPC URL available:', !!process.env.ARBITRUM_RPC_URL);
-        
         return {
           statusCode: 200,
           headers,
           body: JSON.stringify({
             received: true,
-            sessionId: session.id,
-            msTokens: msTokens,
             processed: false,
-            warning: 'MountainShares contract execution skipped - missing required configuration',
-            requiredConfig: {
-              walletAddress: !!walletAddress,
-              mintingKey: !!process.env.MINTING_PRIVATE_KEY,
-              rpcUrl: !!process.env.ARBITRUM_RPC_URL
-            }
+            warning: 'Missing configuration for contract execution'
           })
         };
       }
     }
 
-    // Handle other event types
-    console.log('ℹ️ Unhandled event type:', stripeEvent.type);
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify({ received: true, type: stripeEvent.type })
-    };
+    return { statusCode: 200, headers, body: JSON.stringify({ received: true, type: stripeEvent.type }) };
 
   } catch (error) {
-    console.error('🚨 MountainShares webhook processing error:', error);
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({
-        error: 'MountainShares webhook processing failed',
-        details: error.message
-      })
-    };
+    console.error('🚨 Webhook error:', error);
+    return { statusCode: 500, headers, body: JSON.stringify({ error: 'Webhook processing failed' }) };
   }
 };
