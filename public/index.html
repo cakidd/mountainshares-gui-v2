@@ -3,127 +3,591 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MountainShares Token Purchase Portal</title>
+    <title>MountainShares Token Purchase Portal - Mount Hope, WV</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
     <style>
-        body {
-            font-family: 'JetBrains Mono', monospace;
-            background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%);
-            color: #FFFFFF;
+        :root {
+            --primary-gold: #FFD700;
+            --secondary-blue: #00BFFF;
+            --dark-bg: #0A0A0A;
+            --card-bg: #1A1A1A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #CCCCCC;
+            --accent-green: #00FF88;
+            --warning-orange: #FF6B00;
+            --error-red: #FF4444;
+            --success-green: #00FF00;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            min-height: 100vh;
         }
-        
+
+        body {
+            font-family: 'JetBrains Mono', 'Courier New', monospace;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1A1A2E 50%, var(--card-bg) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 191, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
+            animation: backgroundShift 15s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
         .container {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
             padding: 40px 20px;
+            background: rgba(255, 215, 0, 0.05);
+            border: 2px solid var(--primary-gold);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, var(--primary-gold), var(--secondary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
         }
 
         .ai-badge {
-            background: linear-gradient(45deg, #00BFFF, #FFD700);
-            color: #000;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
+            background: linear-gradient(45deg, var(--secondary-blue), var(--primary-gold));
+            color: var(--dark-bg);
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 14px;
             font-weight: bold;
             display: inline-block;
-            margin: 10px 0;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
         }
 
-        .purchase-form {
-            background: rgba(255, 215, 0, 0.05);
-            border: 2px solid #FFD700;
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-top: 10px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .purchase-section, .wallet-section {
+            background: rgba(26, 26, 26, 0.9);
+            border: 2px solid var(--primary-gold);
             border-radius: 20px;
-            padding: 40px;
-            margin: 20px 0;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-gold);
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--secondary-blue);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .token-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .token-btn {
+            padding: 10px;
+            background: rgba(0, 191, 255, 0.1);
+            border: 1px solid var(--secondary-blue);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .token-btn:hover, .token-btn.active {
+            background: var(--secondary-blue);
+            color: var(--dark-bg);
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
         }
 
         .price-breakdown {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.6);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 15px;
             margin: 20px 0;
-            font-family: monospace;
-            border-left: 4px solid #00BFFF;
+            border-left: 4px solid var(--secondary-blue);
+            font-family: 'Courier New', monospace;
         }
-        
-        .total-price {
-            font-size: 1.5em;
-            color: #00BFFF;
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 5px 0;
+        }
+
+        .price-item.total {
+            border-top: 2px solid var(--primary-gold);
+            font-size: 1.2rem;
             font-weight: bold;
+            color: var(--primary-gold);
+            margin-top: 15px;
+            padding-top: 15px;
         }
-        
+
         .accuracy-guarantee {
             background: rgba(0, 255, 0, 0.1);
-            border: 1px solid #00FF00;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 0.9em;
-            margin: 15px 0;
-        }
-        
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            background: #2A2A2A;
-            color: #FFFFFF;
-            border: 1px solid #FFD700;
-            border-radius: 5px;
-        }
-        
-        button {
-            background: #00BFFF;
-            color: #0A0A0A;
-            padding: 15px 30px;
-            border: none;
+            border: 1px solid var(--success-green);
+            padding: 15px;
             border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .wallet-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .status-connected { background: var(--success-green); }
+        .status-disconnected { background: var(--error-red); }
+        .status-connecting { background: var(--warning-orange); animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .wallet-address {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            word-break: break-all;
+        }
+
+        .network-info {
+            background: rgba(0, 191, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 1px solid var(--secondary-blue);
+        }
+
+        .network-name {
+            font-weight: bold;
+            color: var(--secondary-blue);
+        }
+
+        .action-button {
+            width: 100%;
+            padding: 15px 20px;
+            background: linear-gradient(45deg, var(--primary-gold), #FFA500);
+            color: var(--dark-bg);
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin: 5px;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .action-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .secondary-button {
+            background: linear-gradient(45deg, var(--warning-orange), #FF8C00);
+        }
+
+        .connect-button {
+            background: linear-gradient(45deg, var(--secondary-blue), #0080FF);
+        }
+
+        .transaction-history {
+            margin-top: 30px;
+            background: rgba(26, 26, 26, 0.9);
+            border: 2px solid var(--secondary-blue);
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border-left: 4px solid var(--success-green);
+        }
+
+        .transaction-hash {
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            margin: 5% auto;
+            padding: 30px;
+            border: 2px solid var(--primary-gold);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
+        }
+
+        .close {
+            color: var(--text-secondary);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: var(--primary-gold);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--text-secondary);
+            border-radius: 50%;
+            border-top-color: var(--primary-gold);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(255, 68, 68, 0.1);
+            color: var(--error-red);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--error-red);
+            margin: 15px 0;
+        }
+
+        .success-message {
+            background: rgba(0, 255, 0, 0.1);
+            color: var(--success-green);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--success-green);
+            margin: 15px 0;
+        }
+
+        .ai-optimization-panel {
+            background: linear-gradient(135deg, rgba(0, 191, 255, 0.05), rgba(255, 215, 0, 0.05));
+            border: 1px solid var(--secondary-blue);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .optimization-factor {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 5px 0;
+            font-size: 0.9rem;
+        }
+
+        .factor-label {
+            color: var(--text-secondary);
+        }
+
+        .factor-value {
+            color: var(--secondary-blue);
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+            margin-top: 50px;
+        }
+
+        .mountain-logo {
+            font-size: 2rem;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
+    <div class="background-animation"></div>
+    
     <div class="container">
-        <h1>🏔️ MountainShares Token Purchase Portal</h1>
-        <div class="ai-badge">🤖 Powered by Darwin Gödel Machine AI</div>
-        <p>AI-optimized dynamic pricing for Mount Hope, WV digital economy</p>
-        
-        <div class="purchase-form">
-            <h2>💎 Purchase MountainShares Tokens</h2>
-            
-            <div>
-                <label for="tokenAmount">Number of Tokens:</label>
-                <input type="number" id="tokenAmount" value="10" min="1" max="1000" onchange="updateAIPricing()">
+        <header class="header">
+            <div class="mountain-logo">🏔️⛰️🏔️</div>
+            <h1>MountainShares Token Purchase Portal</h1>
+            <div class="ai-badge">🤖 Powered by Darwin Gödel Machine AI</div>
+            <p class="subtitle">AI-optimized dynamic pricing for Mount Hope, West Virginia digital economy</p>
+        </header>
+
+        <div class="main-content">
+            <div class="purchase-section">
+                <h2 class="section-title">💎 Purchase MountainShares Tokens</h2>
+                
+                <div class="form-group">
+                    <label class="form-label" for="tokenAmount">Number of Tokens:</label>
+                    <input type="number" id="tokenAmount" class="form-input" value="10" min="1" max="10000" 
+                           onchange="updateAIPricing()" oninput="updateAIPricing()">
+                </div>
+
+                <div class="token-selector">
+                    <button class="token-btn" onclick="setTokenAmount(1)">1</button>
+                    <button class="token-btn active" onclick="setTokenAmount(10)">10</button>
+                    <button class="token-btn" onclick="setTokenAmount(25)">25</button>
+                    <button class="token-btn" onclick="setTokenAmount(50)">50</button>
+                    <button class="token-btn" onclick="setTokenAmount(100)">100</button>
+                    <button class="token-btn" onclick="setTokenAmount(500)">500</button>
+                </div>
+
+                <div class="price-breakdown" id="priceBreakdown">
+                    <h3 style="color: var(--secondary-blue); margin-bottom: 15px;">🤖 AI-Optimized Price Breakdown:</h3>
+                    <div id="priceDetails">Initializing Darwin Gödel Machine...</div>
+                </div>
+
+                <div class="ai-optimization-panel" id="aiOptimizationPanel">
+                    <h4 style="color: var(--secondary-blue); margin-bottom: 10px;">🧠 AI Optimization Factors:</h4>
+                    <div id="optimizationFactors">Loading AI parameters...</div>
+                </div>
+
+                <div class="accuracy-guarantee" id="accuracyGuarantee">
+                    ✅ 100% Mathematical Precision Guaranteed by Darwin Gödel Machine AI
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="customerEmail">Email Address (for receipt):</label>
+                    <input type="email" id="customerEmail" class="form-input" placeholder="your.email@example.com">
+                </div>
+
+                <button class="action-button" id="purchaseBtn" onclick="purchaseTokens()">
+                    🛒 Purchase MountainShares Tokens
+                </button>
+                
+                <button class="action-button secondary-button" id="testPurchaseBtn" onclick="testPurchase()">
+                    🧪 Test Purchase (Safe Mode)
+                </button>
             </div>
-            
-            <div class="price-breakdown" id="priceBreakdown">
-                <h3>🤖 AI-Optimized Price Breakdown:</h3>
-                <div id="priceDetails">Initializing Darwin Gödel Machine...</div>
+
+            <div class="wallet-section">
+                <h2 class="section-title">👛 Wallet Connection</h2>
+                
+                <div class="wallet-status" id="walletStatus">
+                    <div style="display: flex; align-items: center;">
+                        <div class="status-indicator status-disconnected" id="statusIndicator"></div>
+                        <span id="connectionStatus">Not Connected</span>
+                    </div>
+                    <button class="action-button connect-button" id="connectBtn" onclick="connectWallet()">
+                        Connect MetaMask
+                    </button>
+                </div>
+
+                <div class="wallet-address" id="walletAddress" style="display: none;">
+                    <strong>Address:</strong><br>
+                    <span id="addressDisplay"></span>
+                </div>
+
+                <div class="network-info" id="networkInfo" style="display: none;">
+                    <div class="network-name" id="networkName">Network: Loading...</div>
+                    <div style="font-size: 0.9rem; margin-top: 5px;">
+                        <span>Chain ID: </span><span id="chainId">-</span><br>
+                        <span>Balance: </span><span id="ethBalance">- ETH</span>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 25px;">
+                    <label class="form-label">Manual Wallet Address (optional):</label>
+                    <input type="text" id="manualWalletAddress" class="form-input" 
+                           placeholder="0x..." onchange="validateAddress()">
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 5px;">
+                        If not connected, tokens will be held for manual transfer
+                    </div>
+                </div>
+
+                <div id="contractInfo" class="network-info" style="margin-top: 20px;">
+                    <div style="color: var(--secondary-blue); font-weight: bold; margin-bottom: 10px;">
+                        🔗 Contract Information:
+                    </div>
+                    <div style="font-size: 0.85rem; line-height: 1.4;">
+                        <div><strong>Network:</strong> Arbitrum One</div>
+                        <div><strong>Chain ID:</strong> 42161</div>
+                        <div><strong>Settlement:</strong> USDC</div>
+                        <div><strong>Token Contract:</strong> 
+                            <span style="font-family: monospace; font-size: 0.75rem;">
+                                0xE8A9c6fFE6b2344147D886EcB8608C5F7863B20D
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="accuracy-guarantee" id="accuracyGuarantee">
-                ✅ 100% Mathematical Precision Guaranteed by AI Optimization
+        </div>
+
+        <div class="transaction-history" id="transactionHistory" style="display: none;">
+            <h2 class="section-title">📊 Recent Transactions</h2>
+            <div id="transactionList">
+                <!-- Transaction items will be populated here -->
             </div>
-            
-            <div>
-                <label for="walletAddress">Your Wallet Address (optional):</label>
-                <input type="text" id="walletAddress" placeholder="0x..." style="width: 100%;">
-            </div>
-            
-            <button onclick="purchaseTokens()" id="purchaseBtn">
-                🛒 Purchase MountainShares Tokens
-            </button>
-            
-            <button onclick="testPurchase()" style="background: #ff6b00;">
-                🧪 Test Purchase (Safe)
-            </button>
         </div>
     </div>
 
+    <div class="modal" id="purchaseModal">
+        <div class="modal-content">
+            <span class="close" onclick="closePurchaseModal()">&times;</span>
+            <h2 style="color: var(--primary-gold); margin-bottom: 20px;">Processing Purchase</h2>
+            <div id="modalContent">
+                <div class="loading"></div>
+                <p>Please wait while we process your MountainShares token purchase...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="mountain-logo">🏔️</div>
+        <p>&copy; 2025 MountainShares - Mount Hope, West Virginia Digital Economy Initiative</p>
+        <p style="font-size: 0.8rem; margin-top: 10px;">
+            Powered by Darwin Gödel Machine AI • Secured by Arbitrum • Backed by USDC
+        </p>
+    </footer>
+
     <script>
-        // AI-powered dynamic pricing using Darwin Gödel Machine
+        // Global state management
+        let web3Provider = null;
+        let userAccount = null;
+        let currentNetwork = null;
+        let darwinMachineData = null;
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏔️ MountainShares Portal Initializing...');
+            checkMetaMaskConnection();
+            updateAIPricing();
+            loadTransactionHistory();
+        });
+
+        // Darwin Gödel Machine AI-powered pricing
         async function updateAIPricing() {
             const tokenAmount = parseInt(document.getElementById('tokenAmount').value) || 0;
             
@@ -134,138 +598,442 @@
             
             try {
                 document.getElementById('priceDetails').innerHTML = '🤖 Darwin Gödel Machine calculating optimal fees...';
+                document.getElementById('optimizationFactors').innerHTML = 'Loading AI optimization parameters...';
                 
                 const response = await fetch('/.netlify/functions/darwin-goedel-fee-calculator', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         tokenQuantity: tokenAmount,
-                        optimizeForCommunity: true 
+                        optimizeForCommunity: true,
+                        userAccount: userAccount,
+                        networkId: currentNetwork 
                     })
                 });
                 
                 const result = await response.json();
                 
                 if (result.success) {
-                    const calc = result.darwinGoedelMachine.optimizedCalculation.calculation;
-                    const validation = result.darwinGoedelMachine.optimizedCalculation.validation;
-                    const aiOpt = calc.aiOptimization;
-                    
-                    document.getElementById('priceDetails').innerHTML = `
-                        <div style="margin-bottom: 15px;">
-                            <strong>${tokenAmount} MountainShares Tokens</strong><br>
-                            <span style="color: #00BFFF;">Token Value: ${tokenAmount} × $1.00 = $${calc.transactionValue.toFixed(2)}</span>
-                        </div>
-                        
-                        <div style="margin-bottom: 15px; font-size: 0.9em; color: #ccc;">
-                            <strong>🤖 AI-Optimized Processing Fees:</strong><br>
-                            • Platform Fee (2% + $0.03): <span style="color: #FFD700;">$${calc.fees.platformFee.toFixed(2)}</span><br>
-                            • Treasury Fee (0.5% health-adjusted): <span style="color: #FFD700;">$${calc.fees.treasuryFee.toFixed(2)}</span><br>
-                            • Payment Processing (2.9% + $0.30): <span style="color: #FFD700;">$${calc.fees.stripeProcessing.toFixed(2)}</span><br>
-                            • SEC Regulatory (0.5% precision-adjusted): <span style="color: #FFD700;">$${calc.fees.secRegulatory.toFixed(2)}</span>
-                        </div>
-                        
-                        <div style="margin-bottom: 15px; font-size: 0.85em; color: #888;">
-                            <strong>🧠 AI Optimization Factors:</strong><br>
-                            • Community Economic Factor: ${aiOpt.communityEconomicFactor}x<br>
-                            • Treasury Health Ratio: ${(aiOpt.treasuryHealthRatio * 100).toFixed(0)}%<br>
-                            • Usage Pattern Multiplier: ${aiOpt.usagePatternMultiplier}x<br>
-                            • Precision Adjustment: ${aiOpt.precisionAdjustment}
-                        </div>
-                        
-                        <hr style="border: 1px solid #333; margin: 15px 0;">
-                        
-                        <div class="total-price">
-                            <strong>Total: $${calc.grandTotal.toFixed(2)} USD</strong><br>
-                            <small style="color: #ccc;">($${(calc.grandTotal/tokenAmount).toFixed(3)} per token)</small>
-                        </div>
-                        
-                        <div style="margin-top: 10px; font-size: 0.8em; color: #00FF00;">
-                            ✅ Validation: ${validation.isValid ? 'PASSED' : 'FAILED'} | Variance: ${validation.variance.toFixed(4)}
-                        </div>
-                    `;
-                    
-                    // Update accuracy guarantee
-                    document.getElementById('accuracyGuarantee').innerHTML = validation.isValid 
-                        ? `✅ Darwin Gödel Machine: 100% Mathematical Precision Achieved (Variance: ${validation.variance.toFixed(4)})`
-                        : `⚠️ Precision Warning: Variance detected (${validation.variance.toFixed(4)})`;
-                        
+                    darwinMachineData = result.darwinGoedelMachine;
+                    displayAIOptimizedPricing(darwinMachineData);
                 } else {
-                    document.getElementById('priceDetails').innerHTML = '❌ Darwin Gödel Machine error: ' + result.error;
+                    throw new Error(result.error || 'Darwin Gödel Machine optimization failed');
                 }
             } catch (error) {
                 console.error('Darwin Gödel Machine error:', error);
-                document.getElementById('priceDetails').innerHTML = '❌ AI optimization failed';
+                document.getElementById('priceDetails').innerHTML = '❌ AI optimization temporarily unavailable';
+                document.getElementById('optimizationFactors').innerHTML = '❌ AI parameters unavailable';
             }
         }
 
-        async function purchaseTokens() {
-            const tokenAmount = parseInt(document.getElementById('tokenAmount').value);
-            const walletAddress = document.getElementById('walletAddress').value;
-            
-            if (tokenAmount <= 0) {
-                alert('Please enter a valid token amount');
+        function displayAIOptimizedPricing(data) {
+            const calc = data.optimizedCalculation.calculation;
+            const validation = data.optimizedCalculation.validation;
+            const aiOpt = calc.aiOptimization;
+
+            // Update price breakdown
+            document.getElementById('priceDetails').innerHTML = `
+                <div class="price-item">
+                    <span><strong>${data.tokenQuantity} MountainShares Tokens</strong></span>
+                    <span style="color: var(--secondary-blue);">$${calc.transactionValue.toFixed(2)}</span>
+                </div>
+                <div class="price-item">
+                    <span>Platform Fee (2% + $0.03)</span>
+                    <span style="color: var(--primary-gold);">$${calc.fees.platformFee.toFixed(2)}</span>
+                </div>
+                <div class="price-item">
+                    <span>Treasury Fee (0.5% health-adjusted)</span>
+                    <span style="color: var(--primary-gold);">$${calc.fees.treasuryFee.toFixed(2)}</span>
+                </div>
+                <div class="price-item">
+                    <span>Payment Processing (2.9% + $0.30)</span>
+                    <span style="color: var(--primary-gold);">$${calc.fees.stripeProcessing.toFixed(2)}</span>
+                </div>
+                <div class="price-item">
+                    <span>SEC Regulatory (0.5% precision-adjusted)</span>
+                    <span style="color: var(--primary-gold);">$${calc.fees.secRegulatory.toFixed(2)}</span>
+                </div>
+                <div class="price-item total">
+                    <span><strong>Total Amount</strong></span>
+                    <span><strong>$${calc.grandTotal.toFixed(2)} USD</strong></span>
+                </div>
+                <div style="text-align: center; margin-top: 10px; font-size: 0.9rem; color: var(--text-secondary);">
+                    ($${(calc.grandTotal/data.tokenQuantity).toFixed(3)} per token)
+                </div>
+            `;
+
+            // Update AI optimization factors
+            document.getElementById('optimizationFactors').innerHTML = `
+                <div class="optimization-factor">
+                    <span class="factor-label">Community Economic Factor:</span>
+                    <span class="factor-value">${aiOpt.communityEconomicFactor}x</span>
+                </div>
+                <div class="optimization-factor">
+                    <span class="factor-label">Treasury Health Ratio:</span>
+                    <span class="factor-value">${(aiOpt.treasuryHealthRatio * 100).toFixed(0)}%</span>
+                </div>
+                <div class="optimization-factor">
+                    <span class="factor-label">Usage Pattern Multiplier:</span>
+                    <span class="factor-value">${aiOpt.usagePatternMultiplier}x</span>
+                </div>
+                <div class="optimization-factor">
+                    <span class="factor-label">Precision Adjustment:</span>
+                    <span class="factor-value">${aiOpt.precisionAdjustment}</span>
+                </div>
+            `;
+
+            // Update accuracy guarantee
+            const accuracyElement = document.getElementById('accuracyGuarantee');
+            if (validation.isValid) {
+                accuracyElement.innerHTML = `✅ Darwin Gödel Machine: 100% Mathematical Precision Achieved (Variance: ${validation.variance.toFixed(4)})`;
+                accuracyElement.className = 'accuracy-guarantee';
+            } else {
+                accuracyElement.innerHTML = `⚠️ Precision Warning: Variance detected (${validation.variance.toFixed(4)}) - Recalibrating...`;
+                accuracyElement.className = 'accuracy-guarantee error-message';
+            }
+        }
+
+        // MetaMask wallet connection
+        async function connectWallet() {
+            if (typeof window.ethereum === 'undefined') {
+                showError('MetaMask is not installed. Please install MetaMask to connect your wallet.');
                 return;
             }
-            
+
             try {
-                document.getElementById('purchaseBtn').textContent = 'AI Processing...';
+                updateConnectionStatus('connecting');
                 
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send("eth_requestAccounts", []);
+                
+                const signer = provider.getSigner();
+                const address = await signer.getAddress();
+                const network = await provider.getNetwork();
+                const balance = await provider.getBalance(address);
+
+                web3Provider = provider;
+                userAccount = address;
+                currentNetwork = network.chainId;
+
+                updateWalletDisplay(address, network, ethers.utils.formatEther(balance));
+                updateConnectionStatus('connected');
+                
+                console.log('✅ Wallet connected:', address);
+                console.log('📡 Network:', network.name, '(Chain ID:', network.chainId, ')');
+
+                // Check if on correct network (Arbitrum One = 42161)
+                if (network.chainId !== 42161) {
+                    showWarning('Please switch to Arbitrum One network for optimal transaction processing.');
+                }
+
+            } catch (error) {
+                console.error('❌ Wallet connection failed:', error);
+                updateConnectionStatus('disconnected');
+                showError('Failed to connect wallet: ' + error.message);
+            }
+        }
+
+        async function checkMetaMaskConnection() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    const provider = new ethers.providers.Web3Provider(window.ethereum);
+                    const accounts = await provider.listAccounts();
+                    
+                    if (accounts.length > 0) {
+                        const network = await provider.getNetwork();
+                        const balance = await provider.getBalance(accounts[0]);
+                        
+                        web3Provider = provider;
+                        userAccount = accounts[0];
+                        currentNetwork = network.chainId;
+                        
+                        updateWalletDisplay(accounts[0], network, ethers.utils.formatEther(balance));
+                        updateConnectionStatus('connected');
+                    }
+                } catch (error) {
+                    console.log('No existing wallet connection');
+                }
+            }
+        }
+
+        function updateConnectionStatus(status) {
+            const statusIndicator = document.getElementById('statusIndicator');
+            const connectionStatus = document.getElementById('connectionStatus');
+            const connectBtn = document.getElementById('connectBtn');
+
+            switch (status) {
+                case 'connected':
+                    statusIndicator.className = 'status-indicator status-connected';
+                    connectionStatus.textContent = 'Connected';
+                    connectBtn.textContent = 'Connected ✓';
+                    connectBtn.disabled = true;
+                    break;
+                case 'connecting':
+                    statusIndicator.className = 'status-indicator status-connecting';
+                    connectionStatus.textContent = 'Connecting...';
+                    connectBtn.textContent = 'Connecting...';
+                    connectBtn.disabled = true;
+                    break;
+                default:
+                    statusIndicator.className = 'status-indicator status-disconnected';
+                    connectionStatus.textContent = 'Not Connected';
+                    connectBtn.textContent = 'Connect MetaMask';
+                    connectBtn.disabled = false;
+            }
+        }
+
+        function updateWalletDisplay(address, network, balance) {
+            const walletAddress = document.getElementById('walletAddress');
+            const addressDisplay = document.getElementById('addressDisplay');
+            const networkInfo = document.getElementById('networkInfo');
+            const networkName = document.getElementById('networkName');
+            const chainId = document.getElementById('chainId');
+            const ethBalance = document.getElementById('ethBalance');
+
+            addressDisplay.textContent = address;
+            networkName.textContent = `Network: ${network.name}`;
+            chainId.textContent = network.chainId;
+            ethBalance.textContent = `${parseFloat(balance).toFixed(4)} ETH`;
+
+            walletAddress.style.display = 'block';
+            networkInfo.style.display = 'block';
+        }
+
+        // Token amount selection
+        function setTokenAmount(amount) {
+            document.getElementById('tokenAmount').value = amount;
+            
+            // Update active button
+            document.querySelectorAll('.token-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            updateAIPricing();
+        }
+
+        function validateAddress() {
+            const address = document.getElementById('manualWalletAddress').value;
+            if (address && !ethers.utils.isAddress(address)) {
+                showError('Invalid wallet address format');
+                return false;
+            }
+            return true;
+        }
+
+        // Purchase functions
+        async function purchaseTokens() {
+            const tokenAmount = parseInt(document.getElementById('tokenAmount').value);
+            const customerEmail = document.getElementById('customerEmail').value;
+            const manualAddress = document.getElementById('manualWalletAddress').value;
+            
+            if (tokenAmount <= 0) {
+                showError('Please enter a valid token amount');
+                return;
+            }
+
+            if (!customerEmail) {
+                showError('Please enter your email address for receipt');
+                return;
+            }
+
+            if (!darwinMachineData) {
+                showError('AI pricing optimization not available. Please refresh and try again.');
+                return;
+            }
+
+            const walletAddress = userAccount || manualAddress;
+            if (!walletAddress && !manualAddress) {
+                showWarning('No wallet connected. Tokens will be held for manual transfer.');
+            }
+
+            try {
+                showPurchaseModal();
+                updatePurchaseModalContent('🤖 Initializing Darwin Gödel Machine optimized purchase...');
+                
+                document.getElementById('purchaseBtn').textContent = 'Processing...';
+                document.getElementById('purchaseBtn').disabled = true;
+
                 const response = await fetch('/.netlify/functions/create-checkout-session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         msTokens: tokenAmount,
                         walletAddress: walletAddress,
-                        darwinGoedelOptimized: true
+                        customerEmail: customerEmail,
+                        darwinGoedelOptimized: true,
+                        darwinMachineData: darwinMachineData,
+                        networkId: currentNetwork,
+                        userAgent: navigator.userAgent
                     })
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (result.sessionId) {
-                    window.location.href = result.url;
+                    updatePurchaseModalContent('✅ Redirecting to secure payment processing...');
+                    setTimeout(() => {
+                        window.location.href = result.url;
+                    }, 1000);
                 } else {
-                    throw new Error(result.error || 'AI-optimized payment setup failed');
+                    throw new Error(result.error || 'Payment session creation failed');
                 }
+
             } catch (error) {
                 console.error('Purchase error:', error);
-                alert('Purchase failed: ' + error.message);
+                showError('Purchase failed: ' + error.message);
                 document.getElementById('purchaseBtn').textContent = '🛒 Purchase MountainShares Tokens';
+                document.getElementById('purchaseBtn').disabled = false;
+                closePurchaseModal();
             }
         }
 
         async function testPurchase() {
             const tokenAmount = parseInt(document.getElementById('tokenAmount').value);
-            const walletAddress = document.getElementById('walletAddress').value;
-            
+            const customerEmail = document.getElementById('customerEmail').value;
+            const walletAddress = userAccount || document.getElementById('manualWalletAddress').value;
+
+            if (tokenAmount <= 0) {
+                showError('Please enter a valid token amount');
+                return;
+            }
+
             try {
+                showPurchaseModal();
+                updatePurchaseModalContent('🧪 Initializing test purchase with Darwin Gödel Machine...');
+
                 const response = await fetch('/.netlify/functions/create-checkout-session', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         msTokens: tokenAmount,
                         walletAddress: walletAddress,
+                        customerEmail: customerEmail || 'test@mountainshares.com',
                         testMode: true,
-                        darwinGoedelOptimized: true
+                        darwinGoedelOptimized: true,
+                        darwinMachineData: darwinMachineData
                     })
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (result.sessionId) {
-                    window.location.href = result.url;
+                    updatePurchaseModalContent('✅ Test mode activated - redirecting...');
+                    setTimeout(() => {
+                        window.location.href = result.url;
+                    }, 1000);
                 } else {
-                    throw new Error(result.error || 'AI test purchase failed');
+                    throw new Error(result.error || 'Test purchase setup failed');
                 }
+
             } catch (error) {
                 console.error('Test purchase error:', error);
-                alert('Test purchase failed: ' + error.message);
+                showError('Test purchase failed: ' + error.message);
+                closePurchaseModal();
             }
         }
-        
-        // Initialize AI-powered pricing on page load
-        updateAIPricing();
+
+        // Modal functions
+        function showPurchaseModal() {
+            document.getElementById('purchaseModal').style.display = 'block';
+        }
+
+        function closePurchaseModal() {
+            document.getElementById('purchaseModal').style.display = 'none';
+        }
+
+        function updatePurchaseModalContent(message) {
+            document.getElementById('modalContent').innerHTML = `
+                <div class="loading"></div>
+                <p>${message}</p>
+            `;
+        }
+
+        // Transaction history
+        function loadTransactionHistory() {
+            // This would load from localStorage or API
+            const transactions = JSON.parse(localStorage.getItem('mountainshares_transactions') || '[]');
+            
+            if (transactions.length > 0) {
+                document.getElementById('transactionHistory').style.display = 'block';
+                displayTransactions(transactions);
+            }
+        }
+
+        function displayTransactions(transactions) {
+            const transactionList = document.getElementById('transactionList');
+            transactionList.innerHTML = transactions.map(tx => `
+                <div class="transaction-item">
+                    <div>
+                        <strong>${tx.amount} MS Tokens</strong><br>
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">
+                            ${new Date(tx.timestamp).toLocaleDateString()}
+                        </span>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="color: var(--primary-gold);">$${tx.total}</div>
+                        <div class="transaction-hash">${tx.hash || 'Processing...'}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Utility functions
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.innerHTML = `❌ ${message}`;
+            document.querySelector('.purchase-section').appendChild(errorDiv);
+            
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+
+        function showWarning(message) {
+            const warningDiv = document.createElement('div');
+            warningDiv.className = 'error-message';
+            warningDiv.style.backgroundColor = 'rgba(255, 107, 0, 0.1)';
+            warningDiv.style.borderColor = 'var(--warning-orange)';
+            warningDiv.style.color = 'var(--warning-orange)';
+            warningDiv.innerHTML = `⚠️ ${message}`;
+            document.querySelector('.purchase-section').appendChild(warningDiv);
+            
+            setTimeout(() => warningDiv.remove(), 7000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.innerHTML = `✅ ${message}`;
+            document.querySelector('.purchase-section').appendChild(successDiv);
+            
+            setTimeout(() => successDiv.remove(), 5000);
+        }
+
+        // Event listeners for MetaMask events
+        if (typeof window.ethereum !== 'undefined') {
+            window.ethereum.on('accountsChanged', function (accounts) {
+                if (accounts.length === 0) {
+                    updateConnectionStatus('disconnected');
+                    document.getElementById('walletAddress').style.display = 'none';
+                    document.getElementById('networkInfo').style.display = 'none';
+                } else {
+                    checkMetaMaskConnection();
+                }
+            });
+
+            window.ethereum.on('chainChanged', function (chainId) {
+                window.location.reload();
+            });
+        }
+
+        // Click outside modal to close
+        window.onclick = function(event) {
+            const modal = document.getElementById('purchaseModal');
+            if (event.target === modal) {
+                closePurchaseModal();
+            }
+        }
+
+        console.log('🏔️ MountainShares Portal Loaded Successfully');
+        console.log('🤖 Darwin Gödel Machine AI: Ready for optimization');
     </script>
 </body>
 </html>
