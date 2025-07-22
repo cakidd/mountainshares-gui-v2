@@ -4,7 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MountainShares Token Purchase Portal - Mount Hope, WV</title>
-    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+    
+    <!-- Multiple CDN sources for ethers.js with fallbacks -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js" 
+            integrity="sha512-FDcVz6WrxCNcjm38q+osGqkSJ1Q1TIwyZ+4Ah6sJmUc7OHZYp7UdnzCNRH1xMzZgAWOP2LvzjEeKBxj1y84yg==" 
+            crossorigin="anonymous"></script>
+    
+    <!-- Backup CDN for ethers -->
+    <script>
+        if (typeof ethers === 'undefined') {
+            document.write('<script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"><\/script>');
+        }
+    </script>
+    
+    <!-- Final fallback to jsdelivr -->
+    <script>
+        if (typeof ethers === 'undefined') {
+            document.write('<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"><\/script>');
+        }
+    </script>
+    
     <style>
         :root {
             --primary-gold: #FFD700;
@@ -97,6 +116,17 @@
             font-size: 1.2rem;
             color: var(--text-secondary);
             margin-top: 10px;
+        }
+
+        .ethers-status {
+            background: rgba(255, 107, 0, 0.1);
+            color: var(--warning-orange);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+            text-align: center;
+            border: 1px solid var(--warning-orange);
         }
 
         .main-content {
@@ -302,31 +332,6 @@
             background: linear-gradient(45deg, var(--secondary-blue), #0080FF);
         }
 
-        .transaction-history {
-            margin-top: 30px;
-            background: rgba(26, 26, 26, 0.9);
-            border: 2px solid var(--secondary-blue);
-            border-radius: 20px;
-            padding: 30px;
-        }
-
-        .transaction-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            margin: 10px 0;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            border-left: 4px solid var(--success-green);
-        }
-
-        .transaction-hash {
-            font-family: 'Courier New', monospace;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
         .modal {
             display: none;
             position: fixed;
@@ -443,6 +448,10 @@
             <h1>MountainShares Token Purchase Portal</h1>
             <div class="ai-badge">🤖 Powered by Darwin Gödel Machine AI</div>
             <p class="subtitle">AI-optimized dynamic pricing for Mount Hope, West Virginia digital economy</p>
+            
+            <div id="ethersStatus" class="ethers-status" style="display: none;">
+                ⚠️ Loading Web3 libraries... Please wait for full functionality.
+            </div>
         </header>
 
         <div class="main-content">
@@ -498,7 +507,7 @@
                 <div class="wallet-status" id="walletStatus">
                     <div style="display: flex; align-items: center;">
                         <div class="status-indicator status-disconnected" id="statusIndicator"></div>
-                        <span id="connectionStatus">Not Connected</span>
+                        <span id="connectionStatus">Checking MetaMask...</span>
                     </div>
                     <button class="action-button connect-button" id="connectBtn" onclick="connectWallet()">
                         Connect MetaMask
@@ -544,13 +553,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="transaction-history" id="transactionHistory" style="display: none;">
-            <h2 class="section-title">📊 Recent Transactions</h2>
-            <div id="transactionList">
-                <!-- Transaction items will be populated here -->
-            </div>
-        </div>
     </div>
 
     <div class="modal" id="purchaseModal">
@@ -578,14 +580,36 @@
         let userAccount = null;
         let currentNetwork = null;
         let darwinMachineData = null;
+        let ethersReady = false;
+
+        // Wait for ethers.js to load
+        function checkEthersLoaded() {
+            if (typeof ethers !== 'undefined') {
+                ethersReady = true;
+                console.log('✅ Ethers.js loaded successfully');
+                document.getElementById('ethersStatus').style.display = 'none';
+                document.getElementById('connectionStatus').textContent = 'Not Connected';
+                initializeApp();
+            } else {
+                console.log('⏳ Waiting for ethers.js to load...');
+                document.getElementById('ethersStatus').style.display = 'block';
+                document.getElementById('connectionStatus').textContent = 'Loading Web3...';
+                setTimeout(checkEthersLoaded, 500);
+            }
+        }
 
         // Initialize application
-        document.addEventListener('DOMContentLoaded', function() {
+        function initializeApp() {
             console.log('🏔️ MountainShares Portal Initializing...');
             checkMetaMaskConnection();
             updateAIPricing();
-            loadTransactionHistory();
-        });
+            
+            // Check if MetaMask is available
+            if (typeof window.ethereum === 'undefined') {
+                showWarning('MetaMask not detected. Please install MetaMask for wallet functionality.');
+                document.getElementById('connectionStatus').textContent = 'MetaMask Required';
+            }
+        }
 
         // Darwin Gödel Machine AI-powered pricing
         async function updateAIPricing() {
@@ -693,8 +717,13 @@
             }
         }
 
-        // MetaMask wallet connection
+        // MetaMask wallet connection (with ethers check)
         async function connectWallet() {
+            if (!ethersReady) {
+                showError('Web3 libraries still loading. Please wait a moment and try again.');
+                return;
+            }
+
             if (typeof window.ethereum === 'undefined') {
                 showError('MetaMask is not installed. Please install MetaMask to connect your wallet.');
                 return;
@@ -734,6 +763,10 @@
         }
 
         async function checkMetaMaskConnection() {
+            if (!ethersReady) {
+                return;
+            }
+
             if (typeof window.ethereum !== 'undefined') {
                 try {
                     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -783,6 +816,8 @@
         }
 
         function updateWalletDisplay(address, network, balance) {
+            if (!ethersReady) return;
+
             const walletAddress = document.getElementById('walletAddress');
             const addressDisplay = document.getElementById('addressDisplay');
             const networkInfo = document.getElementById('networkInfo');
@@ -812,9 +847,11 @@
 
         function validateAddress() {
             const address = document.getElementById('manualWalletAddress').value;
-            if (address && !ethers.utils.isAddress(address)) {
-                showError('Invalid wallet address format');
-                return false;
+            if (address && ethersReady) {
+                if (!ethers.utils.isAddress(address)) {
+                    showError('Invalid wallet address format');
+                    return false;
+                }
             }
             return true;
         }
@@ -947,35 +984,6 @@
             `;
         }
 
-        // Transaction history
-        function loadTransactionHistory() {
-            // This would load from localStorage or API
-            const transactions = JSON.parse(localStorage.getItem('mountainshares_transactions') || '[]');
-            
-            if (transactions.length > 0) {
-                document.getElementById('transactionHistory').style.display = 'block';
-                displayTransactions(transactions);
-            }
-        }
-
-        function displayTransactions(transactions) {
-            const transactionList = document.getElementById('transactionList');
-            transactionList.innerHTML = transactions.map(tx => `
-                <div class="transaction-item">
-                    <div>
-                        <strong>${tx.amount} MS Tokens</strong><br>
-                        <span style="color: var(--text-secondary); font-size: 0.9rem;">
-                            ${new Date(tx.timestamp).toLocaleDateString()}
-                        </span>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="color: var(--primary-gold);">$${tx.total}</div>
-                        <div class="transaction-hash">${tx.hash || 'Processing...'}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
         // Utility functions
         function showError(message) {
             const errorDiv = document.createElement('div');
@@ -1015,7 +1023,7 @@
                     document.getElementById('walletAddress').style.display = 'none';
                     document.getElementById('networkInfo').style.display = 'none';
                 } else {
-                    checkMetaMaskConnection();
+                    setTimeout(checkMetaMaskConnection, 500);
                 }
             });
 
@@ -1031,6 +1039,11 @@
                 closePurchaseModal();
             }
         }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            checkEthersLoaded();
+        });
 
         console.log('🏔️ MountainShares Portal Loaded Successfully');
         console.log('🤖 Darwin Gödel Machine AI: Ready for optimization');
