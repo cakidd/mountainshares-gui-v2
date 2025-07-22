@@ -1,33 +1,17 @@
 {
   "name": "mountainshares-buy-platform",
   "version": "2.1.1",
-  "description": "MountainShares Community-Controlled AI - Token Purchase Platform",
-  "main": "index.js",
+  "description": "MountainShares Token Purchase Platform - Mount Hope, WV",
   "scripts": {
-    "build": "npm run build:setup && npm run build:functions",
-    "build:setup": "mkdir -p public && echo 'Build setup complete'",
-    "build:functions": "echo 'Functions ready for deployment'",
+    "build": "echo 'Static site build complete'",
     "dev": "netlify dev",
-    "start": "netlify dev",
-    "test": "echo 'Running tests...' && exit 0"
+    "start": "netlify dev"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "ethers": "^6.9.2",
     "stripe": "^14.25.0",
-    "web3": "^4.16.0"
-  },
-  "devDependencies": {
-    "netlify-cli": "^17.13.1"
+    "ethers": "^6.15.0"
   },
   "engines": {
-    "node": "22.x",
-    "npm": "10.x"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/cakidd/mountainshares-gui-v2.git"
-  },
-  "author": "MountainShares Platform",
-  "license": "MIT"
+    "node": "22.x"
+  }
 }

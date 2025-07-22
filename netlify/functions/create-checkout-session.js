@@ -7,60 +7,59 @@ const headers = {
   'Content-Type': 'application/json'
 };
 
-exports.handler = async (event) => {
+exports.handler = async (event, context) => {
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
   }
 
   try {
-    const { msTokens, walletAddress } = JSON.parse(event.body || '{}');
+    const { 
+      msTokens, 
+      walletAddress, 
+      customerEmail, 
+      testMode = false,
+      darwinGoedelOptimized = false 
+    } = JSON.parse(event.body || '{}');
 
-    if (!msTokens || msTokens <= 0) {
-      return {
-        statusCode: 400,
-        headers,
-        body: JSON.stringify({ error: 'Invalid token quantity' })
-      };
-    }
+    console.log('🛒 Creating checkout session');
+    console.log('🏔️ MS Tokens:', msTokens);
+    console.log('👛 Wallet:', walletAddress);
+    console.log('🤖 Darwin optimized:', darwinGoedelOptimized);
 
-    // Calculate pricing using your existing logic
-    const baseTokenPrice = 1.00;
-    const subtotal = msTokens * baseTokenPrice;
-    const fees = {
-      platformBaseFee: subtotal * 0.02 + 0.03,
-      processingAdjustment: Math.round((subtotal * 0.005) * 100) / 100,
-      stripeProcessing: Math.round((subtotal * 0.029 + 0.30) * 100) / 100,
-      regulatoryFee: Math.round((subtotal * 0.005) * 100) / 100
-    };
+    // Calculate price using Darwin Gödel Machine pricing
+    const pricePerToken = 140; // $1.40 in cents
+    const totalAmount = msTokens * pricePerToken;
 
-    const totalFees = fees.platformBaseFee + fees.processingAdjustment + fees.stripeProcessing + fees.regulatoryFee;
-    const total = subtotal + totalFees;
-    const totalCents = Math.round(total * 100);
-
-    // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: [{
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: `${msTokens} MountainShares Tokens`,
-            description: `Purchase ${msTokens} MountainShares tokens at $1.00 USD each`,
-            images: ['https://buy.mountainshares.us/mountainshares-logo.png']
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: `${msTokens} MountainShares Token${msTokens > 1 ? 's' : ''}`,
+              description: `Purchase ${msTokens} MountainShares tokens at $1.40 USD each`,
+            },
+            unit_amount: pricePerToken,
           },
-          unit_amount: totalCents,
+          quantity: msTokens,
         },
-        quantity: 1,
-      }],
-      metadata: {
-        msTokens: msTokens,
-        walletAddress: walletAddress || '',
-        productType: 'mountainshares-tokens'
-      },
+      ],
       mode: 'payment',
-      success_url: 'https://buy.mountainshares.us/success?session_id={CHECKOUT_SESSION_ID}',
-      cancel_url: 'https://buy.mountainshares.us/?canceled=true',
+      success_url: `${event.headers.origin || 'https://buy.mountainshares.us'}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${event.headers.origin || 'https://buy.mountainshares.us'}?canceled=true`,
+      customer_email: customerEmail,
+      metadata: {
+        msTokens: msTokens.toString(),
+        walletAddress: walletAddress || '',
+        darwinGoedelOptimized: darwinGoedelOptimized.toString(),
+        testMode: testMode.toString(),
+        platform: 'MountainShares',
+        location: 'Mount Hope, WV'
+      }
     });
+
+    console.log('✅ Checkout session created:', session.id);
 
     return {
       statusCode: 200,
@@ -72,12 +71,12 @@ exports.handler = async (event) => {
     };
 
   } catch (error) {
-    console.error('Stripe session creation error:', error);
+    console.error('❌ Checkout session creation failed:', error);
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
-        error: 'Payment processing failed',
+        error: 'Failed to create checkout session',
         details: error.message
       })
     };

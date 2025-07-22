@@ -1,54 +1,15 @@
 [build]
   publish = "public"
-  command = "npm run build"
-  functions = "netlify/functions"
+  command = "echo 'Static site ready for deployment'"
 
 [build.environment]
   NODE_VERSION = "22"
-  NPM_VERSION = "10"
 
-# Function routing - MUST come before SPA routing
-[[redirects]]
-  from = "/api/calculate-price"
-  to = "/.netlify/functions/calculate-price"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/process-payment"
-  to = "/.netlify/functions/process-payment"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/test-connection"
-  to = "/.netlify/functions/test-connection"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-  force = true
-
-# SPA routing (MUST come after API routes)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# Headers for functions
-[[headers]]
-  for = "/.netlify/functions/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "https://buy.mountainshares.us"
-    Access-Control-Allow-Methods = "POST, GET, OPTIONS"
-    Access-Control-Allow-Headers = "Content-Type, Authorization, X-Requested-With"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
+[functions]
+  node_bundler = "esbuild"
+  directory = "netlify/functions"
