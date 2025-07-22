@@ -1,21 +1,10 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type, Stripe-Signature',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Content-Type': 'application/json'
-};
-
 exports.handler = async (event, context) => {
-  if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 200, headers, body: '' };
-  }
-
+  // Only accept POST requests
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
-      headers,
       body: JSON.stringify({ error: 'Method not allowed' })
     };
   }
@@ -24,11 +13,11 @@ exports.handler = async (event, context) => {
     const sig = event.headers['stripe-signature'];
     const body = event.body;
 
-    console.log('🔔 Stripe webhook received');
+    console.log('🔔 Webhook received');
     console.log('📝 Signature present:', !!sig);
-    console.log('📦 Body length:', body?.length);
+    console.log('📦 Body present:', !!body);
 
-    // Verify webhook signature
+    // Verify webhook signature with raw body
     let stripeEvent;
     try {
       stripeEvent = stripe.webhooks.constructEvent(
@@ -40,50 +29,46 @@ exports.handler = async (event, context) => {
       console.error('❌ Webhook signature verification failed:', err.message);
       return {
         statusCode: 400,
-        headers,
         body: JSON.stringify({ error: 'Invalid signature' })
       };
     }
 
-    console.log('✅ Webhook verified, type:', stripeEvent.type);
+    console.log('✅ Webhook verified successfully, type:', stripeEvent.type);
 
-    // Handle the checkout.session.completed event
+    // Handle checkout.session.completed event
     if (stripeEvent.type === 'checkout.session.completed') {
       const session = stripeEvent.data.object;
       
-      console.log('💰 Payment completed for session:', session.id);
-      console.log('💵 Amount:', session.amount_total / 100, 'USD');
-      console.log('👤 Customer email:', session.customer_details?.email);
+      console.log('💰 MountainShares payment completed:');
+      console.log('- Session ID:', session.id);
+      console.log('- Amount:', session.amount_total / 100, 'USD');
+      console.log('- Customer:', session.customer_details?.email);
       
-      // Extract MountainShares token details
+      // Extract MountainShares token details from metadata
       const metadata = session.metadata || {};
       const msTokens = parseInt(metadata.msTokens) || 1;
       const walletAddress = metadata.walletAddress;
-      const darwinOptimized = metadata.darwinGoedelOptimized === 'true';
+      const customerTotal = parseFloat(metadata.customerTotal) || 0;
       
-      console.log('🏔️ MountainShares details:');
-      console.log('- Tokens purchased:', msTokens);
-      console.log('- Wallet address:', walletAddress || 'Not provided');
-      console.log('- Darwin Gödel optimized:', darwinOptimized);
-      
-      // Here you would trigger your smart contract calls
-      // For now, log the successful webhook processing
-      console.log('🎯 Webhook processing completed successfully');
+      console.log('🏔️ Token details:');
+      console.log('- MS Tokens to deliver:', msTokens);
+      console.log('- Recipient wallet:', walletAddress);
+      console.log('- Total paid:', customerTotal);
       
       // TODO: Add smart contract integration here
-      // - Call USDC settlement processor
-      // - Trigger token minting via Backbone controller
-      // - Execute fee distribution
+      // - Execute USDC settlement via 0x1F0c8a4c920E1094f85b18F681dcfB2e2b7DE076
+      // - Mint tokens via 0x746dD4D401ce5Bbb0Fc964E1a7b4470619dBf67f
+      // - Distribute fees to 5-way split recipients
+      
+      console.log('✅ Webhook processed successfully - token delivery pending contract integration');
       
       return {
         statusCode: 200,
-        headers,
         body: JSON.stringify({
           received: true,
-          type: stripeEvent.type,
           sessionId: session.id,
           msTokens: msTokens,
-          processed: 'webhook_received'
+          processed: true
         })
       };
     }
@@ -92,7 +77,6 @@ exports.handler = async (event, context) => {
     console.log('ℹ️ Unhandled event type:', stripeEvent.type);
     return {
       statusCode: 200,
-      headers,
       body: JSON.stringify({ received: true, type: stripeEvent.type })
     };
 
@@ -100,11 +84,7 @@ exports.handler = async (event, context) => {
     console.error('🚨 Webhook processing error:', error);
     return {
       statusCode: 500,
-      headers,
-      body: JSON.stringify({
-        error: 'Webhook processing failed',
-        details: error.message
-      })
+      body: JSON.stringify({ error: 'Webhook processing failed', details: error.message })
     };
   }
 };
